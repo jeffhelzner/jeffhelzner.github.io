@@ -1,20 +1,5 @@
 [
   {
-    "name": "decision-theory-explorer",
-    "title": "Decision Theory Explorer",
-    "description": "Interactive tools for exploring rational choice theory and decision-making frameworks.",
-    "url": "https://jeffhelzner.github.io/decision-theory-explorer",
-    "repo": "https://github.com/jeffhelzner/decision-theory-explorer",
-    "tags": ["philosophy", "decision-theory", "javascript"]
-  },
-  {
-    "name": "uncertainty-modeling",
-    "title": "Uncertainty Modeling Toolkit",
-    "description": "Statistical and probabilistic tools for modeling uncertainty in decision contexts.",
-    "repo": "https://github.com/jeffhelzner/uncertainty-modeling",
-    "tags": ["statistics", "probability", "research"]
-  },
-  {
     "name": "seu-sensitivity",
     "title": "SEU Sensitivity",
     "description": "Probabilistic model of decision maker's sensitivity to subjective expected utility maximization",
