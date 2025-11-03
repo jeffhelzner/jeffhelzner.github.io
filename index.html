@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jeff Helzner — Home</title>
+    <meta name="description" content="Jeff Helzner - Former philosophy professor exploring rational decision-making, logic, and uncertainty through code and applied research." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <!--
+    Configure Projects behavior using data attributes on <body>:
+
+    data-projects-source:
+      - "manual"  -> only use projects.json
+      - "github"  -> only use GitHub API (requires data-gh-username)
+      - "both"    -> show projects.json first, then append GitHub projects
+
+    data-gh-username:
+      - Set to your GitHub username to enable auto-loading from GitHub API
+
+    data-github-topic-filter (optional):
+      - If set (e.g., "showcase"), only repos with that topic will be shown.
+  -->
+  <body data-projects-source="both" data-gh-username="jeffhelzner" data-github-topic-filter="">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container">
+        <h1 class="site-title">Jeff Helzner</h1>
+        <nav aria-label="Primary">
+          <ul class="nav">
+            <li><a href="#about">About</a></li>
+            <li><a href="#explorations">Explorations</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF, opens in a new tab)">Resume</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <section id="about" class="section">
+        <h2>About me</h2>
+        <p>I'm a former philosophy professor with an interest in logic, rational choice, and uncertainty. For the past decade or so, I've been working to improve decision-making in the insurance industry. It's a great industry for anyone interested in decision-making. Despite this steady flow of interesting applied problems, I maintain an interest in more philosophical questions. The projects here are mainly intended to serve those interests.</p>
+      </section>
+
+      <section id="explorations" class="section">
+        <h2>Explorations</h2>
+        <p>Here are some of the questions that i hope to explore here:</p>
+        <ul>
+          <li>What is a rational decision? How do I know if you've made one? How do I know if I've made one?</li>
+          <li>What is a rational decision maker? Is a rational decision maker simply a decision maker who usually (always) makes rational decisions?</li>
+          <li>What's the relationship between good decisions and rational ones? Are good decisions simply decisions that are sufficiently close to being rational ones?</li>
+        </ul>
+      </section>
+
+      <section id="projects" class="section">
+        <h2>Projects</h2>
+        <p class="muted">
+          Manage curated items in <code>projects.json</code>.
+          To auto-list GitHub repos, set <code>data-gh-username</code> on &lt;body&gt; and optionally
+          <code>data-github-topic-filter</code> to show only tagged repos (e.g., "showcase").
+        </p>
+
+        <div id="projects-list" class="projects-grid" aria-live="polite"></div>
+        <div id="projects-status" class="status muted" role="status" aria-live="polite"></div>
+
+        <noscript>
+          <p class="muted">Enable JavaScript to load the projects list.</p>
+        </noscript>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p class="muted">© <span id="year"></span> Jeff Helzner •
+          <a href="https://www.linkedin.com/in/jeff-helzner-109a5498/" target="_blank" rel="noopener noreferrer me" aria-label="LinkedIn profile">LinkedIn</a> •
+          <a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF)">Resume</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>
