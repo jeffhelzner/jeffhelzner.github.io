@@ -2,7 +2,8 @@
   {
     "name": "seu-sensitivity",
     "title": "SEU Sensitivity",
-    "description": "Probabilistic model of decision maker's sensitivity to subjective expected utility maximization",
+    "description": "A Bayesian framework for modeling decision-making sensitivity to Subjective Expected Utility maximization",
+    "homepage": "https://jeffhelzner.github.io/seu-sensitivity/",
     "repo": "https://github.com/jeffhelzner/seu-sensitivity",
     "tags": ["decision making", "rationality"]
   }
