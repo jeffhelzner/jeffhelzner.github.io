@@ -13,12 +13,31 @@
 
   const $list = document.getElementById('projects-list');
   const $status = document.getElementById('projects-status');
+  const $postsList = document.getElementById('posts-list');
+  const $postsStatus = document.getElementById('posts-status');
 
   function setStatus(msg) {
     if ($status) $status.textContent = msg || '';
   }
 
-  function card({ title, description, href, repoHref, stars, topics = [] }) {
+  function setActiveNav() {
+    const currentPath = window.location.pathname.replace(/\/+$|^\//g, '');
+    document.querySelectorAll('nav a').forEach(a => {
+      try {
+        const url = new URL(a.href, window.location.origin);
+        const targetPath = url.pathname.replace(/\/+$|^\//g, '');
+        if (targetPath === currentPath || (currentPath === '' && targetPath === '')) {
+          a.setAttribute('aria-current', 'page');
+        } else {
+          a.removeAttribute('aria-current');
+        }
+      } catch {
+        // ignore invalid URLs
+      }
+    });
+  }
+
+  function card({ title, description, href, primaryLabel = 'Project', repoHref, stars, topics = [] }) {
     const el = document.createElement('article');
     el.className = 'card';
     el.innerHTML = `
@@ -26,6 +45,7 @@
       ${description ? `<p>${escapeHtml(description)}</p>` : ''}
       <div class="meta">
         ${stars != null ? `<span class="badge">★ ${stars}</span>` : ''}
+        ${href ? `<a href="${href}" target="_blank" rel="noopener">${escapeHtml(primaryLabel)}</a>` : ''}
         ${repoHref ? `<a href="${repoHref}" target="_blank" rel="noopener">Source</a>` : ''}
         ${topics.slice(0, 3).map(t => `<span class="badge">${escapeHtml(t)}</span>`).join('')}
       </div>
@@ -50,14 +70,33 @@
       if (!Array.isArray(data)) return [];
       return data.map(p => ({
         title: p.title || p.name || 'Untitled',
-        description: p.description || '',
-        href: p.url || p.homepage || p.repo || '#',
+        description: p.excerpt || p.description || '',
+        href: p.report_url || p.url || p.homepage || p.repo || '#',
+        primaryLabel: p.report_url ? (p.report_label || 'Report') : 'Project',
         repoHref: p.repo || null,
         stars: null,
         topics: p.tags || [],
-        _key: (p.repo || p.url || p.name || '').toLowerCase(),
+        _key: (p.report_url || p.repo || p.url || p.name || '').toLowerCase(),
       }));
     } catch {
+      return [];
+    }
+  }
+
+  async function loadPosts() {
+    try {
+      const res = await fetch('/posts.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(`posts.json: ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      return data.map(p => ({
+        title: p.title || p.slug,
+        description: p.summary || '',
+        href: p.url || `/posts/${p.slug}.html`,
+        date: p.date || '',
+        _key: (p.slug || p.url || '').toLowerCase(),
+      }));
+    } catch (e) {
       return [];
     }
   }
@@ -116,6 +155,28 @@
     $list.appendChild(frag);
   }
 
+  function renderPosts(items) {
+    if (!$postsList) return;
+    $postsList.innerHTML = '';
+    if (!items.length) {
+      if ($postsStatus) $postsStatus.textContent = 'No posts yet.';
+      return;
+    }
+    if ($postsStatus) $postsStatus.textContent = '';
+    const frag = document.createDocumentFragment();
+    items.forEach(it => {
+      const el = document.createElement('article');
+      el.className = 'card';
+      el.innerHTML = `
+        <h3><a href="${it.href}">${escapeHtml(it.title)}</a></h3>
+        ${it.description ? `<p>${escapeHtml(it.description)}</p>` : ''}
+        ${it.date ? `<div class="meta"><span class="muted">${escapeHtml(it.date)}</span></div>` : ''}
+      `;
+      frag.appendChild(el);
+    });
+    $postsList.appendChild(frag);
+  }
+
   function dedupe(items) {
     const seen = new Set();
     const out = [];
@@ -140,6 +201,14 @@
 
     const combined = dedupe([...(manual || []), ...(gh || [])]);
     render(combined);
+
+    // load and render posts if posts-list exists
+    if ($postsList) {
+      const posts = await loadPosts();
+      renderPosts(posts);
+    }
+
+    setActiveNav();
   }
 
   init();

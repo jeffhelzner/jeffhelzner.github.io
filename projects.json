@@ -2,9 +2,23 @@
   {
     "name": "seu-sensitivity",
     "title": "SEU Sensitivity",
+    "excerpt": "A Bayesian framework modeling sensitivity to Subjective Expected Utility (SEU) maximization.",
     "description": "A Bayesian framework for modeling decision-making sensitivity to Subjective Expected Utility maximization",
-    "homepage": "https://jeffhelzner.github.io/seu-sensitivity/",
+    "published": "2023-06-01",
+    "url": "https://jeffhelzner.github.io/seu-sensitivity/",
     "repo": "https://github.com/jeffhelzner/seu-sensitivity",
     "tags": ["decision making", "rationality"]
+  },
+  {
+    "name": "conditional-admissibility-judgments",
+    "title": "Conditional Admissibility Judgments",
+    "excerpt": "Quarto technical reports and a Lean4 formalization of conditional judgments of admissibility under uncertainty.",
+    "description": "Formal work on rational choice under uncertainty, with reports documenting the foundations and implementation of the framework.",
+    "published": "2026-04-07",
+    "report_url": "https://jeffhelzner.github.io/conditional-admissibility-judgments/01-foundations-overview.html",
+    "report_label": "Report",
+    "url": "https://jeffhelzner.github.io/conditional-admissibility-judgments/",
+    "repo": "https://github.com/jeffhelzner/conditional-admissibility-judgments",
+    "tags": ["rationality", "formalization", "Lean4", "reports"]
   }
 ]

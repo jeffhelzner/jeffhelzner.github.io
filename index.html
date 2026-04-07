@@ -6,6 +6,40 @@
     <title>Jeff Helzner — Home</title>
     <meta name="description" content="Jeff Helzner - Former philosophy professor exploring rational decision-making, logic, and uncertainty through code and applied research." />
     <link rel="stylesheet" href="./styles.css" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://jeffhelzner.github.io/" />
+    <!-- Google Analytics / GA4 snippet placeholder:
+      Paste your ID like GA-XXXXXXX or G-XXXXXXXXXX below and un-comment (if available).
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+      </script>
+    -->
+    <!-- Open Graph / Twitter (placeholders; update per-page for posts) -->
+    <meta property="og:site_name" content="Jeff Helzner" />
+    <meta property="og:title" content="Jeff Helzner — Home" />
+    <meta property="og:description" content="Research and projects on rational decision-making and AI alignment." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jeffhelzner.github.io/" />
+    <meta property="og:image" content="/assets/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jeff Helzner — Home" />
+    <meta name="twitter:description" content="Research and projects on rational decision-making and AI alignment." />
+    <meta name="twitter:image" content="/assets/social-card.png" />
+
+    <!-- JSON-LD organization (includes LinkedIn) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jeff Helzner",
+        "url": "https://jeffhelzner.github.io/",
+        "sameAs": ["https://www.linkedin.com/in/jeff-helzner-109a5498/"]
+      }
+    </script>
   </head>
   <!--
     Configure Projects behavior using data attributes on <body>:
@@ -29,9 +63,9 @@
         <h1 class="site-title">Jeff Helzner</h1>
         <nav aria-label="Primary">
           <ul class="nav">
-            <li><a href="#about">About</a></li>
-            <li><a href="#questions">Questions</a></li>
+            <li><a href="#about">About & Focus</a></li>
             <li><a href="#projects">Projects</a></li>
+            <li><a href="./posts/">Blog</a></li>
             <li><a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF, opens in a new tab)">Resume</a></li>
           </ul>
         </nav>
@@ -39,19 +73,15 @@
     </header>
 
     <main id="main" class="container">
-      <section id="about" class="section">
-        <h2>About me</h2>
-        <p>I'm a former philosophy professor with an interest in logic, rational choice, and uncertainty. For the past decade or so, I've been working to improve decision-making in the insurance industry. It's a great industry for anyone interested in decision-making. Despite this steady flow of interesting applied problems, I maintain an interest in more philosophical questions. The projects here are mainly intended to serve those interests. You can see my resume for a bit more about me.</p>
-      </section>
+      <div class="hero">
+        <img class="hero-card" src="/assets/social-card.png" alt="Jeff Helzner — Rational decision-making & AI alignment" />
+      </div>
 
-      <section id="questions" class="section">
-        <h2>Questions of Interest</h2>
-        <p>Here are some questions that interest me:</p>
-        <ul>
-          <li>What is a rational decision? How do I know if you've made one? How do I know if I've made one?</li>
-          <li>What is a rational decision maker? Is a rational decision maker simply a decision maker who usually (always) makes rational decisions?</li>
-          <li>What's the relationship between good decisions and rational ones? Are good decisions simply decisions that are sufficiently close to being rational ones?</li>
-        </ul>
+      <section id="about" class="section">
+        <h2>About & Research Focus</h2>
+        <p>I am a former academic philosopher who has been working in the insurance industry since 2014. My main research interests focus on improving decision-making by developing a better understanding of how decision makers, whether human or AI, fail to meet relevant standards of rational choice and decision quality. My work spans academia and industry, blending formal models with empirical methods and engineering practice to improve how decision makers form beliefs, select actions, and update in light of new evidence.</p>
+
+        <p>The projects featured here will focus on AI alignment through the lens of rationality and consistency: evaluating models against norms of coherent belief, calibrated uncertainty, robust reasoning, and stable preferences; designing diagnostics and interventions that improve decision quality; and building practical tooling to make alignment claims testable.</p>
       </section>
 
       <section id="projects" class="section">

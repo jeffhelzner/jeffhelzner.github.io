@@ -27,6 +27,19 @@ body {
   padding: 0 16px;
 }
 
+.hero {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0;
+}
+.hero-card {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -62,8 +75,27 @@ body {
 .nav a {
   color: var(--link);
   text-decoration: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
-.nav a:hover { text-decoration: underline; }
+.nav a:hover, .nav a:focus-visible {
+  text-decoration: underline;
+  outline: 2px solid var(--accent);
+}
+
+button.report-link {
+  color: var(--link);
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+button.report-link:hover,
+button.report-link:focus-visible {
+  background: rgba(137, 220, 235, 0.1);
+  outline: 2px solid var(--accent);
+}
 
 .section { margin: 40px 0; }
 .section h2 { margin: 0 0 12px; }
@@ -108,6 +140,15 @@ body {
   font-size: 0.9rem;
   color: var(--muted);
 }
+.reports {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+.report-link {
+  color: var(--link);
+  text-decoration: none;
+}
+.report-link:hover { text-decoration: underline; }
 .badge {
   display: inline-block;
   border: 1px solid var(--border);
