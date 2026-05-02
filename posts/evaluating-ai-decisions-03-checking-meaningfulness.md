@@ -1,17 +1,25 @@
 ---
 title: "Part 3 — Is the measurement telling you anything?"
 date: 2026-05-01
+author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-3-checking-meaningfulness"
+description: "A measurement of alignment is useful only if it is meaningful for the decision-maker in front of you."
 summary: "A measurement of alignment is only useful if it's meaningful for the decision-maker in front of you. The second layer of the tool is the part that tells you whether the number is evidence or noise."
+image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","model-adequacy","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
 part: 3
 draft: true
 ---
 
+::: {.series-nav}
+**Evaluating AI Decision-Makers Under Uncertainty** · Part 3 of 3  
+[Part 1](evaluating-ai-decisions-01-why-measure.html) · [Part 2](evaluating-ai-decisions-02-measuring-alignment.html) · Part 3
+:::
+
 TL;DR: A graded, uncertainty-quantified, comparable measurement of how well an agent's choices align with a stated procedure is necessary, but not sufficient. The measurement comes from a model of how a more-or-less aligned decision-maker would choose. If the agent in front of you doesn't actually decide in a way that model can fit, the score is a number from a misspecified model — directionally readable, but not evidence of anything in particular. The second layer of a useful tool is an *adequacy check*: it tells you whether the measurement is meaningful for this decision-maker. With both layers in place, you have something that can support intervention, comparison, and monitoring as evidence rather than as decoration.
 
-[← Part 2](evaluating-ai-decisions-02-measuring-alignment.html) — *Quick recap:* a measurement of decision quality that can support intervention, comparison, and monitoring has to be graded, uncertainty-quantified, comparable across agents and over time, and tied to a stated procedure for how a good decision-maker would combine beliefs about uncertain consequences with preferences over them. Call that the *measurement-of-alignment* layer — the (A) layer for the rest of this post. This post is about a second layer that the first one needs in order to be trustworthy.
+*Quick recap:* a measurement of decision quality that can support intervention, comparison, and monitoring has to be graded, uncertainty-quantified, comparable across agents and over time, and tied to a stated procedure for how a good decision-maker would combine beliefs about uncertain consequences with preferences over them. Call that the *measurement-of-alignment* layer — the (A) layer for the rest of this post. This post is about a second layer that the first one needs in order to be trustworthy.
 
 ## Back to triage, with a monitoring vignette
 

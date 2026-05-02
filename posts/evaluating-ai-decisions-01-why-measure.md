@@ -1,13 +1,21 @@
 ---
 title: "Part 1 — Why measure how an AI agent decides?"
 date: 2026-05-01
+author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-1-why-measure"
+description: "If you've put an AI agent in a decision-making seat, you need a way to tell whether it's actually deciding well."
 summary: "If you've put an AI agent in a decision-making seat, you need a way to tell whether it's actually deciding well. Three jobs you can't do without one — and why the obvious shortcuts don't get you there."
+image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
 part: 1
 draft: true
 ---
+
+::: {.series-nav}
+**Evaluating AI Decision-Makers Under Uncertainty** · Part 1 of 3  
+Part 1 · [Part 2](evaluating-ai-decisions-02-measuring-alignment.html) · [Part 3](evaluating-ai-decisions-03-checking-meaningfulness.html)
+:::
 
 TL;DR: Suppose you've deployed an LLM-based agent to assist with insurance claims triage. There's a natural sense in which you want it to make *better* decisions, not just plausible-looking ones. Acting on that preference — adjusting the agent, choosing between candidate agents, watching for drift — requires a way to *measure* how well the agent decides. This post is about why that measurement problem is unavoidable, and why the obvious shortcuts ("it looks reasonable," "we trained a classifier on past decisions") don't actually solve it.
 

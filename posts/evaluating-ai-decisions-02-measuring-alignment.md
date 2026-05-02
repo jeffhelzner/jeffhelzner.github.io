@@ -1,17 +1,25 @@
 ---
 title: "Part 2 — What a measurement of decision quality has to look like"
 date: 2026-05-01
+author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-2-measuring-alignment"
+description: "A useful measurement of AI decision quality has to be graded, uncertainty-aware, comparable, and tied to a stated account of good decision-making."
 summary: "If you're going to measure how well an AI agent decides, the measurement has to do specific work. Four requirements — and one that quietly rules out most of what's on offer."
+image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
 part: 2
 draft: true
 ---
 
+::: {.series-nav}
+**Evaluating AI Decision-Makers Under Uncertainty** · Part 2 of 3  
+[Part 1](evaluating-ai-decisions-01-why-measure.html) · Part 2 · [Part 3](evaluating-ai-decisions-03-checking-meaningfulness.html)
+:::
+
 TL;DR: A measurement of decision quality that can support intervention, comparison, and monitoring has to have a particular shape. It has to be graded, not pass/fail. It has to come with a sense of how much to trust it. It has to mean the same thing across agents and over time. And — the requirement that does the most work — it has to be tied to a *stated* account of what good decision-making looks like in this setting. The first three are obvious once you say them. The fourth is the one most evaluation approaches quietly skip.
 
-[← Part 1](evaluating-ai-decisions-01-why-measure.html) — *Quick recap:* if you've put an AI agent in a decision-making seat, you'll need to do at least three things repeatedly — adjust the agent and check whether the change helped, choose between candidate agents, and monitor for drift. None of those are doable by eye. Each requires a measurement of decision quality. The obvious shortcuts ("looks reasonable to a senior reviewer," "score it with a classifier trained on past decisions") fail in specific ways. This post is about what kind of measurement actually does the job.
+*Quick recap:* if you've put an AI agent in a decision-making seat, you'll need to do at least three things repeatedly — adjust the agent and check whether the change helped, choose between candidate agents, and monitor for drift. None of those are doable by eye. Each requires a measurement of decision quality. The obvious shortcuts ("looks reasonable to a senior reviewer," "score it with a classifier trained on past decisions") fail in specific ways. This post is about what kind of measurement actually does the job.
 
 ## Back to the triage scenario, with a comparison vignette
 

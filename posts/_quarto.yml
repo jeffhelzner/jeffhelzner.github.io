@@ -2,9 +2,24 @@ project:
   type: website
 
 website:
-  title: "Posts"
+  title: "Jeff Helzner"
+  site-url: "https://jeffhelzner.github.io"
   draft-mode: unlinked
+  open-graph: true
+  twitter-card: true
+  navbar:
+    left:
+      - text: "Home"
+        href: /
+      - text: "Blog"
+        href: /posts/
+      - text: "Projects"
+        href: /#projects
 
 format:
   html:
     theme: cosmo
+    css: quarto-custom.css
+    toc: true
+    toc-depth: 2
+    page-layout: article

@@ -1,0 +1,103 @@
+:root {
+  --jh-bg: #fbfaf7;
+  --jh-text: #20242b;
+  --jh-muted: #666f7c;
+  --jh-link: #1d5f8a;
+  --jh-accent: #0f766e;
+  --jh-border: #ddd6ca;
+  --jh-panel-soft: #f4f0e8;
+}
+
+body.quarto-light {
+  background: var(--jh-bg);
+  color: var(--jh-text);
+  font-size: 17px;
+  line-height: 1.68;
+}
+
+a {
+  color: var(--jh-link);
+  text-underline-offset: 0.18em;
+}
+
+#quarto-header nav.navbar {
+  background: color-mix(in oklab, var(--jh-bg) 94%, transparent);
+  border-bottom: 1px solid var(--jh-border);
+}
+
+main.content {
+  max-width: 760px;
+}
+
+#title-block-header {
+  border-bottom: 1px solid var(--jh-border);
+  margin-bottom: 2rem;
+  padding-bottom: 1.3rem;
+}
+
+.quarto-title .title {
+  font-size: clamp(2rem, 5vw, 3.35rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.quarto-title-meta {
+  color: var(--jh-muted);
+}
+
+main.content p,
+main.content li {
+  color: #313842;
+}
+
+main.content h2 {
+  border-top: 1px solid var(--jh-border);
+  font-size: 1.55rem;
+  margin-top: 2.4rem;
+  padding-top: 1.45rem;
+}
+
+main.content h3 {
+  font-size: 1.2rem;
+  margin-top: 1.8rem;
+}
+
+.series-nav {
+  background: var(--jh-panel-soft);
+  border: 1px solid var(--jh-border);
+  border-radius: 8px;
+  color: var(--jh-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin: 0 0 1.5rem;
+  padding: 0.9rem 1rem;
+}
+
+.series-nav p {
+  margin: 0;
+}
+
+.series-nav strong {
+  color: var(--jh-text);
+}
+
+.series-nav a {
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.series-nav a:hover,
+.series-nav a:focus-visible {
+  text-decoration: underline;
+}
+
+#quarto-draft-alert {
+  border-radius: 0;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  body.quarto-light {
+    font-size: 16px;
+  }
+}

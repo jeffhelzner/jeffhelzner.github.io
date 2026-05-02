@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
-    <div class="container">
-      <header class="site-header">
+    <header class="site-header">
+      <div class="container">
+        <h1 class="site-title">Jeff Helzner</h1>
         <nav aria-label="Primary">
           <ul class="nav">
             <li><a href="../">Home</a></li>
@@ -19,12 +20,45 @@
             <li><a href="../#projects">Projects</a></li>
           </ul>
         </nav>
-        <h1 class="site-title">Blog</h1>
-        <p class="muted">High-level posts linking to technical reports and project pages.</p>
-      </header>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="page-intro" aria-labelledby="blog-title">
+        <p class="intro-meta">Blog</p>
+        <h1 id="blog-title">Notes on decision-making, uncertainty, and AI evaluation.</h1>
+        <p class="lede">Accessible essays connected to technical projects, with an emphasis on what can actually be measured when AI systems make consequential decisions.</p>
+      </section>
+
+      <section class="series-feature" aria-labelledby="series-title">
+        <div class="series-feature-inner">
+          <p class="series-kicker">Featured series</p>
+          <h2 id="series-title">Evaluating AI Decision-Makers Under Uncertainty</h2>
+          <p>A three-part introduction to why decision quality needs measurement, what such a measurement has to provide, and how to tell whether the measurement is meaningful for the agent in front of you.</p>
+
+          <div class="series-list" aria-label="Series posts">
+            <div class="series-item">
+              <span class="part-label">Part 1</span>
+              <strong>Why measure how an AI agent decides?</strong>
+              <span>Why intervention, comparison, and monitoring all require a real measurement of decision quality.</span>
+            </div>
+            <div class="series-item">
+              <span class="part-label">Part 2</span>
+              <strong>What a measurement of decision quality has to look like</strong>
+              <span>The four requirements a useful measurement has to satisfy.</span>
+            </div>
+            <div class="series-item">
+              <span class="part-label">Part 3</span>
+              <strong>Is the measurement telling you anything?</strong>
+              <span>Why adequacy checks are needed before a score becomes evidence.</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <main class="section">
-        <div id="posts-list" class="projects-grid"></div>
+        <h2>All Posts</h2>
+        <div id="posts-list" class="post-list"></div>
         <div id="posts-status" class="status muted" role="status" aria-live="polite"></div>
       </main>
 
