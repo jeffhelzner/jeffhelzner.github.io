@@ -78,6 +78,19 @@ If you use a different default branch or a GitHub Pages configuration, update th
 - Contributions are welcome via issues or pull requests. Please keep JSON entries consistent with the examples above.
 - To contact the site owner, add an issue or open a PR with your suggested change.
 
+## Review workflow
+
+- Preferred feedback channel: inline HTML comments inside Markdown drafts in the `posts/` directory. Insert comments like:
+
+	```markdown
+	<!-- COMMENT: Replace "This method" with "The SEU-based method" for clarity. -->
+	```
+
+- For longer or numbered feedback, create a separate file `posts/<slug>.feedback.md` containing numbered items that reference headings or short quotes from the draft.
+- Rounds are open-ended — we'll iterate until you're satisfied. As a guideline, expect 2–3 rounds for a typical post but we'll continue as needed.
+- My update process: I extract high-level versus line-level items, implement edits in the draft, and add a short changelog at the top of the revised Markdown (for example: "Revision 2: clarified X; tightened argument in section 3"). When you approve, I will set `draft: false` in the post frontmatter and update `posts.json`.
+- To publish: add the corresponding `posts.json` entry (see examples above), commit, and push to the repository.
+
 ## Notes
 
 - The site is static HTML/CSS/JS and has no build step. Optional migration to a static site generator (e.g., Eleventy) is possible if you prefer Markdown authoring.

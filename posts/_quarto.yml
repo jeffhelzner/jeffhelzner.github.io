@@ -1,0 +1,10 @@
+project:
+  type: website
+
+website:
+  title: "Posts"
+  draft-mode: unlinked
+
+format:
+  html:
+    theme: cosmo
