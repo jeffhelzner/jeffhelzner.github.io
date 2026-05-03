@@ -303,6 +303,24 @@ button.report-link:focus-visible {
   max-width: var(--measure);
 }
 
+.ai-use-note {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 36px 0 0;
+  max-width: var(--measure);
+  padding-top: 16px;
+}
+.ai-use-note h2 {
+  color: var(--text);
+  font-size: 1rem;
+  margin: 0 0 6px;
+}
+.ai-use-note p {
+  margin: 0;
+}
+
 .site-footer {
   margin: 48px 0 24px;
   border-top: 1px solid var(--border);
