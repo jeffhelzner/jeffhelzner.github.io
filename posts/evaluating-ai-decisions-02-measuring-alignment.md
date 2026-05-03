@@ -1,10 +1,10 @@
 ---
-title: "Part 2 — What a measurement of decision quality has to look like"
+title: "Part 2 - Beliefs, preferences, and a standard of choice"
 date: 2026-05-01
 author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-2-measuring-alignment"
-description: "A useful measurement of AI decision quality has to be graded, uncertainty-aware, comparable, and tied to a stated account of good decision-making."
-summary: "If you're going to measure how well an AI agent decides, the measurement has to do specific work. Four requirements — and one that quietly rules out most of what's on offer."
+description: "To assess a decision maker procedurally, we need a stated account of how beliefs and preferences should guide choice under uncertainty."
+summary: "Accuracy asks whether choices match labels. A procedural assessment asks whether choices are consistent with a stated standard for combining beliefs and preferences under uncertainty."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
@@ -17,70 +17,84 @@ draft: true
 [Part 1](evaluating-ai-decisions-01-why-measure.html) · Part 2 · [Part 3](evaluating-ai-decisions-03-checking-meaningfulness.html)
 :::
 
-TL;DR: A measurement of decision quality that can support intervention, comparison, and monitoring has to have a particular shape. It has to be graded, not pass/fail. It has to come with a sense of how much to trust it. It has to mean the same thing across agents and over time. And — the requirement that does the most work — it has to be tied to a *stated* account of what good decision-making looks like in this setting. The first three are obvious once you say them. The fourth is the one most evaluation approaches quietly skip.
+The first post separated two evaluation questions. One question asks whether a decision maker's choices agree with labels, outcomes, or other external benchmarks. The other asks whether the choices are consistent with a stated standard for making decisions under uncertainty.
 
-*Quick recap:* if you've put an AI agent in a decision-making seat, you'll need to do at least three things repeatedly — adjust the agent and check whether the change helped, choose between candidate agents, and monitor for drift. None of those are doable by eye. Each requires a measurement of decision quality. The obvious shortcuts ("looks reasonable to a senior reviewer," "score it with a classifier trained on past decisions") fail in specific ways. This post is about what kind of measurement actually does the job.
+This second question requires more structure. We cannot assess whether a decision maker is combining information appropriately until we say what information is supposed to be combined, and what counts as combining it appropriately.
 
-## Back to the triage scenario, with a comparison vignette
+For the kinds of decisions considered here, four ingredients are central: alternatives, consequences, beliefs, and preferences.
 
-You've narrowed your shortlist to two candidate agents for claims triage. Both are LLM-based. One is a frontier model from a major vendor with a carefully engineered system prompt; the other is a smaller, cheaper model with a longer prompt and some retrieval-augmented context from your internal guidelines. You've run both through the same five hundred files. The outputs, on inspection, look broadly similar.
+An alternative is something the decision maker can choose. In a claims triage example, the alternatives might be ordinary handling, escalation to a senior adjuster, referral to a specialized unit, or some other routing decision.
 
-You have to pick one. Procurement wants a defensible reason. Risk wants something they can put in a memo. Your own intuition is "the frontier one feels a little better, but I'm not sure," which is exactly the kind of intuition that doesn't survive contact with a board.
+A consequence is a possible result of choosing an alternative. The consequences may include claim severity, litigation risk, cost, handling expense, customer experience, operational burden, or other outcomes relevant to the organization.
 
-What would a measurement that *did* survive contact with a board have to look like?
+Beliefs represent the decision maker's uncertainty about which consequences would follow from each alternative. The decision maker may not know whether a claim will become complex, but it may have evidence that bears on the probability of that happening.
 
-## Four requirements
+Preferences represent how the decision maker evaluates the possible consequences. Some consequences are better than others. Some errors are more costly than others. Some forms of delay, escalation, or unnecessary review may be acceptable in one context and unacceptable in another.
 
-**It has to be graded.**
+The general problem is to combine beliefs about uncertain consequences with preferences over those consequences in order to choose among alternatives.
 
-Real agents aren't decision-quality-good or decision-quality-bad. They're partially good. They handle the routine cases well, get sloppy under specific kinds of ambiguity, miss certain corner cases, perform differently when the file is unusually long. A pass/fail verdict throws away exactly the information you need: the difference between "this agent is 0.3 better than that one on this workload" and "they're indistinguishable" is the difference between a defensible procurement decision and a coin flip in a memo. Every one of the three jobs from the previous post — intervention, comparison, monitoring — depends on being able to detect *gradations* of decision quality. A binary score can't do that work.
+## Why the standard has to be stated
 
-**It has to come with a sense of how much to trust it.**
+Once the problem is described this way, an evaluative question becomes visible.
 
-You ran both candidate agents on five hundred files. Suppose the measurement comes back: 0.62 for the frontier model, 0.59 for the smaller one. Is the frontier model better? Maybe. Or maybe the difference is well within what you'd expect from running the same agent on a different five hundred files drawn from the same workload. Without a sense of the noise, the number is a number, not a signal. This matters most in exactly the situations where insurance teams will be using it: smaller pilot samples, monitoring windows that are too short to wait out, comparisons between similar candidates where the right answer is sometimes "we can't tell yet, run more files." A measurement that doesn't tell you when it can't tell you something is worse than no measurement at all, because it produces false confidence on a schedule.
+Suppose we observe a decision maker choosing among alternatives across many cases. We know, or can specify, the consequences associated with those alternatives. We have some representation of uncertainty over those consequences. We have some representation of the preferences or utilities that matter. We can then ask whether the observed choices are consistent with a particular account of how beliefs and preferences should guide choice.
 
-**It has to mean the same thing across agents and over time.**
+But the phrase "consistent with good decision making" is not yet precise enough. Different standards can give different answers. A rule that minimizes worst-case loss is not the same as a rule that maximizes expected utility. A rule that treats some constraints as inviolable is not the same as a rule that represents every consideration in a single utility scale. A heuristic that prioritizes speed may disagree with a more comprehensive expected-value calculation.
 
-When you compute the measurement on Vendor A's agent and on Vendor B's, the numbers have to be on the same scale, in the same units, with the same interpretation. When you compute it on the deployed agent in March and again in October, a change in the number has to mean a change in the agent's decision quality and not a change in the workload, the prompt, or what the underlying model happened to do that week. This sounds obvious, but it's the requirement most easily violated by ad-hoc evaluation pipelines. A score that only makes sense relative to the specific batch of files it was computed on, or relative to a particular reviewer's preferences that month, isn't really a measurement; it's a momentary impression with a number on it.
+For this reason, the standard must be stated. Without a stated standard, we do not know what the assessment is an assessment of.
 
-**It has to be tied to a stated account of what good decision-making looks like.**
+This is one limitation of expert review. Expert review is often valuable, and in many domains it is indispensable. But when an expert says that a triage recommendation looks right, the standard being applied may remain implicit. It may depend on professional judgment, local practice, recent experience, or tacit knowledge that is difficult to separate from the individual reviewer.
 
-This is the requirement that does the real work, and the one most easily glossed over. When the measurement says the frontier agent scores 0.62 and the smaller one 0.59, *what is being measured?* What does a higher number actually mean about how the agent is deciding? "More aligned with good decision-making" is only a meaningful answer if you've said what *aligned with what* — what account of good decision-making the measurement is tracking.
+The same limitation appears in classifier-based evaluation. A model trained to predict labels may produce a useful score, but the score measures conformity to whatever pattern the labels encode. If the labels encode expert judgment, then the score measures conformity to that judgment. If the labels encode historical outcomes, then the score measures conformity to those outcomes. If the labels encode institutional habits, then the score measures conformity to those habits. None of this is necessarily bad, but it is different from measuring consistency with an explicitly stated standard of choice.
 
-This is what the classifier shortcut from the previous post quietly skips. A classifier trained on labelled examples produces a graded score, can be made uncertainty-aware with a bit of work, and reads consistently across agents and over time. It satisfies the first three requirements. What it doesn't satisfy is the fourth: the score measures conformity to whatever pattern the labels happened to encode, and you usually can't say what that pattern is. It's a number whose direction you can read but whose content you can't.
+## SEU as a reference point
 
-The same problem affects "let a senior reviewer rate the outputs." The reviewer is applying *some* account of good decision-making — but it's implicit, sits in their head, varies across reviewers, drifts over time, and can't be held still for the comparison and monitoring use cases. The measurement isn't tied to a stated account of good decision-making; it's tied to a private one.
+Subjective expected utility theory provides one such standard.
 
-The requirement, stated positively, is this: the tool should commit to a specific procedure for how a good decision-maker would combine what they believe about the uncertain consequences of an alternative with what they prefer among those consequences, and the measurement should report how well the agent's choices align with *that* procedure. Higher score = closer alignment to a procedure you've named.
+On the SEU account, the decision maker has subjective probabilities over possible consequences and utilities representing preferences over those consequences. The decision maker evaluates each alternative by its expected utility and chooses accordingly.
 
-## Why naming the procedure matters
+That is a strong and idealized account of choice under uncertainty. It is also a useful reference point. It makes explicit how beliefs and preferences are to be combined. It gives a precise meaning to the claim that one alternative is preferred to another given the decision maker's probabilities and utilities. It also gives us a way to ask whether observed choices behave as if they were generated by a decision maker following, approximating, or departing from that standard.
 
-Two reasons, both of which will return in the next post.
+The point is not that SEU must be accepted as the final theory of rational choice. There are familiar reasons to be cautious about that claim. Real decision makers may have incomplete preferences, ambiguity-sensitive attitudes, constraints that are not naturally represented as utilities, or institutional objectives that are not well captured by a single expected-utility calculation.
 
-First: it's the only way to make the measurement *interpretable*. If you can't say what procedure the score is tracking, you can't say what it means when the score goes up or down. You can't tell a board what an improvement actually consists in. You can't argue with a vendor whose agent scored lower. You can't tell a regulator what your evaluation methodology is. Every downstream use of the measurement depends on being able to say what it's a measurement *of*.
+The more modest point is enough for present purposes. If SEU is taken as a stated standard, then we can formulate an evaluation question with more precision:
 
-Second: it's the only way to ask whether the measurement is *appropriate for this decision-maker*. If you've named the procedure you're measuring alignment with, you can ask whether the agent's choices actually behave as if they came from a decision-maker more or less aligned with that procedure — or whether they don't, in which case the measurement isn't telling you anything about this agent and you need to know that. If you haven't named the procedure, you can't even ask the question.
+> To what extent are the observed choices consistent with the choices that would be made by a decision maker combining beliefs and preferences according to SEU?
 
-That second point is the subject of the next post. It's the part of the picture that the (A) layer — the measurement of alignment described here — doesn't supply on its own.
+This is not the same as asking whether the choices are accurate. It is also not the same as asking whether the choices are morally, legally, or operationally acceptable in every respect. It is a narrower question about consistency with a particular decision-theoretic standard.
 
-## What this rules out, and what it leaves on the table
+## What this kind of assessment can show
 
-The four requirements together rule out most of the off-the-shelf evaluation approaches that an insurance team is likely to be offered.
+A procedural assessment of this kind can be useful in several ways.
 
-Pure human review fails the graded, comparable, and stated-procedure requirements. Classifier-based scoring fails the stated-procedure requirement, which silently undermines the others. "LLM-as-judge" approaches — asking another model to rate the agent's decisions — combine the worst features of both: an opaque procedure (whatever the judge model has internalized about good decisions) plus the noise of model-to-model variation, plus a circularity problem when the judge and the agent share architectural quirks.
+First, it can identify whether a system is responsive to the quantities that are supposed to matter. If the probability of a severe consequence increases, does the system's choice change in the expected direction? If the cost of a false negative increases, does the system become more willing to escalate? If two alternatives have nearly identical expected value, does the system treat the choice as close rather than sharply determined?
 
-What they leave on the table is a class of approaches that *do* commit to a stated procedure for combining beliefs about uncertain consequences with preferences over them, and *do* produce a graded, uncertainty-quantified, comparable estimate of how well the agent's choices align with it. The series isn't picking among such approaches; it's pointing out that the requirements pin down the *shape* of what a useful tool has to deliver, and that the shape is more constrained than it first appears.
+Second, it can distinguish between agreement with labels and agreement with a standard. A system may match historical labels while using features or patterns that are not part of the stated decision problem. Conversely, a system may depart from historical labels in cases where the labels reflect noise, outdated practice, or judgments that are inconsistent with the stated standard.
 
-## What's missing
+Third, it can make disagreement more interpretable. If the system departs from the standard, we can ask where and how. Are the departures concentrated in cases with high uncertainty? Are they associated with low-probability high-severity outcomes? Do they reflect underweighting of particular consequences? These are more informative questions than simply asking whether the system was right or wrong.
 
-Even with all four requirements satisfied, the picture is incomplete.
+Fourth, it can support comparison across decision makers, including human, algorithmic, and hybrid decision processes. If the same standard is used, then differences in observed choices can be interpreted relative to that standard rather than relative to shifting reviewer impressions.
 
-You've named a procedure. You've measured alignment. The score comes back: 0.62 for one agent, 0.59 for the other, both with reasonable error bars, both on the same scale, both interpretable as alignment-with-the-named-procedure.
+These advantages depend on the standard being explicit. A hidden standard cannot do this work.
 
-But what if the agents aren't actually deciding in a way that's *of the kind* the procedure describes? What if their choice patterns simply aren't the kind of thing that a "more or less aligned" model can fit? Then the score is still a number, but a number from a model that doesn't fit the data. A higher score means the model fit the data slightly better in one place, not that the agent is decisively a better decision-maker.
+## What this kind of assessment cannot show
 
-This is the gap the next post fills. Once you've committed to measuring alignment with a stated procedure, you've taken on a second obligation: to check that the measurement is meaningful for this decision-maker. The two layers — *measuring alignment* and *checking that the measurement is meaningful* — together describe the shape of the tool the series is arguing you need.
+It is equally important to say what a procedural assessment does not show.
+
+It does not show that the stated standard is the only reasonable one. SEU can be used as a reference point without claiming that every departure from SEU is irrational in every context.
+
+It does not show that labels and outcomes are irrelevant. External validation remains important. If a system behaves in a way that is formally consistent with a stated standard but performs poorly in practice, that matters. The point is not to replace empirical validation with decision theory. The point is to add a dimension of assessment that empirical accuracy alone does not provide.
+
+It does not show that a decision maker should be trusted. A system can be consistent with a stated standard and still be wrong about probabilities, wrong about utilities, incomplete in its representation of consequences, or inappropriate for the institutional setting in which it is being used.
+
+Finally, it does not show that real decision makers must satisfy the standard exactly. That expectation would be too strong for most practical purposes. In applications, the more useful question is often not whether a decision maker perfectly satisfies the standard, but how its choices change as it departs from the standard.
+
+That is the question of sensitivity.
 
 ## Where this goes next
 
-The next (and final) post in the series takes up the second layer: how to tell whether a measurement of alignment is actually saying something about the decision-maker in front of you, or whether it's a number from a misspecified model. It's the part of the picture that turns the measurement from a score into evidence.
+The next post turns from consistency to sensitivity.
+
+If SEU is used as a reference point, then one possible evaluation asks whether observed choices satisfy the SEU standard. But a binary result is usually not the most useful result. Real decision makers may approximate a standard, satisfy it in some regions of a decision problem and not others, or depart from it in ways that matter more or less depending on the stakes.
+
+The practical question is therefore graded: how consequential are departures from the stated standard? That question motivates the SEU Sensitivity project.

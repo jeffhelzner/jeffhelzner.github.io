@@ -1,10 +1,10 @@
 ---
-title: "Part 1 — Why measure how an AI agent decides?"
+title: "Part 1 - Evaluating decisions, not just outcomes"
 date: 2026-05-01
 author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-1-why-measure"
-description: "If you've put an AI agent in a decision-making seat, you need a way to tell whether it's actually deciding well."
-summary: "If you've put an AI agent in a decision-making seat, you need a way to tell whether it's actually deciding well. Three jobs you can't do without one — and why the obvious shortcuts don't get you there."
+description: "Why accuracy against a labeled test set is not enough to evaluate decision makers under uncertainty."
+summary: "A decision can be good even when the outcome is bad, and bad even when the outcome is good. That distinction matters when evaluating AI-assisted decisions under uncertainty."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
@@ -17,48 +17,84 @@ draft: true
 Part 1 · [Part 2](evaluating-ai-decisions-02-measuring-alignment.html) · [Part 3](evaluating-ai-decisions-03-checking-meaningfulness.html)
 :::
 
-TL;DR: Suppose you've deployed an LLM-based agent to assist with insurance claims triage. There's a natural sense in which you want it to make *better* decisions, not just plausible-looking ones. Acting on that preference — adjusting the agent, choosing between candidate agents, watching for drift — requires a way to *measure* how well the agent decides. This post is about why that measurement problem is unavoidable, and why the obvious shortcuts ("it looks reasonable," "we trained a classifier on past decisions") don't actually solve it.
+Suppose a decision maker must choose among several alternatives whose consequences are uncertain. We may have a view about how such a decision ought to be made: the decision maker should represent the possible consequences of each alternative, assign beliefs or probabilities to those consequences, evaluate them according to its preferences, and choose in a way that is appropriately responsive to both its beliefs and its preferences.
 
-## A scenario that probably sounds familiar
+If we have such a view, then we have a corresponding evaluation problem. We can ask whether an observed decision maker is choosing in a way that is consistent with that view.
 
-You're piloting an LLM-based agent that assists with claims triage. On any given claim it has to weigh things it can't be sure about: how severe the loss really is, whether the documentation hangs together, whether there are signals of fraud, whether this is the kind of file that tends to escalate, what the downstream cost of a misroute looks like. None of these are observable in the moment of the decision. The agent reads the file, weighs what it can, and makes a call.
+That question is not the same as asking whether the decision maker was accurate on a labeled test set.
 
-Most of the time, the calls look reasonable. A senior adjuster, glancing at a sample, would mostly nod. Some of the time, they wouldn't — and that's exactly the point of running a pilot.
+This distinction is the starting point for the series. The motivating application is AI-assisted decision making, especially in insurance settings such as underwriting or claims triage. But the point is more general. The decision maker might be a person, a model, an AI agent, or a human-machine process. In each case, if the decision is made under uncertainty, then evaluating the decision maker requires care about what exactly is being evaluated.
 
-The question that pilot is supposed to answer is not "does this agent produce plausible-looking outputs?" It's "is this agent making *good decisions* on these files, and how do we know?"
+## Decisions and outcomes
 
-That second question turns out to be much harder than the first. And it doesn't go away once you decide to use the agent. It becomes a question you'll need an answer to, repeatedly, for as long as the agent is in production.
+In many practical settings, the quality of a decision cannot be read directly from the outcome that happens to follow it.
 
-## Three jobs you can't do without measurement
+Consider a claims triage example. A system is asked to decide whether a claim should be routed to ordinary handling or escalated for more specialized review. At the time of the decision, the system does not know the full severity of the claim, whether litigation will occur, whether the claimant's condition will develop unexpectedly, whether documentation is complete, or whether early signals of complexity are meaningful. It has evidence bearing on these questions, but not the answers themselves.
 
-Three things any team in this position will eventually want to do — and none of them can be done by eye.
+Later, an outcome is observed. The claim may settle uneventfully, or it may become expensive and complex. That outcome matters. It is evidence. But it is not identical to the quality of the original triage decision.
 
-**Intervention.** You suspect the agent could decide better. You change the system prompt, swap to a different base model, tighten the temperature, fine-tune on internal examples. You want to know whether the change actually helped. Not whether the outputs *look* better; whether the decisions *are* better. To answer that, you need a number — or something that behaves like one — that you can compute before and after.
+A good decision can lead to a bad outcome. A claim may look routine on the available evidence and nevertheless deteriorate for reasons no reasonable decision procedure could have anticipated. A bad decision can also lead to a good outcome. A claim may be mishandled at the triage stage and nevertheless resolve favorably because later events happen to break in the insurer's favor.
 
-**Comparison.** You're choosing between candidate agents. Maybe two LLM vendors with different strengths. Maybe two configurations of the same model. Maybe an off-the-shelf agent against an internally tuned one. Comparing them on a sample of claims and forming an impression won't scale, won't be reproducible, and won't survive a pushback from procurement or risk. You need a measurement that reads the same way across candidates, on the same workload.
+This is not a subtle distinction in decision analysis. It is one of the basic reasons decision theory is needed at all. Decisions are made before uncertainty is resolved. Outcomes are observed after uncertainty is resolved. A serious evaluation of decision making has to respect that difference.
 
-**Monitoring.** The agent has been in production for some time. The model behind it gets updated on the vendor's schedule. The mix of claims drifts seasonally. New fraud patterns emerge. You want to know whether the agent's decision quality is holding up, drifting, or quietly degrading. Monitoring requires a measurement you can compute repeatedly, on fresh data, without having to convene a panel of senior adjusters every time.
+## What labeled accuracy can and cannot tell us
 
-Each of these — intervention, comparison, monitoring — is blocked without measurement. Each of them is something an insurance team will, in fact, want to do. The measurement problem is not optional; it's the problem you've taken on the moment you put an AI agent in a decision-making seat.
+The natural response is to evaluate the system on a labeled test set. If a collection of historical claims has labels indicating the correct triage decision, then we can ask how often the system agrees with the labels. This is a useful exercise when the labels are available, when their provenance is understood, and when agreement with those labels is the evaluative target.
 
-A note on what *rationality* means in this series, since the word is going to come up: I'm using it pragmatically, as a shorthand for "operating expectations for a decision process." I'm not making a philosophical claim about what rationality really is. The question this series is concerned with is not whether good decision-making matters — stipulated: it does — but how to tell whether you're getting it.
+But labeled accuracy does not by itself settle the question of decision quality.
 
-## Why the obvious shortcuts don't work
+First, a labeled test set may not exist. In many decision problems, the relevant outcomes arrive slowly, incompletely, or in forms that are difficult to connect cleanly to the original decision. Insurance examples are common in this respect. A triage decision may be made today, while the information needed to assess its consequences unfolds over months or years.
 
-Two shortcuts will occur to anyone reading this. Both are tempting; neither delivers what intervention, comparison, and monitoring actually require.
+Second, labels can be costly. If the labels require review by senior underwriters, claim adjusters, physicians, attorneys, or other domain experts, then producing a large labeled set is not merely a technical step. It is an operational project. The cost matters, especially if the evaluation is meant to be repeated as systems, workloads, and business conditions change.
 
-**Shortcut 1: "Have a senior adjuster look at the outputs."** Useful as a sanity check, and there's no substitute for it as a ground-truth anchor on individual files. But as a measurement, it has known problems. Different judges disagree. The same judge disagrees with herself on a Tuesday vs. a Friday. Most importantly, you can't say what's being measured. "Looks reasonable to Maria" is not a number you can compute before and after a prompt change, or compare across candidate agents on the same workload, or recompute weekly to monitor drift. It also doesn't scale: the volume that makes the agent worth deploying is exactly the volume that breaks human review as a measurement strategy.
+Third, labels may reflect judgment rather than fact. In a claims triage setting, a label may record what one expert reviewer thought should have been done. Another expert might have labeled the same case differently. A committee might have reached a compromise. A historical label may encode local practice at a particular time, not a stable standard of good decision making.
 
-**Shortcut 2: "Train a classifier on past decisions."** Tempting, especially for an analytics team comfortable with supervised learning. Label some past triage decisions as good or bad, train a model to predict the labels, run new decisions through it, get a score. The score is graded, scales nicely, and updates on a schedule. Why isn't this the answer?
+Fourth, labels may reflect outcomes in a way that conflates decision quality with luck. If a claim did not escalate, the associated triage decision may be labeled correct. But perhaps it was a poor decision that happened not to be punished. If a claim did escalate, the triage decision may be labeled incorrect. But perhaps it was a reasonable decision given the information available at the time.
 
-Because the score doesn't tell you what it's measuring. It tells you how closely the agent's decisions resemble whatever was labelled "good" in the training data. If the labels reflect a particular adjuster's judgment, the score measures conformity to that adjuster. If they reflect outcomes (claims that didn't escalate, didn't get litigated), the score measures conformity to a particular slice of outcomes from a particular period — which conflates good decisions with lucky ones, and silently bakes in whatever distribution shift has happened since. A higher score from such a classifier means *something*, but you can't say what. That's a serious problem when the score is supposed to support a decision about which agent to deploy, or whether a prompt change was an improvement.
+These are not objections to test sets. They are objections to treating test-set accuracy as if it exhausted the evaluation problem.
 
-The measurement that intervention, comparison, and monitoring actually need has a different shape. It has to give you a graded answer (real agents are partially good at this, not perfectly good or hopeless). It has to come with some sense of how much to trust it (when you're comparing two agents on a hundred files, you need to know whether the difference you're seeing could just be noise). It has to mean the same thing across agents, configurations, and time. And — this is the part the classifier shortcut hides — it has to be tied to a *stated* account of what good decision-making looks like in this setting, so that when the score moves, you can say what moved.
+## Two different questions
 
-That fourth requirement is the one that does the most work in the rest of the series. It's also the one that turns out to be a feature rather than a constraint, for reasons I'll get to.
+It is helpful to separate two questions that are often run together.
+
+The first question is external:
+
+> Did the decision maker's choices agree with the labels or outcomes we are using as our benchmark?
+
+The second question is procedural:
+
+> Did the decision maker combine information about alternatives, uncertain consequences, and preferences in a way that is consistent with a stated standard of choice?
+
+Both questions can matter. The first is often indispensable. If a system performs poorly against carefully constructed labels, that is important evidence. No evaluation framework should pretend otherwise.
+
+But the second question is different. It asks whether the decision maker's choices have a certain kind of internal structure. Are the choices responsive to changes in probabilities in the way the standard says they should be? Are they responsive to changes in consequences or utilities? Do they treat materially similar tradeoffs similarly? Do they choose as if beliefs and preferences are being combined according to a principled rule?
+
+These questions can be asked even when a definitive labeled test set is unavailable. They can also be asked when labels are available but incomplete, costly, judgment-dependent, or tied too closely to realized outcomes.
+
+## Why this matters for AI-assisted decisions
+
+AI systems make the distinction more pressing, but they do not create it.
+
+In a human-only process, decision makers often carry implicit standards with them. A senior adjuster may not write down a formal decision rule, but years of experience, institutional training, and professional norms constrain how evidence is interpreted and how tradeoffs are made. Those constraints may be imperfect, variable, and difficult to audit, but they are part of the practice.
+
+When an AI system is added to the process, especially one that produces recommendations or triage decisions at scale, the need for an explicit evaluative standard becomes harder to avoid. It is no longer enough to say that the outputs look plausible, or that they usually match historical labels. We need to know something about the basis on which the system is making distinctions among alternatives.
+
+This does not mean that every AI-assisted decision process must be reduced to a formal decision-theoretic model. It means that if we have a view about how a decision maker should combine beliefs and preferences under uncertainty, then we should be able to ask whether the observed decision maker is behaving consistently with that view.
+
+That is the question this series is concerned with.
+
+## The role of a stated standard
+
+To ask whether a decision maker is deciding well in this procedural sense, we need to state the standard relative to which the assessment is being made.
+
+For example, one possible standard is subjective expected utility theory. On that view, a decision maker represents uncertainty probabilistically, assigns utilities to possible consequences, and chooses alternatives according to expected utility. There are well-known debates about the scope and interpretation of this standard. The point here is not to settle those debates. The point is that SEU gives us a clear example of a stated procedure for combining beliefs and preferences under uncertainty.
+
+Once a standard is stated, a new kind of evaluation becomes possible. We can ask not only whether the decision maker matched labels, but whether its choices are consistent with that standard. We can ask how close the choices are to the standard. We can ask how consequential departures from the standard are. We can ask whether the observed choices are even the kind of choices for which the standard provides a useful model.
+
+Those are different questions from accuracy. They do not replace accuracy. They supplement it by addressing a dimension of decision quality that accuracy alone can miss.
 
 ## Where this goes next
 
-The next post takes up the question of what a measurement of decision quality has to look like, in the setting where the consequences of a decision are uncertain at the moment it's made — which is most decisions worth measuring, and certainly the situation in claims triage. The post after that takes up a question that the second post leaves open: how do you know your measurement is telling you anything meaningful about *this* decision-maker, as opposed to producing a number from a model that doesn't actually fit how this agent decides?
+The next post makes the role of the stated standard more explicit. If we want to assess a decision maker procedurally, we need to say what ingredients the decision maker is supposed to combine and what rule or standard governs the combination.
 
-Together, those two layers — *measuring alignment* and *checking that the measurement is meaningful* — describe the shape of the tool the rest of the series argues you need.
+That leads naturally to beliefs, preferences, alternatives, and uncertain consequences. It also explains why SEU is a useful reference point for this series: not because it is the only possible account of rational choice, but because it gives a precise and well-studied account of how a decision maker might be expected to choose under uncertainty.

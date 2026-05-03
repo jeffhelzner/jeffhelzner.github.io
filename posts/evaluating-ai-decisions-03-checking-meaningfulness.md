@@ -1,10 +1,10 @@
 ---
-title: "Part 3 — Is the measurement telling you anything?"
+title: "Part 3 - Measuring departures from a decision standard"
 date: 2026-05-01
 author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-3-checking-meaningfulness"
-description: "A measurement of alignment is useful only if it is meaningful for the decision-maker in front of you."
-summary: "A measurement of alignment is only useful if it's meaningful for the decision-maker in front of you. The second layer of the tool is the part that tells you whether the number is evidence or noise."
+description: "Why sensitivity to departures from a stated decision standard matters for evaluating decision makers under uncertainty."
+summary: "Real decision makers rarely satisfy an idealized standard exactly. The practical question is how consequential their departures from that standard are."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","model-adequacy","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
@@ -17,75 +17,89 @@ draft: true
 [Part 1](evaluating-ai-decisions-01-why-measure.html) · [Part 2](evaluating-ai-decisions-02-measuring-alignment.html) · Part 3
 :::
 
-TL;DR: A graded, uncertainty-quantified, comparable measurement of how well an agent's choices align with a stated procedure is necessary, but not sufficient. The measurement comes from a model of how a more-or-less aligned decision-maker would choose. If the agent in front of you doesn't actually decide in a way that model can fit, the score is a number from a misspecified model — directionally readable, but not evidence of anything in particular. The second layer of a useful tool is an *adequacy check*: it tells you whether the measurement is meaningful for this decision-maker. With both layers in place, you have something that can support intervention, comparison, and monitoring as evidence rather than as decoration.
+The first post argued that accuracy against labels does not exhaust the evaluation of decisions under uncertainty. The second argued that a procedural assessment requires a stated standard for combining beliefs and preferences. Subjective expected utility theory is one possible standard: precise, familiar, and strong enough to make the assessment question well defined.
 
-*Quick recap:* a measurement of decision quality that can support intervention, comparison, and monitoring has to be graded, uncertainty-quantified, comparable across agents and over time, and tied to a stated procedure for how a good decision-maker would combine beliefs about uncertain consequences with preferences over them. Call that the *measurement-of-alignment* layer — the (A) layer for the rest of this post. This post is about a second layer that the first one needs in order to be trustworthy.
+But even after a standard has been stated, a further question remains. Real decision makers will rarely satisfy an idealized standard exactly. This is true of human decision makers, algorithmic systems, and human-machine processes. Exact conformity is usually too much to expect and, in many applications, too crude an evaluative target.
 
-## Back to triage, with a monitoring vignette
+The practical question is not only whether a decision maker departs from the standard. It is how much the departure matters.
 
-The agent has been in production for nine months. You've been recomputing the alignment measurement on a rolling window — last quarter's claims, refreshed weekly. The number has been hovering around 0.62 for most of the year. In the last six weeks it's drifted down to 0.55. The error bars say the drop is real, not noise.
+That is the motivation for a sensitivity framework.
 
-Here's the question that will land on your desk: *what does the drift mean?*
+## From violation to sensitivity
 
-There are at least three live possibilities.
+Suppose we use SEU as the stated standard. One possible evaluation would ask whether the decision maker's choices satisfy the standard. In a formal setting, this might be treated as a yes-or-no question. Are the choices representable as maximizing expected utility relative to some probability and utility assignments, subject to whatever constraints the model imposes?
 
-- **The agent has actually gotten worse.** The vendor pushed a model update; the new version handles your file mix less well; decisions that used to track the procedure you've named are now tracking it less reliably. This is the reading that justifies action.
+For practical evaluation, that binary question is often too blunt.
 
-- **The workload has shifted.** A new line of business is sending different kinds of files into the queue. The agent's underlying decision behavior hasn't changed, but the procedure you're measuring alignment against fits this new mix less well — perhaps because the new files involve trade-offs the procedure doesn't handle, or because the decisions on these files are driven by considerations the procedure doesn't represent. The agent isn't worse; the *measurement* fits less well on this slice.
+A decision maker may depart from SEU in ways that have little effect on the choices that matter. Another decision maker may depart from SEU in a small number of cases, but those cases may involve high-stakes tradeoffs. A third decision maker may satisfy the standard across routine cases while failing badly in cases involving low-probability severe consequences. Treating all of these as simple failures misses the point.
 
-- **The measurement was never really fitting.** It produced a stable number for nine months, but the number came out of a model that didn't actually capture how the agent decides. The drop reflects a change in the data, not a change in the agent's decision quality, because the model was tracking surface features the whole time.
+Sensitivity asks a more graded question:
 
-The (A) layer can't, by itself, tell you which of these is happening. It can tell you the score moved. It can tell you the move is bigger than the noise. It can't tell you whether the move is evidence about *the agent's decision quality* or evidence about *the model's fit to the situation*. Distinguishing those two things is the job of a second layer.
+> How much do the relevant choices, values, or outcomes change as the decision maker departs from the stated standard?
 
-## What a measurement of alignment actually rests on
+This question is especially important when the standard is idealized. The value of an idealized standard is not only that it allows us to classify behavior as conforming or nonconforming. Its value is that it provides a reference point from which departures can be measured.
 
-To produce a number, the (A) layer commits to something more than a procedure. It commits to a *model* — an account of how a decision-maker who is more or less aligned with the procedure would make choices. The score is the answer to a specific question: *if this agent were more or less aligned with the named procedure (and decided the way the model says such decision-makers decide), how aligned would it have to be to produce the choices we actually saw?*
+## Why departures are not all alike
 
-That question has an answer regardless of whether the model is the right model for this decision-maker. You can fit a model to a sequence of coin flips that says "this agent is 0.62 aligned with the laws of arithmetic"; the number will come back, and it will be stable, and it will mean nothing. The model fits the data trivially because the data don't have the structure the model is looking for.
+Consider again the claims triage example.
 
-The same problem can arise more subtly with an actual AI agent on actual decisions. The agent's choices may not be of the *kind* the model is built to fit — they may be driven by surface features, by biases the model doesn't represent, by considerations orthogonal to the procedure. The model still produces a number. The number still moves around. None of it is evidence about decision quality, because the model isn't fitting the agent's behavior in any meaningful sense.
+One system may be slightly inconsistent in how it handles close cases. When the expected values of ordinary handling and escalation are nearly equal, it sometimes chooses one and sometimes the other in a way that does not fully track the SEU calculation. This is a departure from the standard. But if the alternatives are genuinely close, the practical effect may be limited.
 
-This is the misspecification worry, and it's not a hypothetical concern. AI agents in production routinely exhibit choice patterns that look reasonable in isolation but don't add up to behavior of the kind a decision-theoretic model expects. An adequacy check is what gives you a way to detect that.
+Another system may be well behaved in ordinary cases but insensitive to low-probability, high-severity outcomes. It may under-escalate claims where severe downstream consequences are unlikely but very costly. This may also appear as a departure from SEU, but it is a more consequential one.
 
-## What an adequacy check looks like
+A third system may match historical labels at a high rate while systematically using a different tradeoff than the one the organization endorses. It may agree with labels because the test set contains many routine cases, while its departures from the stated standard become important only in unusual or high-stakes cases.
 
-The adequacy check — call it the (B) layer — is a set of diagnostics that asks whether the model behind the (A) measurement actually fits this decision-maker. There are two natural moves, both expressible in plain language.
+These differences matter. They are not captured by a single accuracy score. They are also not captured by a binary test of conformity to a decision standard.
 
-**Does the model reproduce the patterns the agent actually exhibits?** Take the alignment estimate that the (A) layer returned. Use it to simulate how the agent would have decided across the cases you ran. Compare those simulated decisions to the agent's real decisions — not on individual files, but on patterns: how often it goes with the obvious call, how it behaves when alternatives are close, how its tendencies shift as the stakes or the uncertainty change. If the model fits, those patterns line up. If it doesn't, they diverge in ways the score itself doesn't reveal.
+What we want to know is where the decision maker is sensitive to the standard, where it is insensitive, and how much the departures affect the choices we care about.
 
-**Does the model predict choices on cases it hasn't seen?** Hold out some of the agent's decisions when you fit the model. Then ask the fitted model to predict what the agent did on those held-out cases. A model that's actually capturing how the agent decides will predict reasonably well. A model that produced a stable score by fitting noise or surface features will predict poorly on cases it didn't see. This is a familiar move in any kind of statistical modeling, and it has the same status here: a misspecified model can fit the data it was given; it usually can't predict the data it wasn't.
+## Sensitivity and assurance
 
-Both moves are checks of the same thing: not "is the agent decision-quality-good," but "is this measurement of decision quality actually a measurement of *this* decision-maker's decision quality, or is it a number from a model that doesn't fit?" The first question is what the (A) layer answers. The second question is what makes the (A) answer worth taking seriously.
+This gives procedural evaluation a role that is different from ordinary validation against labels.
 
-## Why the (B) layer requires the procedure to be stated
+A labeled test set can provide evidence about how often a system agrees with a benchmark. A sensitivity analysis can provide evidence about the structure of the system's decision behavior. It can tell us whether the system's choices are stable under changes in probabilities or utilities. It can tell us whether departures from a standard are concentrated in parts of the decision problem that matter. It can tell us whether two systems with similar accuracy scores differ in their responsiveness to the decision-theoretic quantities we care about.
 
-Here's a point that ties the two layers together. In the previous post, the requirement that the measurement be tied to a *stated* procedure was justified by interpretability — you can't say what a score means if you can't say what it's a score of. There's a second justification that only becomes visible once the (B) layer is in view.
+This is a different dimension of assurance.
 
-The adequacy check is a check of *fit to a procedure*. To check fit to a procedure, you have to have a procedure to check fit against. If you've left the procedure implicit — as a senior reviewer's intuition does, as a classifier's training labels do, as an LLM-as-judge's pretraining does — there's no fixed thing for the data to fit or fail to fit. The "model" is whatever the judge happens to think today; the question of whether it fits the agent doesn't have a stable formulation.
+It is not a substitute for outcome analysis, expert review, operational monitoring, or legal and ethical assessment. But it addresses a question those forms of evaluation may leave open: whether the decision maker is behaving in a way that is meaningfully connected to a principled account of choice under uncertainty.
 
-Naming the procedure is what makes the adequacy check possible at all. The same act that makes the (A) measurement interpretable is the act that makes the (B) check well-defined. The two requirements that initially looked like separate methodological commitments turn out to be the same commitment, with two payoffs.
+For AI-assisted decisions, this is especially useful because apparent performance can be misleading. A system may do well on a test set for reasons that do not generalize. It may reproduce historical labels without representing the underlying tradeoffs appropriately. It may appear plausible to reviewers while being unstable in regions of the decision problem that were not heavily sampled. Sensitivity analysis gives us a way to probe these possibilities.
 
-This is what was meant earlier in the series when I said the precision requirement is a feature, not a constraint. Stating the procedure is the price of admission to a tool that can both measure decision quality *and* tell you when the measurement isn't to be trusted.
+## What a sensitivity framework needs
 
-## Pulling the two layers together
+A useful sensitivity framework for this purpose needs several features.
 
-A useful tool for evaluating AI decision-makers under uncertainty has two layers, and both are needed:
+First, it needs a stated reference standard. Without a standard, there is no well-defined notion of departure. In the SEU case, the reference standard is the expected-utility rule for combining subjective probabilities and utilities.
 
-- **(A) Measurement of alignment.** A graded, uncertainty-quantified, comparable estimate of how well the agent's choices align with a stated procedure for combining beliefs about uncertain consequences with preferences over them.
-- **(B) Adequacy check.** Diagnostics establishing that the (A) measurement is actually a measurement of *this* decision-maker — that the model behind the score fits the agent's choice patterns and predicts its behavior on unseen cases.
+Second, it needs a graded measure. The question is not merely whether the decision maker violates the standard, but how far it departs and how much the departure matters for choice.
 
-Each of the three use cases from the first post needs both.
+Third, it needs uncertainty quantification. Observed choices are finite and noisy. If we estimate sensitivity from a sample of decisions, we need to know how much confidence to place in the estimate.
 
-- *Intervention.* You changed the prompt and the (A) score went up by 0.04. Was the change an improvement, or did it shift the agent's behavior into a region where the model fits worse and produces an inflated number? Without (B), you don't know.
-- *Comparison.* Agent A scores 0.62, agent B scores 0.59, error bars allow the difference. Does the model fit both agents equally well? If it fits A well and B poorly, the comparison isn't really a comparison of decision quality — it's a comparison of one well-fit number to one less-meaningful number. (B) is what tells you whether the comparison is honest.
-- *Monitoring.* The (A) score has drifted from 0.62 to 0.55. Returning to the vignette that opened this post: the (B) layer is what lets you tell whether the agent has actually gotten worse, the workload has shifted, or the measurement was never really fitting. Without (B), the drift is a number to react to; with (B), it's evidence about a specific cause.
+Fourth, it needs diagnostics of fit. A model can produce a number even when it is not a good model of the decision maker's behavior. If the observed choices are not meaningfully related to the structure assumed by the framework, then the resulting measure should not be treated as evidence of decision quality. The assessment must include checks on whether the model is adequate for the decision maker and decision problem at hand.
 
-(A) without (B) is decoration: a score that moves on a schedule without telling you what it's tracking. (B) without (A) is partial: you know the model fits, but you haven't quantified what it says about the agent. The two together are what an evaluation team can stand behind in a memo, in front of a board, or in a conversation with a regulator.
+These requirements are methodological rather than cosmetic. They are what make the difference between a score that is merely assigned to a system and an analysis that says something interpretable about how the system decides.
 
-## Where this goes next
+## The SEU Sensitivity project
 
-This series has argued for the *shape* of a tool, not for any particular tool. The argument has been: if you're going to evaluate AI agents in decision-making roles under uncertainty, the tool you reach for should commit to a stated procedure for combining beliefs and preferences, produce a graded and uncertainty-quantified estimate of alignment with that procedure (the (A) layer), and provide adequacy checks that tell you whether the estimate is meaningful for the agent in front of you (the (B) layer). The shape is more constrained than it looks, and most off-the-shelf evaluation approaches don't have it.
+The [SEU Sensitivity project](https://jeffhelzner.github.io/seu-sensitivity/) is one attempt to make this kind of assessment operational.
 
-The [SEU Sensitivity project](https://jeffhelzner.github.io/seu-sensitivity/) is one realization of a tool with this shape. It commits to a specific procedure (drawn from classical decision theory), produces a graded estimate of alignment with that procedure with calibrated uncertainty, and includes diagnostics for whether the measurement is meaningful for a given decision-maker. Subsequent posts will work through it in detail, including how it handles each of the use cases this series has been concerned with — intervention, comparison, and monitoring — on actual AI agents.
+The project uses SEU as a reference point. It does not require the stronger claim that SEU is the only possible standard for rational choice. Rather, it asks what can be learned by treating SEU as an explicit standard and examining how sensitive decisions are to departures from it.
 
-The point of the present series was the prior question: *what would a tool worth using have to look like?* If that question now has a clearer answer, the series has done its job.
+In that sense, the project is motivated by the argument of this series:
+
+- If decisions are made under uncertainty, outcome accuracy alone does not settle the question of decision quality.
+- If we have a view about how beliefs and preferences should be combined, we can assess choices relative to that view.
+- If the stated view is SEU, then departures from SEU can be studied not only as violations, but as quantities whose practical significance can vary.
+- If those departures can be estimated with uncertainty and checked for adequacy, they provide a useful complement to labeled accuracy, expert review, and outcome-based validation.
+
+The broader point is not limited to SEU. Any serious procedural assessment needs to say what standard it is using and what kind of departure from that standard matters. SEU is a natural starting point because it is precise, well studied, and directly concerned with the combination of beliefs and preferences under uncertainty.
+
+## What follows
+
+The initial series has been concerned with the prior question: why evaluate decision makers in this way at all?
+
+The answer is that some important evaluation questions are not answered by labeled accuracy. We may want to know whether a decision maker is using information in a way that is consistent with a stated account of good decision making. We may want to know how consequential its departures from that account are. We may want to compare systems not only by whether they match historical labels, but by how their choices respond to probabilities, utilities, and tradeoffs.
+
+Those questions arise naturally in AI-assisted decision making, but they are not specific to AI. They belong to the more general problem of evaluating decisions under uncertainty.
+
+Subsequent posts can therefore be more concrete. They can examine the SEU Sensitivity framework directly, work through examples, and ask how this kind of analysis behaves in realistic decision problems. The role of the present series is to make clear why such a framework is worth considering in the first place.
