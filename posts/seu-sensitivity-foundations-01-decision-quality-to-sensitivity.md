@@ -89,6 +89,8 @@ Third, as `alpha` approaches zero, the model converges to random choice.
 
 These properties are simple, but they do important interpretive work. They justify reading `alpha` as a sensitivity parameter rather than as an arbitrary fitting knob.
 
+![Three fundamental softmax properties: increasing sensitivity concentrates probability on the best alternative, very high sensitivity approaches deterministic optimization, and very low sensitivity approaches uniform random choice.](https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation_files/figure-html/fig-three-properties-output-1.svg){#fig-softmax-three-properties fig-alt="Visual summary of the three core softmax properties. The left panel shows the probability of the value-maximizing alternative increasing as alpha increases. The middle panel illustrates convergence toward deterministic optimization as alpha becomes large. The right panel illustrates convergence toward uniform random choice as alpha approaches zero."}
+
 ## Why scale matters
 
 There is one important complication. Utility scales are not unique. If a utility function represents the same preferences after being stretched or shifted, then the numerical size of utility differences is not meaningful until a scale has been fixed.

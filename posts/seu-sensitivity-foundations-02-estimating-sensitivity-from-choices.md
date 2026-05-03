@@ -81,6 +81,8 @@ The implementation represents the spacing between utilities through increments. 
 
 This matters because the sensitivity parameter only has a stable interpretation once the utility scale is fixed. Without standardization, sensitivity and utility scale would be confounded. With standardization, `alpha` can be interpreted as sensitivity to expected-utility differences on a common scale.
 
+![Incremental utility construction: simplex increments determine ordered utilities on the zero-to-one scale.](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation_files/figure-html/fig-utility-construction-output-1.svg){#fig-utility-construction fig-alt="Illustration of the incremental utility construction. The left panel shows sample delta vectors drawn from a Dirichlet prior. The right panel shows the corresponding ordered utility vectors anchored at zero for the worst consequence and one for the best consequence."}
+
 ## From beliefs and utilities to expected utilities
 
 Once the model has a probability distribution over consequences and a utility value for each consequence, it can compute the expected utility of each alternative.
@@ -124,6 +126,8 @@ The prior predictive report uses a moderate study design: 25 decision problems, 
 That variation is the point. Before seeing data, the model allows weak, moderate, and strong sensitivity. It does not assume the answer.
 
 The simulations also confirm the theoretical behavior from the first foundational report. Higher `alpha` is associated with a greater probability of selecting the SEU-maximizing alternative. Very low `alpha` produces near-random behavior. Very high `alpha` produces near-deterministic SEU maximization.
+
+![Prior predictive relationship between alpha and the proportion of SEU-maximizing alternatives selected.](https://jeffhelzner.github.io/seu-sensitivity/foundations/03_prior_analysis_files/figure-html/fig-seu-max-vs-alpha-output-1.svg){#fig-prior-alpha-seu-max fig-alt="Scatterplot from the prior predictive analysis showing that higher alpha values are associated with a higher proportion of choices selecting the SEU-maximizing alternative."}
 
 This gives the model a sanity check before it is used for inference. If the prior predictive distribution had failed to include plausible observed behaviors, the model would need revision before being applied.
 

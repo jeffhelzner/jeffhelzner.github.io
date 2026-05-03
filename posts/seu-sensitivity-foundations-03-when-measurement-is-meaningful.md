@@ -95,6 +95,8 @@ The sensitivity parameter `alpha` is recovered well. Credible interval coverage 
 
 The parameters that decompose expected utility into beliefs and utilities are harder to recover. The feature-to-probability mapping `beta` and the utility increments show wider uncertainty and slower learning. They are not completely uninformed by the data, but they are less precisely identified than `alpha`.
 
+![Parameter recovery for the sensitivity parameter alpha, comparing true values to posterior estimates and showing credible interval coverage across recovery iterations.](https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery_files/figure-html/fig-alpha-recovery-output-1.svg){#fig-alpha-recovery-foundations fig-alt="Parameter recovery visualization for alpha. The left panel compares true alpha values to estimated values with an identity line. The right panel shows 90 percent credible intervals across recovery iterations, colored by whether they contain the true value."}
+
 This distinction is central to interpreting the framework.
 
 ## Why sensitivity can be easier to recover than its ingredients
@@ -104,6 +106,8 @@ The reason for the asymmetry is structural.
 Choices under uncertainty depend on expected utilities. Expected utilities combine subjective probabilities and utilities. If we only observe choices, then we see the result of that combination indirectly. We do not separately observe the decision maker's beliefs or utilities.
 
 Different combinations of beliefs and utilities can produce similar expected-utility patterns. That creates a coupling between the parameters that determine beliefs and the parameters that determine utilities. Uncertainty in one can be offset by uncertainty in the other.
+
+![Posterior correlation between beta and delta parameters, showing compensatory coupling between the feature-to-belief mapping and utility increments.](https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery_files/figure-html/fig-beta-delta-correlation-output-1.svg){#fig-beta-delta-coupling fig-alt="Posterior correlation visualization for beta and delta parameters. The left panel shows the distribution of posterior correlations, emphasizing negative compensatory coupling. The right panel relates true alpha to the strength of beta-delta posterior correlation."}
 
 The sensitivity parameter has a different role. For a given expected-utility structure, `alpha` governs how strongly choices respond to expected-utility differences. It is therefore more directly tied to the stochastic pattern of choices.
 
