@@ -1,3 +1,5 @@
 archived
 .DS_Store
 posts/_site/
+.resume-build/
+BLOG_SERIES_PLAN.md

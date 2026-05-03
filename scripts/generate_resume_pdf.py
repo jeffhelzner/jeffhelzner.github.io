@@ -2,7 +2,8 @@
 """
 Generate resume HTML from Markdown and print to PDF using headless Chrome.
 
-Creates `Jeff_Helzner_Resume.html` and `Jeff_Helzner_Resume.pdf` in the repository root.
+Creates the public `resume.pdf` in the repository root. Intermediate HTML is
+written to `.resume-build/`, which is ignored by git.
 """
 import os
 import sys
@@ -10,8 +11,9 @@ import subprocess
 import shutil
 
 MD_FILE = 'Jeff_Helzner_Resume.md'
-HTML_FILE = 'Jeff_Helzner_Resume.html'
-PDF_FILE = 'Jeff_Helzner_Resume.pdf'
+BUILD_DIR = '.resume-build'
+HTML_FILE = os.path.join(BUILD_DIR, 'resume.html')
+PDF_FILE = 'resume.pdf'
 
 def ensure_markdown():
     try:
@@ -52,6 +54,8 @@ def main():
     if style:
         html += style + '\n'
     html += '</head>\n<body>\n' + html_body + '\n</body>\n</html>'
+
+    os.makedirs(BUILD_DIR, exist_ok=True)
 
     with open(HTML_FILE, 'w', encoding='utf-8') as f:
         f.write(html)

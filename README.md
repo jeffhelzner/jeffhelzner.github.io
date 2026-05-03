@@ -14,6 +14,15 @@ python3 -m http.server 8000
 
 Any static file server (Node `http-server`, `live-server`, etc.) works the same way.
 
+## Repository structure
+
+- `index.html`, `styles.css`, and `script.js` define the main static site.
+- `posts/` contains blog source Markdown, published HTML, and Quarto assets required by the published posts.
+- `posts.json` and `projects.json` power the dynamic post and project listings.
+- `resume.pdf` is the public resume linked from the site.
+- `Jeff_Helzner_Resume.md` is the resume source used by `scripts/generate_resume_pdf.py`.
+- `sitemap.xml`, `robots.txt`, and `feed.xml` support search indexing and feed discovery.
+
 ## Adding projects and posts
 
 Edit the JSON lists in the repo to add content. Examples below show the expected fields and formats.
@@ -59,6 +68,31 @@ When creating a post page, include minimal OG/Twitter meta tags for good preview
 <meta name="twitter:card" content="summary_large_image">
 ```
 
+## Blog publishing workflow
+
+The blog uses Quarto for Markdown-authored posts. Source drafts live in `posts/*.md`; published pages are committed as `posts/*.html` because GitHub Pages serves this repository directly.
+
+After editing Quarto posts, render them from the `posts/` directory:
+
+```bash
+cd posts
+quarto render
+```
+
+Copy the generated publishable article HTML and required assets from `posts/_site/` into `posts/` before committing. Do not commit `posts/_site/`; it is a local build directory.
+
+Update `posts.json`, `sitemap.xml`, and `feed.xml` when publishing new posts.
+
+## Resume workflow
+
+The site links to `resume.pdf`. To regenerate it from `Jeff_Helzner_Resume.md`, run:
+
+```bash
+python3 scripts/generate_resume_pdf.py
+```
+
+The script writes intermediate HTML to `.resume-build/` and updates `resume.pdf` in the repository root.
+
 ## Deployment (GitHub Pages)
 
 This repository is configured to publish at https://jeffhelzner.github.io. Because the repository name is `jeffhelzner.github.io`, GitHub Pages serves the site from the repository root (typically the `main` branch) by default.
@@ -93,8 +127,8 @@ If you use a different default branch or a GitHub Pages configuration, update th
 
 ## Notes
 
-- The site is static HTML/CSS/JS and has no build step. Optional migration to a static site generator (e.g., Eleventy) is possible if you prefer Markdown authoring.
-- Scripted assets: see the `assets/` folder (for example, `assets/gen_social_png.py`) for utilities used to generate social images.
+- The deployed site is static HTML/CSS/JS. Quarto and the resume script are local authoring tools whose generated public artifacts are committed to the repo.
+- Scripted assets: see `scripts/` and the archived asset utilities for generation helpers.
 - Tested in current desktop Chrome and Firefox; if you notice layout issues in other browsers or mobile, please report them.
 
 ## License
