@@ -6,4 +6,26 @@
     "summary": "A conversational overview of the SEU Sensitivity project linking to technical reports and code.",
     "url": "/posts/seu-sensitivity.html"
   }
+  ,
+  {
+    "slug": "evaluating-ai-decisions-part-1-why-measure",
+    "title": "Part 1 — Why measure how an AI agent decides?",
+    "date": "2026-05-01",
+    "summary": "If you've put an AI agent in a decision-making seat, you need a way to tell whether it's actually deciding well. Three jobs you can't do without one — and why the obvious shortcuts don't get you there.",
+    "url": "/posts/evaluating-ai-decisions-01-why-measure.html"
+  },
+  {
+    "slug": "evaluating-ai-decisions-part-2-measuring-alignment",
+    "title": "Part 2 — What a measurement of decision quality has to look like",
+    "date": "2026-05-01",
+    "summary": "If you're going to measure how well an AI agent decides, the measurement has to do specific work. Four requirements — and one that quietly rules out most of what's on offer.",
+    "url": "/posts/evaluating-ai-decisions-02-measuring-alignment.html"
+  },
+  {
+    "slug": "evaluating-ai-decisions-part-3-checking-meaningfulness",
+    "title": "Part 3 — Is the measurement telling you anything?",
+    "date": "2026-05-01",
+    "summary": "A measurement of alignment is only useful if it's meaningful for the decision-maker in front of you. The second layer of the tool is the part that tells you whether the number is evidence or noise.",
+    "url": "/posts/evaluating-ai-decisions-03-checking-meaningfulness.html"
+  }
 ]
