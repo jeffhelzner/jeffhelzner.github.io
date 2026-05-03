@@ -1,13 +1,5 @@
 [
   {
-    "slug": "seu-sensitivity",
-    "title": "SEU Sensitivity — high-level overview",
-    "date": "2024-02-15",
-    "summary": "A conversational overview of the SEU Sensitivity project linking to technical reports and code.",
-    "url": "/posts/seu-sensitivity.html"
-  }
-  ,
-  {
     "slug": "evaluating-ai-decisions-part-1-why-measure",
     "title": "Part 1 — Why measure how an AI agent decides?",
     "date": "2026-05-01",

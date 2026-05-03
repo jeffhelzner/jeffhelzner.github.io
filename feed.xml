@@ -28,12 +28,5 @@
       <pubDate>Fri, 01 May 2026 00:00:00 GMT</pubDate>
       <description>Why sensitivity to departures from a stated decision standard matters when evaluating AI decision makers under uncertainty.</description>
     </item>
-    <item>
-      <title>SEU Sensitivity - High-level overview</title>
-      <link>https://jeffhelzner.github.io/posts/seu-sensitivity.html</link>
-      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity.html</guid>
-      <pubDate>Thu, 15 Feb 2024 00:00:00 GMT</pubDate>
-      <description>A conversational overview of the SEU Sensitivity project linking to technical reports and code.</description>
-    </item>
   </channel>
 </rss>

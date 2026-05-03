@@ -14,6 +14,15 @@ python3 -m http.server 8000
 
 Any static file server (Node `http-server`, `live-server`, etc.) works the same way.
 
+Useful local preview URLs:
+
+- Home page: http://localhost:8000/
+- Blog index: http://localhost:8000/posts/
+- First published series post: http://localhost:8000/posts/evaluating-ai-decisions-01-why-measure.html
+- Resume PDF: http://localhost:8000/resume.pdf
+
+Stop the local server with `Ctrl+C` in the terminal where it is running.
+
 ## Repository structure
 
 - `index.html`, `styles.css`, and `script.js` define the main static site.
