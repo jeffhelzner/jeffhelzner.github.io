@@ -1,15 +1,37 @@
 ---
-title: "Part 2 - Beliefs, preferences, and a standard of choice"
+title: "Measuring AI Decision Quality: Beliefs, Preferences, and Standards of Choice"
 date: 2026-05-01
 author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-2-measuring-alignment"
-description: "To assess a decision maker procedurally, we need a stated account of how beliefs and preferences should guide choice under uncertainty."
+description: "How beliefs, preferences, alternatives, and consequences define a procedural standard for measuring AI decision quality under uncertainty."
 summary: "Accuracy asks whether choices match labels. A procedural assessment asks whether choices are consistent with a stated standard for combining beliefs and preferences under uncertainty."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
 part: 2
-draft: true
+draft: false
+format:
+  html:
+    include-in-header:
+      text: |
+        <link rel="canonical" href="https://jeffhelzner.github.io/posts/evaluating-ai-decisions-02-measuring-alignment.html">
+        <meta name="robots" content="index, follow">
+        <meta property="og:type" content="article">
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Measuring AI Decision Quality: Beliefs, Preferences, and Standards of Choice",
+          "description": "How beliefs, preferences, alternatives, and consequences define a procedural standard for measuring AI decision quality under uncertainty.",
+          "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
+          "datePublished": "2026-05-01",
+          "dateModified": "2026-05-02",
+          "image": "https://jeffhelzner.github.io/assets/social-card.png",
+          "mainEntityOfPage": "https://jeffhelzner.github.io/posts/evaluating-ai-decisions-02-measuring-alignment.html",
+          "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
+          "keywords": ["AI decision quality", "beliefs and preferences", "subjective expected utility", "decision standards", "uncertainty"]
+        }
+        </script>
 ---
 
 ::: {.series-nav}

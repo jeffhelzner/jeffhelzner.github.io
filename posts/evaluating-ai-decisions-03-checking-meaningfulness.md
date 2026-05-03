@@ -1,15 +1,37 @@
 ---
-title: "Part 3 - Measuring departures from a decision standard"
+title: "AI Decision Evaluation: Measuring Departures from a Decision Standard"
 date: 2026-05-01
 author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-3-checking-meaningfulness"
-description: "Why sensitivity to departures from a stated decision standard matters for evaluating decision makers under uncertainty."
+description: "Why sensitivity to departures from a stated decision standard matters when evaluating AI decision makers under uncertainty."
 summary: "Real decision makers rarely satisfy an idealized standard exactly. The practical question is how consequential their departures from that standard are."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","model-adequacy","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
 part: 3
-draft: true
+draft: false
+format:
+  html:
+    include-in-header:
+      text: |
+        <link rel="canonical" href="https://jeffhelzner.github.io/posts/evaluating-ai-decisions-03-checking-meaningfulness.html">
+        <meta name="robots" content="index, follow">
+        <meta property="og:type" content="article">
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "AI Decision Evaluation: Measuring Departures from a Decision Standard",
+          "description": "Why sensitivity to departures from a stated decision standard matters when evaluating AI decision makers under uncertainty.",
+          "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
+          "datePublished": "2026-05-01",
+          "dateModified": "2026-05-02",
+          "image": "https://jeffhelzner.github.io/assets/social-card.png",
+          "mainEntityOfPage": "https://jeffhelzner.github.io/posts/evaluating-ai-decisions-03-checking-meaningfulness.html",
+          "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
+          "keywords": ["AI decision evaluation", "decision standards", "SEU sensitivity", "model adequacy", "uncertainty"]
+        }
+        </script>
 ---
 
 ::: {.series-nav}

@@ -276,6 +276,11 @@ button.report-link:focus-visible {
   padding: 14px;
   text-decoration: none;
 }
+.series-item:hover,
+.series-item:focus-visible {
+  border-color: color-mix(in oklab, var(--accent) 48%, var(--border));
+  outline: 2px solid transparent;
+}
 .part-label {
   color: var(--accent);
   font-size: 0.78rem;

@@ -1,15 +1,37 @@
 ---
-title: "Part 1 - Evaluating decisions, not just outcomes"
+title: "Evaluating AI Decisions Under Uncertainty: Why Outcomes Are Not Enough"
 date: 2026-05-01
 author: "Jeff Helzner"
 slug: "evaluating-ai-decisions-part-1-why-measure"
-description: "Why accuracy against a labeled test set is not enough to evaluate decision makers under uncertainty."
+description: "Why accuracy against a labeled test set is not enough to evaluate AI decision quality under uncertainty."
 summary: "A decision can be good even when the outcome is bad, and bad even when the outcome is good. That distinction matters when evaluating AI-assisted decisions under uncertainty."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","insurance","evaluation","series:evaluating-ai-decisions"]
 series: "Evaluating AI Decision-Makers Under Uncertainty"
 part: 1
-draft: true
+draft: false
+format:
+  html:
+    include-in-header:
+      text: |
+        <link rel="canonical" href="https://jeffhelzner.github.io/posts/evaluating-ai-decisions-01-why-measure.html">
+        <meta name="robots" content="index, follow">
+        <meta property="og:type" content="article">
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Evaluating AI Decisions Under Uncertainty: Why Outcomes Are Not Enough",
+          "description": "Why accuracy against a labeled test set is not enough to evaluate AI decision quality under uncertainty.",
+          "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
+          "datePublished": "2026-05-01",
+          "dateModified": "2026-05-02",
+          "image": "https://jeffhelzner.github.io/assets/social-card.png",
+          "mainEntityOfPage": "https://jeffhelzner.github.io/posts/evaluating-ai-decisions-01-why-measure.html",
+          "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
+          "keywords": ["AI decision evaluation", "decision quality", "uncertainty", "insurance analytics", "AI-assisted decisions"]
+        }
+        </script>
 ---
 
 ::: {.series-nav}

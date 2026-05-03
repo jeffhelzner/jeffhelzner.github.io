@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jeff Helzner</title>
+    <link>https://jeffhelzner.github.io/posts/</link>
+    <description>Essays on decision-making, uncertainty, and AI evaluation.</description>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 May 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://jeffhelzner.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Evaluating AI Decisions Under Uncertainty: Why Outcomes Are Not Enough</title>
+      <link>https://jeffhelzner.github.io/posts/evaluating-ai-decisions-01-why-measure.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/evaluating-ai-decisions-01-why-measure.html</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 GMT</pubDate>
+      <description>Why accuracy against a labeled test set is not enough to evaluate AI decision quality under uncertainty.</description>
+    </item>
+    <item>
+      <title>Measuring AI Decision Quality: Beliefs, Preferences, and Standards of Choice</title>
+      <link>https://jeffhelzner.github.io/posts/evaluating-ai-decisions-02-measuring-alignment.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/evaluating-ai-decisions-02-measuring-alignment.html</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 GMT</pubDate>
+      <description>How beliefs, preferences, alternatives, and consequences define a procedural standard for measuring AI decision quality under uncertainty.</description>
+    </item>
+    <item>
+      <title>AI Decision Evaluation: Measuring Departures from a Decision Standard</title>
+      <link>https://jeffhelzner.github.io/posts/evaluating-ai-decisions-03-checking-meaningfulness.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/evaluating-ai-decisions-03-checking-meaningfulness.html</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 GMT</pubDate>
+      <description>Why sensitivity to departures from a stated decision standard matters when evaluating AI decision makers under uncertainty.</description>
+    </item>
+    <item>
+      <title>SEU Sensitivity - High-level overview</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity.html</guid>
+      <pubDate>Thu, 15 Feb 2024 00:00:00 GMT</pubDate>
+      <description>A conversational overview of the SEU Sensitivity project linking to technical reports and code.</description>
+    </item>
+  </channel>
+</rss>

@@ -10,11 +10,11 @@ website:
   navbar:
     left:
       - text: "Home"
-        href: /
+        href: ../
       - text: "Blog"
-        href: /posts/
+        href: ./
       - text: "Projects"
-        href: /#projects
+        href: ../#projects
 
 format:
   html:

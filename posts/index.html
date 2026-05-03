@@ -7,7 +7,18 @@
     <meta name="description" content="High-level posts on rational decision-making, AI alignment, and project updates." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://jeffhelzner.github.io/posts/" />
+    <link rel="alternate" type="application/rss+xml" title="Jeff Helzner blog" href="https://jeffhelzner.github.io/feed.xml" />
     <link rel="stylesheet" href="../styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Jeff Helzner Blog",
+        "url": "https://jeffhelzner.github.io/posts/",
+        "description": "Essays on decision-making, uncertainty, and AI evaluation.",
+        "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"}
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -37,27 +48,43 @@
           <p>A three-part introduction to why decision quality needs measurement, what such a measurement has to provide, and how to tell whether the measurement is meaningful for the agent in front of you.</p>
 
           <div class="series-list" aria-label="Series posts">
-            <div class="series-item">
+            <a class="series-item" href="./evaluating-ai-decisions-01-why-measure.html">
               <span class="part-label">Part 1</span>
               <strong>Why measure how an AI agent decides?</strong>
               <span>Why intervention, comparison, and monitoring all require a real measurement of decision quality.</span>
-            </div>
-            <div class="series-item">
+            </a>
+            <a class="series-item" href="./evaluating-ai-decisions-02-measuring-alignment.html">
               <span class="part-label">Part 2</span>
               <strong>What a measurement of decision quality has to look like</strong>
               <span>The four requirements a useful measurement has to satisfy.</span>
-            </div>
-            <div class="series-item">
+            </a>
+            <a class="series-item" href="./evaluating-ai-decisions-03-checking-meaningfulness.html">
               <span class="part-label">Part 3</span>
               <strong>Is the measurement telling you anything?</strong>
               <span>Why adequacy checks are needed before a score becomes evidence.</span>
-            </div>
+            </a>
           </div>
         </div>
       </section>
 
       <main class="section">
         <h2>All Posts</h2>
+        <noscript>
+          <div class="post-list">
+            <article class="card">
+              <h3><a href="./evaluating-ai-decisions-01-why-measure.html">Part 1 - Why measure how an AI agent decides?</a></h3>
+              <p>If you've put an AI agent in a decision-making seat, you need a way to tell whether it's actually deciding well.</p>
+            </article>
+            <article class="card">
+              <h3><a href="./evaluating-ai-decisions-02-measuring-alignment.html">Part 2 - What a measurement of decision quality has to look like</a></h3>
+              <p>Four requirements for measuring how well an AI agent decides under uncertainty.</p>
+            </article>
+            <article class="card">
+              <h3><a href="./evaluating-ai-decisions-03-checking-meaningfulness.html">Part 3 - Is the measurement telling you anything?</a></h3>
+              <p>Why adequacy checks determine whether a decision-quality measurement is evidence or noise.</p>
+            </article>
+          </div>
+        </noscript>
         <div id="posts-list" class="post-list"></div>
         <div id="posts-status" class="status muted" role="status" aria-live="polite"></div>
       </main>
