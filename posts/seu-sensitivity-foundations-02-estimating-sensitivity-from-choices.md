@@ -1,12 +1,12 @@
 ---
-title: "Estimating SEU Sensitivity From Choices"
+title: "From the Abstract Model to a Stan Implementation"
 date: 2026-06-14
 author: "Jeff Helzner"
 slug: "seu-sensitivity-foundations-part-2-estimating-sensitivity-from-choices"
-description: "How observed choices become evidence about sensitivity to subjective expected utility, and why the result should be treated as an uncertain estimate."
-summary: "A sensitivity estimate is not assigned directly to a decision maker. It is inferred from observed choices through a model of beliefs, utilities, expected utilities, and probabilistic choice."
+description: "Turning the abstract SEU sensitivity model into a concrete Stan implementation, and naming the modeling choices the implementation commits us to."
+summary: "Three choices turn the abstract softmax-over-expected-utility model into something we can fit: how features map to subjective probabilities, how ordered utilities are parameterized, and which priors we place on the resulting parameters."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
-tags: ["ai","decision-making","subjective-expected-utility","bayesian-modeling","series:seu-sensitivity-foundations"]
+tags: ["ai","decision-making","subjective-expected-utility","stan","bayesian-modeling","series:seu-sensitivity-foundations"]
 series: "Foundations of SEU Sensitivity"
 part: 2
 draft: true
@@ -21,15 +21,15 @@ format:
         {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
-          "headline": "Estimating SEU Sensitivity From Choices",
-          "description": "How observed choices become evidence about sensitivity to subjective expected utility, and why the result should be treated as an uncertain estimate.",
+          "headline": "From the Abstract Model to a Stan Implementation",
+          "description": "Turning the abstract SEU sensitivity model into a concrete Stan implementation, and naming the modeling choices the implementation commits us to.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
           "datePublished": "2026-06-14",
-          "dateModified": "2026-05-02",
+          "dateModified": "2026-05-14",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html",
           "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
-          "keywords": ["SEU sensitivity", "Bayesian decision model", "prior predictive analysis", "AI decision evaluation", "uncertainty"]
+          "keywords": ["SEU sensitivity", "Stan", "Bayesian decision model", "softmax choice", "linear feature mapping", "Dirichlet prior", "lognormal prior"]
         }
         </script>
 ---
@@ -39,132 +39,154 @@ format:
 [Part 1](seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html) · Part 2 · [Part 3](seu-sensitivity-foundations-03-when-measurement-is-meaningful.html)
 :::
 
-The previous post introduced the main interpretive idea behind SEU Sensitivity. Once subjective expected utility is used as a reference standard, we can ask how strongly a decision maker's choices track expected-utility differences. The sensitivity parameter `alpha` captures that relationship: low `alpha` corresponds to weak sensitivity, high `alpha` corresponds to more consistent choice of expected-utility-favored alternatives, and the limiting cases connect random choice to deterministic SEU maximization.
+The previous post introduced the abstract object the SEU sensitivity framework is built around. Each alternative has an expected utility, choices are governed by a softmax over those expected utilities, and a single positive parameter `alpha` controls how sharply choices concentrate on the alternative that the expected-utility ranking favors. Low `alpha` corresponds to nearly uniform choice; high `alpha` approaches deterministic SEU maximization.
 
-That interpretation is useful, but it leaves a measurement question unanswered.
+That description is useful as an interpretive frame, but it is not yet a model we can fit. To compute anything from observed choices, we have to make three additional decisions.
 
-In real applications, we do not get to observe sensitivity directly. We observe choices. A model, an AI assistant, a person, or a human-machine process is presented with decision problems and selects alternatives. From those choices, we have to infer how the decision maker is related to the SEU standard.
+First, the abstract model takes the subjective probabilities `psi` as given. Real applications do not. We need to say where `psi` comes from.
 
-That is why the SEU Sensitivity framework is Bayesian. The result is not a naked score. It is an estimate with uncertainty.
+Second, the abstract model requires utilities that are ordered and standardized to the unit interval. We need a parameterization that enforces those constraints and that we can put priors on.
 
-## What the model observes
+Third, every parameter in a Bayesian model needs a prior. The choice of prior matters here in a particular way, because the priors on `alpha`, on the feature-to-belief mapping, and on the utility increments jointly determine what kinds of decision behavior the model regards as plausible before any data arrive.
 
-The initial implementation, called `m_0` in the foundational reports, begins with a study design.
+This post walks through each of these three choices as the `m_0` Stan model makes them. The point is not to retrace the Stan source line by line — the foundational implementation report does that. The point is to name the choices, say what each one commits us to, and what could in principle be changed.
 
-There is a collection of decision problems. Each problem presents a subset of alternatives. Each alternative has observable features. The decision maker chooses one of the available alternatives in each problem.
+## What the Stan program estimates
 
-That setup is deliberately general. It can represent paired comparisons, multi-alternative tasks, insurance triage options, policy choices, or experimental prompts where an AI system must choose among possible actions. The model does not require that every alternative appear in every problem. It only needs to know which alternatives were available and which one was chosen.
+It helps to start with the parameter block, because every later decision is a decision about one of these three objects.
 
-From the observer's point of view, the data look simple: here are the alternatives, here are their features, here are the choice sets, and here are the observed choices.
+```stan
+parameters {
+  real<lower=0> alpha;     // Sensitivity
+  matrix[K, D] beta;       // Feature-to-probability mapping
+  simplex[K-1] delta;      // Utility increments
+}
+```
 
-The work of the model is to connect those observations to the SEU structure.
+There are three groups of parameters. `alpha` is the sensitivity scalar from Part 1, constrained to be non-negative. `beta` is a `K x D` matrix that will convert the `D`-dimensional feature vector of each alternative into a probability distribution over `K` possible consequences. `delta` is a `(K-1)`-simplex that will become the spacing between ordered utilities on the unit interval.
 
-## From features to beliefs
+Nothing in the abstract framework forced these particular objects to exist. They are the answer the `m_0` model gives to the three modeling questions above. The remainder of this post discusses each one.
 
-SEU requires beliefs about consequences. If an alternative is chosen, what consequences might follow, and with what probabilities?
+## Choice 1: A linear-in-features softmax for subjective probabilities
 
-The `m_0` model treats those beliefs as latent. They are not directly observed. Instead, each alternative's features are used to generate a probability distribution over possible consequences.
+The first decision is how features of an alternative determine the decision maker's beliefs about its possible consequences.
 
-The foundational implementation uses a softmax mapping. A matrix of coefficients, called `beta`, maps features into subjective probabilities over consequences. In plainer terms, `beta` represents how the model thinks features of an alternative bear on the decision maker's beliefs about what will happen if that alternative is chosen.
+The `m_0` model takes a simple route. Each alternative has a feature vector `w[r]` of dimension `D`. The model multiplies that vector by `beta` and pushes the result through a softmax:
 
-For example, in an insurance triage setting, features might describe signals of claim complexity, severity, documentation, or litigation risk. The model would use those features to estimate the decision maker's implicit probability distribution over possible consequence categories. The exact application may differ, but the modeling role is the same: features become evidence about beliefs.
+```stan
+psi[i] = softmax(beta * x[i]);
+```
 
-This is a modeling assumption. A linear softmax mapping is not the only possible way to connect features to subjective probabilities. A different application might use a nonlinear mapping, domain constraints, or hierarchical structure. The foundational report uses the simple version because it is a clear starting point and because it keeps the core sensitivity idea visible.
+Equivalently,
 
-## From consequences to utilities
+$$
+\psi_{r,k} \;=\; \frac{\exp(\beta_{k,\cdot} \cdot w_r)}{\sum_{j=1}^{K} \exp(\beta_{j,\cdot} \cdot w_r)}.
+$$
 
-SEU also requires utilities. Consequences have to be evaluated, not merely predicted.
+This embeds three substantive commitments worth naming.
 
-The model assumes ordered consequences and constructs utilities on a standardized 0-to-1 scale. The worst consequence has utility 0. The best consequence has utility 1. Intermediate consequences receive utilities between those endpoints.
+The first is **linearity in features**. The log-odds of each consequence are taken to be a linear function of the feature representation. Whether that assumption is innocuous depends on how the features were constructed. In an LLM-based study where features come from a high-dimensional embedding projected to a smaller space, a linear softmax may already be quite flexible. In a domain with hand-crafted features that interact non-trivially, a linear map can be restrictive. The foundational report notes the alternatives — a nonlinear function in place of `beta * w`, hierarchical variation in `beta` across problem types, or constraints on `beta` informed by domain knowledge — but the default model uses the linear form because it is interpretable and computationally cheap.
 
-The implementation represents the spacing between utilities through increments. Those increments are constrained to be nonnegative and to sum to 1, which guarantees that the utility vector is ordered and standardized. This is the concrete counterpart of the scale convention described in the previous post.
+The second is **a shared coefficient matrix**. The same `beta` applies to every alternative. The model does not learn one mapping for one alternative and a different mapping for another; it learns a single rule that turns feature vectors into belief vectors. That is what gives the model leverage: when two alternatives appear in different problems, their estimated beliefs are tied together through `beta`.
 
-This matters because the sensitivity parameter only has a stable interpretation once the utility scale is fixed. Without standardization, sensitivity and utility scale would be confounded. With standardization, `alpha` can be interpreted as sensitivity to expected-utility differences on a common scale.
+The third is a familiar **identifiability subtlety**. The softmax is invariant to adding the same constant to every row of `beta`, so only the contrasts between rows of `beta` are identified from `psi`. The `m_0` model does not pin one row to zero; it leaves the redundancy and relies on the prior on `beta` to keep the sampler well-behaved. The consequence for interpretation is that individual entries of `beta` should not be read in isolation — only differences between rows, or the induced probabilities `psi`, are meaningful.
 
-![Incremental utility construction: simplex increments determine ordered utilities on the zero-to-one scale.](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation_files/figure-html/fig-utility-construction-output-1.svg){#fig-utility-construction fig-alt="Illustration of the incremental utility construction. The left panel shows sample delta vectors drawn from a Dirichlet prior. The right panel shows the corresponding ordered utility vectors anchored at zero for the worst consequence and one for the best consequence."}
+What we get in exchange for these commitments is something quite useful: a way to let observed features carry information about beliefs without having to elicit `psi` directly, and a single object — `beta` — that the data can refine as more choices are observed.
 
-## From beliefs and utilities to expected utilities
+## Choice 2: Ordered utilities built from a simplex
 
-Once the model has a probability distribution over consequences and a utility value for each consequence, it can compute the expected utility of each alternative.
+The second decision is how to parameterize utilities so that the SEU machinery still has the interpretation we want.
 
-The expected utility of an alternative is the probability-weighted average of the utilities of its possible consequences. In the notation of the reports, this is the dot product of the subjective probability vector and the utility vector.
+Part 1 emphasized that the sensitivity parameter `alpha` only has a stable meaning once the utility scale is fixed. If we are allowed to multiply every utility difference by a constant, we can offset that by dividing `alpha` by the same constant, and the model produces identical choice probabilities. The standardization that fixes this is the convention that the worst consequence has utility 0, the best has utility 1, and the intermediate consequences are ordered between them.
 
-This is where the SEU standard enters the statistical model. The model does not merely ask which alternative was chosen. It asks how the observed choice relates to the expected utilities implied by the estimated beliefs and utilities.
+The `m_0` model enforces both the ordering and the standardization through an incremental construction:
 
-If an alternative has higher expected utility than another, a more sensitive decision maker should be more likely to choose it. The strength of that tendency is governed by `alpha`.
+```stan
+upsilon = cumulative_sum(append_row(0, delta));
+```
 
-## From expected utilities to choices
+Here `delta` is a `(K-1)`-simplex (non-negative entries summing to 1). Prepending a zero and taking the cumulative sum produces a vector `upsilon` of length `K` with `upsilon[1] = 0`, `upsilon[K] = 1`, and `upsilon[k] <= upsilon[k+1]` for every `k`. Ordering and standardization come out automatically, by construction.
 
-The final step is the probabilistic choice rule.
+This is one of several possible parameterizations. We could have parameterized the interior utilities directly with constraints, or used an `ordered` vector and rescaled. The simplex-and-cumulative-sum route has the practical advantage that it makes the *spacing* the unknown, which is the quantity a prior on utilities should naturally express.
 
-For each decision problem, the model computes the expected utilities of the available alternatives. It then applies the softmax choice rule with sensitivity `alpha`. The result is a probability distribution over the available choices.
+This is where the third group of choices — the priors — starts to bite. The default prior on the utility increments is
 
-An observed choice is treated as one draw from that distribution.
+```stan
+delta ~ dirichlet(rep_vector(1, K-1));
+```
 
-This is what makes the model statistical rather than purely classificatory. A lower expected-utility choice is not impossible. It is just less probable when `alpha` is high. When `alpha` is low, expected-utility differences have less influence on choice probabilities.
+a symmetric Dirichlet with concentration 1, which is uniform over the simplex. Every valid configuration of utility spacings is equally likely a priori. For the moderate case `K = 3`, this means the middle utility has a prior mean of 0.5 and a prior standard deviation of roughly 0.29 — broad but not pathological.
 
-Across many observed choices, the model learns about `alpha` and the other parameters. If choices repeatedly favor the alternatives with higher estimated expected utility, the posterior distribution for `alpha` will tend to move upward. If choices look weakly related to expected utility, the posterior will support lower sensitivity values.
+Two things are worth flagging about this default. The prior is intentionally weakly informative; it expresses no preference for how utilities should be spaced. And it has a subtle dependence on `K`: as `K` grows, the marginal distribution of each increment concentrates around `1/(K-1)`, which means interior utilities cluster more tightly around equally spaced values. For larger `K`, a different concentration parameter may better express the prior uncertainty one actually has.
 
-## Why priors enter the story
+## Choice 3: A lognormal prior on alpha
 
-Because this is a Bayesian model, it begins with prior distributions over the parameters.
+The third decision is the prior on the sensitivity parameter itself.
 
-The default `m_0` implementation uses a lognormal prior for `alpha`, a standard normal prior for the feature-to-probability coefficients `beta`, and a symmetric Dirichlet prior for the utility increments. These are not meant to be final truths about every application. They are default assumptions that make the model operational while allowing a broad range of behavior.
+The default in `m_0` is
 
-The third foundational report asks what these priors imply before any data are observed. That is the purpose of prior predictive analysis.
+```stan
+alpha ~ lognormal(0, 1);
+```
 
-A prior predictive analysis simulates possible datasets from the model before conditioning on real observations. It asks: if these priors were true, what kinds of choices would we expect to see?
+Lognormal is a natural choice because it has positive support, matching the constraint `alpha >= 0`. With location 0 and scale 1, the median is 1, the mean is about 1.65, and the 95% interval is approximately `[0.14, 7.1]`.
 
-This is a crucial step because priors are not just abstract probability distributions over parameters. They imply behavior. A prior that seems harmless on `alpha`, `beta`, or utility increments might imply that the decision maker almost always chooses randomly, or almost always chooses the SEU maximizer, or produces some other pattern that is implausible for the intended application.
+What does that mean substantively? Recall from Part 1 the three regimes implied by the sensitivity parameter. Very low `alpha` produces nearly uniform random choice. Moderate `alpha` produces probabilistic choice that visibly favors higher expected-utility alternatives. Very high `alpha` produces near-deterministic SEU maximization. A Lognormal(0, 1) prior on `alpha` places non-trivial mass across all three of these regimes. It does not assume in advance that the decision maker is nearly random, nor that the decision maker is nearly an SEU maximizer.
 
-The foundational prior predictive analysis finds that the default priors cover a useful range: near-random choice, moderate sensitivity, and strong SEU maximization. The prior does not force the model into one behavioral regime. It also avoids obvious pathologies such as invalid expected utilities or degenerate choice probabilities.
+That breadth is appropriate as an exploratory default but it is also the prior that most often needs adjustment in real applications. A study of LLM decision behavior, for example, may have prior reasons to expect substantial sensitivity — the temperature study replaces this default with `Lognormal(3.0, 0.75)`, whose median sits near 20 rather than 1, because the foundational default places almost all of its mass well below the regime where LLM choice data actually live. The next post returns to how that kind of mismatch is detected and corrected; the point here is only that the prior on `alpha` is the one most directly tied to a substantive assumption about the application domain.
 
-## What the prior predictive check tells us
+The default prior on `beta` is similarly weakly informative: each entry receives an independent standard normal. In log-odds units, that places roughly 95% of coefficients within `±2`, allowing probability ratios per unit feature change up to about `e^2 ≈ 7.4` — moderately informative, but not narrow.
 
-The prior predictive report uses a moderate study design: 25 decision problems, 3 consequences, 5 feature dimensions, 15 distinct alternatives, and between 2 and 5 alternatives per problem. Under the default priors, simulated decision makers select the SEU-maximizing alternative more often than random choice on average, but with substantial variation.
+## Putting the pieces together
 
-That variation is the point. Before seeing data, the model allows weak, moderate, and strong sensitivity. It does not assume the answer.
+With `psi`, `upsilon`, and `alpha` in hand, the rest of the model is mechanical. Expected utilities are computed as inner products,
 
-The simulations also confirm the theoretical behavior from the first foundational report. Higher `alpha` is associated with a greater probability of selecting the SEU-maximizing alternative. Very low `alpha` produces near-random behavior. Very high `alpha` produces near-deterministic SEU maximization.
+$$
+\eta_r \;=\; \psi_r^{\top}\, \upsilon \;=\; \sum_{k=1}^{K} \psi_{r,k}\, \upsilon_k,
+$$
 
-![Prior predictive relationship between alpha and the proportion of SEU-maximizing alternatives selected.](https://jeffhelzner.github.io/seu-sensitivity/foundations/03_prior_analysis_files/figure-html/fig-seu-max-vs-alpha-output-1.svg){#fig-prior-alpha-seu-max fig-alt="Scatterplot from the prior predictive analysis showing that higher alpha values are associated with a higher proportion of choices selecting the SEU-maximizing alternative."}
+and choice probabilities follow the softmax rule from Part 1,
 
-This gives the model a sanity check before it is used for inference. If the prior predictive distribution had failed to include plausible observed behaviors, the model would need revision before being applied.
+$$
+\chi_{m,r} \;=\; \frac{\exp(\alpha \cdot \eta_r)}{\sum_{j \in \text{problem } m} \exp(\alpha \cdot \eta_j)}.
+$$
 
-## Why the estimate remains uncertain
+The full model block is correspondingly compact:
 
-Even with a sensible model and a reasonable prior, observed choices are finite. A small study cannot reveal everything about a decision maker's beliefs, utilities, and sensitivity. Some choice sets are more informative than others. Some alternatives may have nearly equal expected utilities, making choices less revealing about sensitivity. Some parameter combinations can produce similar expected-utility rankings.
+```stan
+model {
+  // Priors
+  alpha ~ lognormal(0, 1);
+  to_vector(beta) ~ std_normal();
+  delta ~ dirichlet(rep_vector(1, K-1));
 
-For this reason, the output of the model should be a posterior distribution, not only a point estimate.
+  // Likelihood
+  for (m in 1:M) {
+    y[m] ~ categorical(chi[m]);
+  }
+}
+```
 
-The posterior distribution tells us which parameter values remain plausible after observing the choices. A narrow posterior for `alpha` indicates that the data strongly constrain sensitivity. A wide posterior indicates that the observed choices leave substantial uncertainty.
+Every commitment to subjective expected utility lives in that last loop. The model treats each observed choice `y[m]` as a draw from the categorical distribution over alternatives in problem `m`, with probabilities given by `softmax(alpha * eta_problem)`. If observed choices repeatedly favor alternatives whose model-implied expected utility is higher, the posterior for `alpha` will tend upward. If choices look weakly related to the expected-utility ranking, the posterior will support lower sensitivity values.
 
-That uncertainty is not a nuisance to be hidden. It is part of the measurement.
+## What we have committed to
 
-In AI evaluation, this is especially important. It is tempting to rank systems by a single number. But if the uncertainty around the estimates is large, then apparent differences may not support strong conclusions. Conversely, if uncertainty is small, a sensitivity estimate can support more confident comparison.
+It is worth pausing on the explicit list, because the rest of this series turns on it.
 
-## What choices can and cannot identify
+The `m_0` model assumes:
 
-The `m_0` model estimates more than sensitivity. It also estimates the feature-to-belief mapping and the utility spacing. These parameters matter because they determine the expected utilities to which choices are supposed to be sensitive.
+- The log-odds of each consequence are *linear* in the features of an alternative, with the same coefficient matrix used across all alternatives.
+- Utilities are *ordered* on the standardized `[0, 1]` interval, parameterized by a Dirichlet-distributed simplex of increments.
+- The sensitivity parameter `alpha` follows a *lognormal* prior with substantial mass across the random / moderate / sharp regimes.
+- The feature-to-belief coefficients follow weakly informative independent standard normal priors.
+- Conditional on `psi` and `upsilon`, choices in different problems are *exchangeable*: the same alternative appearing in two problems shares its expected utility but is not required to be chosen identically.
 
-But decisions under uncertainty do not always identify those components equally well. Choices reveal expected utilities indirectly. They do not separately show exactly which part came from beliefs and which part came from utilities.
+None of these is forced by the abstract framework from Part 1. Each was made because it is interpretable and computationally clean. Each could be changed — and in some applications should be.
 
-This issue becomes more important in the next post, which discusses parameter recovery. The short version is that `alpha`, the primary sensitivity parameter, can be recovered well in the foundational validation study. The decomposition of expected utility into beliefs and utilities is harder. That does not make the sensitivity framework unusable, but it does affect how results should be interpreted.
+That brings us to the question of whether the implementation works. We have a model. We have priors. We have a way to compute a posterior. But none of that is yet evidence that the posterior we will eventually report is one we should trust.
 
-For now, the key point is simpler: a sensitivity estimate is an inference from observed choices under a model. It depends on the decision design, the assumed relationship between features and beliefs, the utility parameterization, the priors, and the amount of data.
-
-## The bridge to meaningful measurement
-
-This measurement setup gets us from observed choices to posterior uncertainty about sensitivity. But one more question remains.
-
-When should we trust the number?
-
-A model can always produce an estimate. That does not mean the estimate is meaningful. The observed decision maker may not be well described by the model. The study design may be too weak. The priors may be inappropriate for the domain. The model may recover some parameters but not others. The posterior may look precise for the wrong reason, or too diffuse to support the intended conclusion.
-
-This is why the foundational reports do not stop with implementation. They include prior predictive analysis and parameter recovery. Those checks are part of what turns a formal model into an evaluative tool.
-
-The next post focuses on that adequacy question. Before the framework can support empirical claims about AI decision behavior, we need evidence that the model can produce interpretable estimates in the kinds of settings where we want to use it.
+The next post takes up that question. It is organized around the modern Bayesian workflow: prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks. Each of those four steps interrogates a different aspect of the modeling choices laid out above — and the foundational reports run them on `m_0` precisely so that later applications inherit a model whose behavior we already understand.
 
 ## Sources
 
-This post draws primarily on [Concrete Implementation: The m_0 Stan Model](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html) and [Prior Predictive Analysis](https://jeffhelzner.github.io/seu-sensitivity/foundations/03_prior_analysis.html), with the abstract interpretation from [Abstract Formulation of the SEU Sensitivity Model](https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html).
+This post draws primarily on [Concrete Implementation: The m_0 Stan Model](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html), with background from [Abstract Formulation of the SEU Sensitivity Model](https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html). The applied prior choice mentioned briefly above is from the [Initial Temperature Study](https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html).

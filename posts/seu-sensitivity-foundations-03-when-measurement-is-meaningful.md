@@ -1,12 +1,12 @@
 ---
-title: "When Is an SEU Sensitivity Estimate Meaningful?"
+title: "Probing the SEU Model: A Bayesian Workflow Tour"
 date: 2026-07-01
 author: "Jeff Helzner"
 slug: "seu-sensitivity-foundations-part-3-when-measurement-is-meaningful"
-description: "Why prior checks, parameter recovery, and model adequacy matter before interpreting an SEU sensitivity estimate as evidence about decision quality."
-summary: "A model can always produce a number. Before treating a sensitivity estimate as evidence, we need checks showing that the model is adequate for the decision maker, task, and study design."
+description: "Probing the m_0 SEU sensitivity model with the modern Bayesian workflow: prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks."
+summary: "Four checks ask four different questions of the same model. Together they tell us whether an SEU sensitivity estimate is something we should be willing to interpret."
 image: "https://jeffhelzner.github.io/assets/social-card.png"
-tags: ["ai","decision-making","subjective-expected-utility","model-adequacy","series:seu-sensitivity-foundations"]
+tags: ["ai","decision-making","subjective-expected-utility","bayesian-workflow","sbc","posterior-predictive-checks","series:seu-sensitivity-foundations"]
 series: "Foundations of SEU Sensitivity"
 part: 3
 draft: true
@@ -21,15 +21,15 @@ format:
         {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
-          "headline": "When Is an SEU Sensitivity Estimate Meaningful?",
-          "description": "Why prior checks, parameter recovery, and model adequacy matter before interpreting an SEU sensitivity estimate as evidence about decision quality.",
+          "headline": "Probing the SEU Model: A Bayesian Workflow Tour",
+          "description": "Probing the m_0 SEU sensitivity model with the modern Bayesian workflow: prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
           "datePublished": "2026-07-01",
-          "dateModified": "2026-05-02",
+          "dateModified": "2026-05-14",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-03-when-measurement-is-meaningful.html",
           "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
-          "keywords": ["SEU sensitivity", "parameter recovery", "model adequacy", "AI decision evaluation", "Bayesian validation"]
+          "keywords": ["SEU sensitivity", "Bayesian workflow", "prior predictive", "parameter recovery", "simulation-based calibration", "SBC", "posterior predictive checks"]
         }
         </script>
 ---
@@ -39,140 +39,101 @@ format:
 [Part 1](seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html) · [Part 2](seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html) · Part 3
 :::
 
-The first post in this series explained the sensitivity idea. If subjective expected utility is the reference standard, then we can ask how strongly a decision maker's choices track expected-utility differences. The second post explained how observed choices become evidence about sensitivity through a Bayesian model.
+Part 1 introduced the abstract sensitivity idea. Part 2 turned it into a Stan program by committing to a feature-to-probability map, an ordered-utility parameterization, and a set of priors. With that implementation in hand, the natural next question is whether the resulting posterior is something we should trust.
 
-But there is a final question before the framework can support empirical claims:
+A posterior is just an answer the model gives to the data. It is only as good as the model that produced it. Asking *"does this model behave the way a useful model should behave?"* is the job of the **modern Bayesian workflow**, and the foundational reports run four checks on `m_0` that together address that question:
 
-> When is the estimate meaningful?
+1. **Prior predictive checks** — does the model produce plausible decision behavior *before* seeing any data?
+2. **Parameter recovery** — given data the model itself generates, can the model recover the parameters that generated it?
+3. **Simulation-based calibration (SBC)** — do the model's posteriors have the right *calibration*, not just the right point estimates?
+4. **Posterior predictive checks (PPC)** — does the fitted model reproduce features of the actual observed data?
 
-This question is easy to underestimate. Once a model is implemented, it will usually produce output. There will be posterior means, intervals, diagnostics, plots, and tables. But a number produced by a model is not automatically evidence about the decision maker.
+Each check interrogates a different aspect of the model. None is decorative; failure on any of them changes what an eventual `alpha` estimate is allowed to mean.
 
-The number is meaningful only if the model is adequate for the task we are asking it to perform.
+## Prior predictive: is the model plausible before data?
 
-That is why the first four foundational reports include not only an abstract model and a concrete implementation, but also prior predictive analysis and parameter recovery. These checks are not decorative. They are part of the argument that a sensitivity estimate can be interpreted at all.
+Before fitting any choices, we can ask what kind of decision behavior the model expects to see. Sampling parameters from the priors and simulating choices yields a *prior predictive distribution* over observable outcomes — the rate at which SEU-maximizing alternatives get chosen, the spread of expected utilities across problems, the apparent decisiveness of the simulated chooser.
 
-## A model can produce a number even when it should not be trusted
+The foundational report runs this check for `m_0` on a small but realistic design: `M = 25` problems with `K = 3` consequences, `D = 5` features, `R = 15` distinct alternatives, and 2–5 alternatives per problem. Each prior draw produces a complete synthetic data set.
 
-Suppose we present an AI system with a set of decision problems and fit the SEU Sensitivity model to its choices. The model returns an estimate of `alpha`. The estimate is moderate, and the interval is not too wide. It would be tempting to say: this system has moderate sensitivity to SEU.
+The headline summary is that under the `m_0` priors, the *rate at which the SEU-maximizing alternative is chosen* ranges from about **12% to 92%** across simulations, with a mean near **43%**. Compare that to the random-choice baseline of `1/3 ≈ 33%` for problems with three alternatives on average. Two things are worth noting.
 
-That conclusion may be warranted. But it is not warranted merely because the model produced an estimate.
+First, the range is wide. The model is not committing in advance to any particular regime. It allows for prior draws where the simulated decision maker looks nearly random (12%) and prior draws where the decision maker is highly sensitive (92%). The Lognormal(0, 1) prior on `alpha`, paired with the weakly informative priors on `beta` and `delta`, expresses genuine uncertainty across the regimes named in Part 1.
 
-Several things could go wrong.
+Second, the mean is not far from the baseline. On average, the model expects choices that look modestly biased toward the SEU-favored alternative, not strongly biased and not adversarial. The simulations show no pathologies: no degenerate distributions over choices, no impossible utility orderings, no numerical breakdowns.
 
-The choice data might not contain enough information to distinguish weak sensitivity from moderate sensitivity. The model's feature representation might not capture the quantities the decision maker is actually using. The prior might make some behaviors seem more plausible than they should in this domain. The observed choices might fall outside the range of behavior the model was designed to describe. The model might recover the main sensitivity parameter while failing to identify the belief and utility components needed for a more detailed interpretation.
+A more substantive prior predictive check — and one worth flagging — would compare these prior predictions to any data we already have. If real choices in our domain regularly produce SEU-rates above the prior's 92nd percentile, that is *prior–data conflict*, and it warns us that the default priors are mis-specified for the application. The Lognormal(0, 1) on `alpha` is the place where this most often shows up. In the temperature study, for example, observed choice data sit far above the regime the default prior emphasizes, which is exactly why that study replaces the default with `Lognormal(3.0, 0.75)`.
 
-These are not edge cases. They are ordinary risks in statistical evaluation.
+## Parameter recovery: can the model find what it put in?
 
-So the interpretive question is not just "What is the estimate?" It is also "What checks support treating this estimate as evidence?"
+The next check is a kind of self-test. If we generate synthetic data from the model itself — sampling parameters from the priors, then sampling choices from the resulting likelihood — can the model recover the parameters that generated it?
 
-## Prior predictive checks ask what the model permits
+The foundational report runs this exercise systematically on `m_0`. The results are uneven across parameters, in a way that turns out to be informative.
 
-Prior predictive analysis asks what kinds of behavior the model expects before observing the data.
+**`alpha` recovers well.** Across simulation runs, the posterior for `alpha` tends to cover the true generating value, and the posterior mean tracks it closely. This is encouraging, because `alpha` is the parameter that the framework is built to estimate.
 
-This matters because every Bayesian model carries assumptions into the analysis. The priors over sensitivity, feature effects, and utility spacing imply a prior distribution over choices. If that prior predictive distribution is implausible, the model needs attention before it is used to evaluate real decision makers.
+**`beta` and `delta` recover less cleanly.** Posteriors for individual entries of `beta` are wider than for `alpha`, and posterior means do not track the truth as tightly. The same is true, less dramatically, for `delta`.
 
-In the foundational prior predictive analysis, the default model permits a broad range of behavior. Some simulated decision makers are near-random. Some show moderate sensitivity. Some are strongly concentrated on SEU-maximizing alternatives. This is what we want from a default prior in an exploratory setting: it should not decide the substantive question before the data arrive.
+There is a structural reason for this. The decision-relevant signal at every problem flows through the composition `alpha * eta_r = alpha * (psi_r^T upsilon)`. Choice probabilities are invariant to a lot of joint movement in `(alpha, beta, delta)` that leaves this composition unchanged. The likelihood pins down something close to the *product* well, and the data needed to disentangle the factors are substantial. With `M = 25` problems, the data simply do not contain enough information to localize `beta` and `delta` precisely on their own.
 
-The prior predictive analysis also checks for pathological behavior. Expected utilities stay within the standardized range. Choice probabilities remain valid. The model does not build in a systematic preference for arbitrary alternatives. The simulated behavior aligns with the theoretical properties established in the abstract formulation: higher sensitivity leads to more frequent selection of SEU-maximizing alternatives.
+The design implication is that if the goal is to interpret entries of `beta` — for example, to claim that one feature has a stronger effect on beliefs than another — a `M = 25` study will rarely support it. If the goal is to estimate `alpha`, the design is roughly adequate. The foundational design-extension report goes further on this and quantifies how `M` and the number of alternatives per problem affect each parameter's recovery.
 
-These checks do not prove that the model is correct. They show that the model is at least coherent enough to use as a starting point.
+## SBC: are the posteriors calibrated, not just close?
 
-They also create a baseline for detecting prior-data conflict. If observed choices fall far outside the behaviors the prior predictive distribution regarded as plausible, that is a warning. It may mean the priors are poorly calibrated for the application. It may mean the decision maker is not well described by the model. Either way, the warning should be investigated before the estimate is interpreted.
+Parameter recovery answers a *point-estimate* question: does the posterior land near the truth? It does not directly answer a *calibration* question: do my 90% intervals contain the true value 90% of the time? A model can have well-located point estimates and still be miscalibrated — typically by being overconfident, which is the failure mode that matters most when intervals will be interpreted as uncertainty.
 
-## Parameter recovery asks whether the model can learn what it says it is learning
+Simulation-based calibration ([Talts et al., 2018](https://arxiv.org/abs/1804.06788)) is the standard way to check this. The recipe: simulate many `(theta_true, y)` pairs from the prior and likelihood, fit the model to each `y` to get a posterior over `theta`, and record the *rank* of `theta_true` within that posterior. If the model is calibrated, those ranks should be uniformly distributed.
 
-Prior predictive checks ask what the model can generate. Parameter recovery asks whether the model can recover known parameters from simulated data.
+The reader's guide for SBC rank histograms is short:
 
-The logic is straightforward.
+- **Flat** — calibration is good.
+- **U-shaped** — the model is *overconfident*: the true value falls in the tails too often, meaning intervals are too narrow.
+- **Dome / inverted-U** — the model is *underconfident*: intervals are too wide.
+- **Ramp** — the model is *biased*: posteriors systematically over- or under-shoot the truth.
 
-First, simulate choices from the model using known parameter values. Second, fit the model to those simulated choices. Third, compare the posterior estimates to the known values. If the model cannot recover parameters when the data were generated by the model itself, then it is not ready to support strong claims in messier real applications.
+For `m_0`, the SBC results align with the recovery picture. `alpha` shows broadly well-calibrated ranks, with mild departures consistent with the moderate posterior width seen in recovery. Some entries of `beta` show flatter, wider rank distributions, again reflecting the weak identification of individual entries from a small `M`.
 
-The fourth foundational report performs this kind of recovery analysis for `m_0`. It uses the same moderate study design as the prior predictive analysis: 25 decision problems, 3 consequences, 5 feature dimensions, 15 distinct alternatives, and variable choice-set sizes. Across repeated simulations, the sampler diagnostics are reliable, so the recovery results reflect the model's inferential behavior rather than computational failure.
+The take-away is the same as for recovery, but with a sharper edge: SBC tells us that uncertainty in `alpha` reported by `m_0` can be interpreted as uncertainty, not as a placeholder for "the sampler converged but we have no idea what the interval means."
 
-The main finding is asymmetric.
+## Posterior predictive checks: does the fitted model match the data?
 
-The sensitivity parameter `alpha` is recovered well. Credible interval coverage is close to the nominal target, and posterior estimates track true values. This is encouraging because `alpha` is the primary parameter for the sensitivity question.
+The first three checks all use synthetic data. PPC is the first check that uses the actual data being analyzed. Having fit the model to observed choices, we sample synthetic choices from the posterior predictive distribution and compare summary statistics of those replicated data sets to the same statistics computed on the observed data.
 
-The parameters that decompose expected utility into beliefs and utilities are harder to recover. The feature-to-probability mapping `beta` and the utility increments show wider uncertainty and slower learning. They are not completely uninformed by the data, but they are less precisely identified than `alpha`.
+The `m_0` Stan program emits three discrepancy statistics in `generated quantities`, evaluated on both the observed choices and posterior-replicated choices:
 
-![Parameter recovery for the sensitivity parameter alpha, comparing true values to posterior estimates and showing credible interval coverage across recovery iterations.](https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery_files/figure-html/fig-alpha-recovery-output-1.svg){#fig-alpha-recovery-foundations fig-alt="Parameter recovery visualization for alpha. The left panel compares true alpha values to estimated values with an identity line. The right panel shows 90 percent credible intervals across recovery iterations, colored by whether they contain the true value."}
+- **`ll`** — model log-likelihood on the choices.
+- **`modal`** — the fraction of problems in which the alternative with highest posterior choice probability matches the observed choice.
+- **`prob`** — the mean posterior probability assigned to the actually-chosen alternative.
 
-This distinction is central to interpreting the framework.
+Each statistic gets a posterior predictive *p-value*: the fraction of posterior-replicated data sets whose statistic is at least as extreme as the observed value. A p-value near 0 or 1 is a flag that the model cannot reproduce that feature of the data; values comfortably in the interior of `[0, 1]` are reassuring.
 
-## Why sensitivity can be easier to recover than its ingredients
+A worked example helps. The temperature study's [Posterior Predictive Checks section](https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#posterior-predictive-checks) reports all three statistics across five sampling temperatures. Every p-value lands in roughly `[0.30, 0.65]`. The model is not implausibly close to the data (which would suggest overfitting) and not far away (which would suggest misspecification). It reproduces these three features adequately.
 
-The reason for the asymmetry is structural.
+One caveat is worth stating plainly. Passing PPC on these three statistics is *necessary* for trusting the fit, but it is not sufficient. PPC tests only the discrepancies one chooses to compute. A model that reproduces likelihood, modal accuracy, and chosen-alternative probability could still fail to reproduce a discrepancy we did not check — for example, the within-problem distribution of choices when more than one alternative is plausible. PPC is a confidence-building exercise, not a final verdict.
 
-Choices under uncertainty depend on expected utilities. Expected utilities combine subjective probabilities and utilities. If we only observe choices, then we see the result of that combination indirectly. We do not separately observe the decision maker's beliefs or utilities.
+## What the four checks tell us together
 
-Different combinations of beliefs and utilities can produce similar expected-utility patterns. That creates a coupling between the parameters that determine beliefs and the parameters that determine utilities. Uncertainty in one can be offset by uncertainty in the other.
+Prior predictive, recovery, SBC, and PPC ask four different questions:
 
-![Posterior correlation between beta and delta parameters, showing compensatory coupling between the feature-to-belief mapping and utility increments.](https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery_files/figure-html/fig-beta-delta-correlation-output-1.svg){#fig-beta-delta-coupling fig-alt="Posterior correlation visualization for beta and delta parameters. The left panel shows the distribution of posterior correlations, emphasizing negative compensatory coupling. The right panel relates true alpha to the strength of beta-delta posterior correlation."}
+- *Is the model plausible before data?* Yes for `m_0` — wide range of decision behavior, no pathologies.
+- *Can the model recover its own parameters?* `alpha` well; `beta` and `delta` only weakly at small `M`.
+- *Are the resulting posteriors calibrated?* Yes for `alpha`; the `beta` posteriors are honestly wide.
+- *Does the fitted model match observed data on chosen statistics?* In the temperature application, yes.
 
-The sensitivity parameter has a different role. For a given expected-utility structure, `alpha` governs how strongly choices respond to expected-utility differences. It is therefore more directly tied to the stochastic pattern of choices.
+That is what it takes to use a sensitivity estimate as evidence rather than as a number. It is not enough that the sampler converged. It is not enough that the posterior interval looks reasonable. The model has to behave the right way *across* all four checks before the estimate it produces can be interpreted with confidence.
 
-This is good news if the primary research question is about sensitivity: how strongly choices track the SEU ranking. It is more cautionary if the research question requires a precise decomposition of the decision maker's beliefs and utilities.
+## Where this leaves the broader program
 
-That distinction should shape how empirical results are reported. An application may justify claims about comparative sensitivity while being much more cautious about claims concerning the exact utility function or subjective probability mapping.
+The three posts in this series have concentrated on the `m_0` model: a single decision maker, a single block of decision problems with consequence features, and a softmax-over-expected-utility likelihood. This is intentional. `m_0` is the workhorse that everything else in the foundational program either generalizes or compares to.
 
-## More data helps, but not always in the same way
+There are two natural directions of generalization, both of which the foundational reports work out in detail.
 
-The parameter recovery report also examines whether increasing the number of decision problems improves recovery.
+The first is to enrich the model of utilities. The `m_1` variant moves to the Anscombe–Aumann setting with risky choices, where utility differences become directly identifiable from observed lotteries rather than inferred jointly with `alpha`. That sharpens both interpretation and identifiability.
 
-Doubling the number of problems improves `alpha` recovery substantially. The model has more observations from which to learn how choice probabilities respond to expected-utility differences.
+The second is to model multiple decision makers jointly. The `h_m01` family of hierarchical models lets `alpha` (and other parameters) vary across decision makers while pooling information about the common structure. This is the natural framework for studying how sensitivity differs across, say, AI systems with different training, or across temperatures of the same system.
 
-The improvement for utility-related parameters is more modest. Adding more problems over the same alternatives gives the model more choice data, but it does not necessarily provide qualitatively new information about how features map to consequences or how utilities are spaced. Adding new alternatives can help by expanding the feature space, but even then the belief-utility coupling remains.
-
-This matters for empirical design. If the goal is to estimate sensitivity, a moderate number of well-designed choice problems may be enough. If the goal is to recover utilities and subjective probabilities separately, the design may need additional structure.
-
-The foundational report points toward one such structure: risky choices with known probabilities. When probabilities are fixed by the experimenter, choices can provide more direct information about utilities. That extension appears in later foundational work, but the lesson is already visible here. The type of data matters, not just the amount of data.
-
-## Adequacy is part of the evaluation
-
-For AI decision evaluation, these checks are not merely technical housekeeping. They determine what kind of claim the framework can support.
-
-A sensitivity estimate is meaningful when several conditions are met.
-
-The reference standard must be stated clearly. In this framework, the standard is SEU maximization over the represented alternatives, consequences, beliefs, and utilities.
-
-The model must connect observed choices to that standard in an interpretable way. The softmax choice rule supplies that connection, with `alpha` governing sensitivity to expected-utility differences.
-
-The priors must imply plausible behavior for the application. Prior predictive checks help establish this before the data are interpreted.
-
-The study design must contain enough information for the parameters of interest. Parameter recovery helps show what can and cannot be learned under a design like the one being used.
-
-The posterior uncertainty must be reported and respected. A wide interval is not a failed analysis. It is information about what the data do not yet settle.
-
-Finally, the model's limitations must be kept in view. The framework is not a cognitive process model. It does not prove that an AI system literally represents probabilities and utilities. It asks whether observed choices can be usefully described as sensitive to the expected-utility structure supplied by the analysis.
-
-## What would make a sensitivity score misleading
-
-A sensitivity score can mislead if it is interpreted without these adequacy checks.
-
-It would be misleading to treat a point estimate of `alpha` as a general measure of intelligence, rationality, safety, or trustworthiness. It is narrower than that. It measures sensitivity to a specified SEU representation in a specified decision design.
-
-It would be misleading to compare two systems if the uncertainty around their estimates is too large to support the comparison.
-
-It would be misleading to treat low sensitivity as a universal defect without asking whether SEU is the right standard for the task, whether the represented consequences are adequate, and whether the decision maker may be following a different legitimate constraint.
-
-It would also be misleading to treat high sensitivity as sufficient assurance. A system can be highly sensitive to a badly specified expected-utility model. It can choose consistently according to the represented tradeoffs while the representation omits legally, ethically, or operationally important considerations.
-
-Sensitivity is therefore a disciplined measurement of one aspect of decision behavior. It is not a substitute for the rest of evaluation.
-
-## The bridge to empirical applications
-
-These foundations matter because the next stage of the project applies the framework to actual LLM decision behavior.
-
-At that point, the questions become empirical. Does model temperature affect estimated sensitivity? Does an observed pattern travel across models, prompts, tasks, or domains? Does the framework behave similarly in an abstract choice setting and an insurance-like triage setting? When a result fails to replicate, should we treat that as a failure of the framework, a change in the decision maker, a task difference, a prompt effect, a model adequacy issue, or some combination of these?
-
-The first four foundational reports do not answer those application questions. They make those questions interpretable.
-
-They tell us what `alpha` is supposed to mean. They show how observed choices become evidence about sensitivity. They check what the priors imply before data arrive. They test whether the model can recover known parameters in simulated settings. And they identify a key limitation: sensitivity can be recovered more readily than the full decomposition of expected utility into beliefs and utilities.
-
-With that in place, an empirical result is no longer just a pattern in outputs. It is a claim about a decision maker's estimated sensitivity to a stated decision standard, with uncertainty and adequacy conditions attached.
-
-That is the right frame for the application story. A first study may suggest a pattern. A later study may show that the pattern does not travel. The methodological value of the framework is not that every initial result generalizes. It is that the framework gives us a disciplined way to ask what changed, how much the evidence supports, and whether the measurement was meaningful in the setting where it was applied.
+The next series in this blog moves from foundations into applications, beginning with the temperature study that already appeared in this post as an illustration of PPC. The workflow developed across these three posts — abstract model, concrete implementation, Bayesian probes — is what the applied work assumes and builds on.
 
 ## Sources
 
-This post draws primarily on [Prior Predictive Analysis](https://jeffhelzner.github.io/seu-sensitivity/foundations/03_prior_analysis.html) and [Parameter Recovery Analysis](https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery.html), with background from [Abstract Formulation of the SEU Sensitivity Model](https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html) and [Concrete Implementation: The m_0 Stan Model](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html).
+This post draws on the foundational [Prior Predictive Analysis](https://jeffhelzner.github.io/seu-sensitivity/foundations/03_prior_predictive_analysis.html), [Parameter Recovery](https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery.html), and [Simulation-Based Calibration](https://jeffhelzner.github.io/seu-sensitivity/foundations/06_simulation_based_calibration.html) reports. The PPC discussion uses the [Initial Temperature Study](https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#posterior-predictive-checks) as a worked example. The bridge to `m_1` and hierarchical models points to later reports in the [SEU Sensitivity Foundations](https://jeffhelzner.github.io/seu-sensitivity/) site.

@@ -135,9 +135,9 @@ But applications are not that simple. We do not observe a decision maker's subje
 
 That requires a statistical model.
 
-The second foundational report turns the abstract framework into a concrete Bayesian implementation. It specifies how features of alternatives map to subjective probabilities, how ordered utilities are represented on the 0-to-1 scale, how expected utilities are computed, and how observed choices are treated as evidence about `alpha` and the other model parameters.
+The next post takes the first step. It turns the abstract framework above into a concrete Stan program — the `m_0` model — and, more importantly, *names the modeling choices the implementation commits us to*: how features of an alternative map to subjective probabilities, how ordered utilities are parameterized on the unit interval, and what priors are placed on `alpha`, on the feature-to-belief mapping, and on the utility increments. Each of these is a decision that could in principle have been made differently, and each one shapes what the eventual posterior over `alpha` is allowed to mean.
 
-The next post explains that measurement setup at a high level. The central point is that sensitivity is not a score directly read off from a decision maker. It is an uncertain estimate from finite observed choices.
+The post after that asks whether the resulting implementation is one we should trust. It walks through the modern Bayesian workflow as applied to `m_0` — prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks — because a posterior is only as good as the model that produced it. Sensitivity is not a score directly read off from a decision maker. It is an uncertain estimate from finite observed choices, and the trust we can place in that estimate has to be earned by checks of the model that produced it.
 
 ## Sources
 
