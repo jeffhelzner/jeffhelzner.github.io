@@ -25,7 +25,7 @@ format:
           "description": "How an initial GPT-4o temperature study used real LLM choice data to test whether the SEU Sensitivity framework could detect structured changes in decision behavior.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
           "datePublished": "2026-08-02",
-          "dateModified": "2026-05-03",
+          "dateModified": "2026-05-14",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html",
           "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
@@ -41,11 +41,11 @@ Part 1 · [Part 2](seu-sensitivity-applications-02-result-that-did-not-travel.ht
 
 The foundations series developed the SEU Sensitivity framework as a way to ask how strongly observed choices track subjective expected utility differences. The framework is deliberately narrower than a full theory of intelligence, rationality, or trustworthiness. It estimates a relationship between a decision maker's choices and a stated decision standard, then asks whether that estimate is uncertain, interpretable, and adequate for the task.
 
-The next question is what happens when the framework is applied to real data.
+The next question is what happens when the framework is applied to real data. That is what this third series is about. The two studies discussed here are best read as pilots intended to probe the measurement device itself -- the `m_0` family of models introduced in the foundations series -- rather than as substantive claims about LLM cognition.
 
-The first empirical application used LLM temperature as the experimental lever. That choice is useful, but it should be read in the right spirit. The temperature hypothesis is not the deepest substantive claim one could make about AI decision-making. It is a fairly direct probe: if we increase the randomness of token sampling, do the model's choices become less tightly related to expected utility differences?
+The first pilot used LLM temperature as the experimental lever. There is a loose folk intuition behind that choice. Temperature is sometimes described as a creativity dial, and creativity is sometimes informally contrasted with disciplined or rational choice. That intuition was suggestive, but it was not the real reason temperature was selected. The real reason was that temperature is an easy knob: it is exposed by the API, it plausibly changes the stochasticity of outputs, and it gives a manipulation under which something should change if the framework is detecting anything at all. In that sense, the question the study asked was less "what does temperature do to LLM rationality" and more "does the measurement device pick up a structured change in choice behavior when we move the easiest available lever?"
 
-That makes temperature a good early test of the methodology. It gives us a manipulation that should plausibly affect choice consistency, while still leaving room for the result to be complicated. If the framework cannot detect any structure in this setting, that would be informative. If it does detect structure, that is also informative, though not yet a general conclusion about LLMs.
+If the framework cannot detect any structure in this setting, that would itself be informative. If it does detect structure, that is also informative, though not yet a general conclusion about LLMs.
 
 The initial study should therefore be understood as a methodological application to real LLM choice data. It asks whether the framework can move from simulated validation to an empirical setting where a model makes repeated decisions under uncertainty.
 
@@ -53,13 +53,11 @@ The initial study should therefore be understood as a methodological application
 
 The study used GPT-4o in an insurance claims triage task. In each decision problem, the model was presented with a small set of insurance claims and asked which claim should be forwarded for investigation. Each claim was treated as an alternative whose consequences could be represented within the SEU Sensitivity framework.
 
-The experimental factor was sampling temperature. The study used five temperature levels: 0.0, 0.3, 0.7, 1.0, and 1.5. Each temperature condition was treated as its own data collection. For each condition, the model made choices over the same general task structure, allowing the analysis to estimate sensitivity separately at each temperature.
+The experimental factor was sampling temperature. The study used five temperature levels: 0.0, 0.3, 0.7, 1.0, and 1.5. Each temperature condition was treated as its own data collection.
 
-The motivating hypothesis was simple. In the SEU Sensitivity model, the parameter `alpha` governs how sharply choices concentrate on alternatives with higher expected utility. In a language model, temperature affects the entropy of token sampling. If more sampling randomness propagates into final choices, then higher temperature should be associated with lower estimated `alpha`.
+The motivating hypothesis was simple. In the SEU Sensitivity model, the parameter `alpha` governs how sharply choices concentrate on alternatives that the model ranks higher in expected utility. In a language model, temperature affects the entropy of token sampling. If more sampling randomness propagates into final choices, then higher temperature should be associated with lower estimated `alpha`.
 
-That pathway is plausible, but it is not mechanistically clean. Temperature can affect intermediate reasoning, wording, assessment of claims, and final answer selection. It can affect the text that later becomes part of the feature construction. It can affect several stages at once. The study does not identify which internal mechanism is responsible. It tests the aggregate relationship between temperature and estimated sensitivity.
-
-That limitation is part of why the study is best read as a probe of the measurement framework rather than as a full theory of temperature.
+That pathway is plausible, but it is not mechanistically clean. Temperature can affect intermediate reasoning, the language of claim assessments, and final answer selection at once. The study does not identify which internal mechanism is responsible. It tests the aggregate relationship between temperature and estimated sensitivity. That limitation is part of why the study is best read as a probe of the measurement framework rather than as a full theory of temperature.
 
 ## How choices became model input
 
@@ -91,11 +89,11 @@ At the global level, the evidence for a negative relationship was strong. A draw
 
 That is the headline result: in this initial GPT-4o insurance triage study, higher temperature was associated with lower estimated sensitivity to expected utility differences.
 
-The local pattern was less tidy. Temperatures 0.3 and 0.7 were nearly indistinguishable. The probability of strict monotonic decrease across all five temperature levels was modest, largely because those two intermediate conditions overlapped so strongly. The study therefore supported a broad directional claim more strongly than a fine-grained claim about every adjacent temperature step.
+The local pattern was less tidy. Temperatures 0.3 and 0.7 were nearly indistinguishable. The probability that `alpha` was strictly decreasing across all five temperature levels was only about 0.12, driven almost entirely by the overlap between those two intermediate conditions. Collapsing the two into a single intermediate level raised the probability of the resulting coarser ordering to about 0.38. The study therefore supported a broad directional claim more strongly than a fine-grained claim about every adjacent temperature step.
 
 ![GPT-4o temperature study summary: posterior medians with 90% credible intervals and pairwise posterior probabilities for alpha across temperature conditions.](https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study_files/figure-html/fig-summary-output-1.svg){#fig-gpt4o-temperature-summary fig-alt="Summary visualization from the GPT-4o temperature study. The left panel shows alpha posterior medians with 90 percent credible intervals across temperatures. The right panel shows pairwise posterior probabilities that alpha is higher in one temperature condition than another."}
 
-This distinction is important. A less careful summary would say that sensitivity simply decreases monotonically with temperature. The data support something more qualified: there was clear evidence of a negative overall relationship, especially when comparing low to high temperatures, but not enough evidence to order every neighboring temperature level.
+There is also a subtler caveat about how confidently the conditions can be compared. The same pool of 30 insurance claims was used at every temperature. That design choice sharpens within-condition precision but introduces a shared, unmodeled factor across conditions: whatever is idiosyncratic about that particular set of 30 claims shifts every estimate in the same direction. Treating the five posteriors as independent -- as the pairwise comparisons above do -- slightly overstates how confidently we can resolve between-temperature differences. A hierarchical version of the model that fits all five conditions jointly would handle this properly and is a natural next step for follow-up work. The qualitative direction of the headline result is not threatened by this caveat, but the fine-grained ordering is more provisional than independent fits make it look.
 
 ## What adequacy checks showed
 
@@ -105,24 +103,23 @@ That is reassuring, but it should not be overread. Posterior predictive checks s
 
 The application therefore gives us a meaningful measurement in a specific setting. It does not give us a universal law of LLM temperature.
 
-That is exactly the kind of conclusion the SEU Sensitivity framework is meant to support. It gives a disciplined way to say: under this design, with this model, with these adequacy checks, the choices became less concentrated on the expected-utility-favored alternatives as temperature increased.
+## What `alpha` is and is not measuring
+
+One further qualification is worth stating directly, because it shapes how the rest of this series should be read. The `alpha` parameter is most accurately described as how consistently the LLM's choices track the model's own fitted utility ranking -- not as a context-free score for how rational the LLM is. The fitted utility depends on the feature construction, the prior, and the design. A comparison of `alpha` across conditions that share these ingredients (as the temperature conditions do) is a defensible comparative claim. A claim that some absolute value of `alpha` certifies an LLM as rational, in a sense that travels across studies, would be a stronger claim and would need stronger identifying structure than the present design provides.
+
+This distinction matters more for some kinds of questions than others. The temperature comparison lives on the comparative side and is well-supported. The fully absolute interpretation is something a later series will return to in its own right. For now it is enough to keep the reader-facing claim in the comparative register: the same measurement device, applied to the same task, produced lower estimated sensitivity at higher temperatures.
 
 ## Why the result was promising but limited
 
-The initial study was promising because it showed the full workflow operating on real choice data.
+The study was promising because the full workflow ran end-to-end on real choice data: a stated reference standard, a graded sensitivity parameter, posterior uncertainty, and a chain of adequacy checks behind every estimate. The output was not a naked score attached to GPT-4o; it was an inference supported by modeling choices that had been inspected.
 
-There was a stated reference standard: subjective expected utility maximization as represented by the model. There was a graded sensitivity parameter: `alpha`. There was uncertainty around the estimates. There were prior predictive checks, parameter recovery, simulation-based calibration, MCMC diagnostics, and posterior predictive checks. The result was not a naked score attached to GPT-4o. It was an estimate supported by a chain of modeling and validation choices.
+The limits are easy to state. One LLM, one task domain, one embedding model, one way of representing alternatives. Each temperature condition fit independently. No separation between temperature effects on assessment text and temperature effects on final choice. No basis for assuming that provider temperature parameters mean the same thing across models. And no way of knowing, from this study alone, whether the observed pattern would travel.
 
-At the same time, the study had clear limits.
-
-It used one LLM, one task domain, one embedding model, and one way of representing alternatives. It fit each temperature condition independently, even though the same underlying claim set appeared across conditions. It did not fully separate temperature effects on assessment text from temperature effects on final choice. It did not establish that provider temperature parameters are comparable across models. It did not show that lowering temperature is always a reliable way to improve decision quality.
-
-Most importantly, it did not establish that the observed pattern would travel.
-
-That is why the result is valuable. It is not valuable because the temperature hypothesis is especially profound. It is valuable because it demonstrates how the method behaves when applied to real data, and it produces a result that can be tested in another setting.
+That last point is what makes the result valuable as a pilot. It is not valuable because the temperature hypothesis is especially profound. It is valuable because it shows how the method behaves when applied to real LLM data, and it produces a finding that can be tested in another setting.
 
 The next question is what happened when that test was run.
 
 ## Sources
 
 This post draws on [Temperature and SEU Sensitivity: Initial Results](https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html), with background from the foundational reports discussed in the previous series.
+
