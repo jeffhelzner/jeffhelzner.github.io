@@ -65,13 +65,15 @@ parameters {
 
 There are three groups of parameters. `alpha` is the sensitivity scalar from Part 1, constrained to be non-negative. `beta` is a `K x D` matrix that will convert the `D`-dimensional feature vector of each alternative into a probability distribution over `K` possible consequences. `delta` is a `(K-1)`-simplex that will become the spacing between ordered utilities on the unit interval.
 
-Nothing in the abstract framework forced these particular objects to exist. They are the answer the `m_0` model gives to the three modeling questions above. The remainder of this post discusses each one.
+The parameters $\alpha$, $\beta$, and $\delta$ are required by the abstract framework in the sense that something has to play their roles — a sensitivity, a way of attaching beliefs to alternatives, and a utility structure. What is *not* forced by the abstract framework is the particular parametric form chosen for each: a `matrix[K,D]` rather than some nonlinear belief map, a `simplex[K-1]` of increments rather than some other parameterization of an ordered utility, and the priors placed on each. The remainder of this post discusses those parametric and prior choices.
 
 ## Choice 1: A linear-in-features softmax for subjective probabilities
 
 The first decision is how features of an alternative determine the decision maker's beliefs about its possible consequences.
 
-The `m_0` model takes a simple route. Each alternative has a feature vector `w[r]` of dimension `D`. The model multiplies that vector by `beta` and pushes the result through a softmax:
+The `m_0` model takes a simple route. Each alternative has a feature vector `w[r]` of dimension `D`. Before fitting, the Stan program flattens these per-alternative feature vectors into a single array `x` that lists, in order, the feature vector for every alternative that is available in some problem. The construction is described in the [transformed-data block of Report 2](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#transformed-data); the point of the flattening is purely computational — it lets the rest of the model use a single vectorized loop indexed by position rather than by `(problem, alternative)` pairs. Each entry `x[i]` corresponds to some original `w[r]`, and the mapping is bookkept so that expected utilities for each problem can later be extracted with `segment(eta, pos, N[m])`.
+
+The model then multiplies that feature vector by `beta` and pushes the result through a softmax:
 
 ```stan
 psi[i] = softmax(beta * x[i]);
@@ -85,7 +87,7 @@ $$
 
 This embeds three substantive commitments worth naming.
 
-The first is **linearity in features**. The log-odds of each consequence are taken to be a linear function of the feature representation. Whether that assumption is innocuous depends on how the features were constructed. In an LLM-based study where features come from a high-dimensional embedding projected to a smaller space, a linear softmax may already be quite flexible. In a domain with hand-crafted features that interact non-trivially, a linear map can be restrictive. The foundational report notes the alternatives — a nonlinear function in place of `beta * w`, hierarchical variation in `beta` across problem types, or constraints on `beta` informed by domain knowledge — but the default model uses the linear form because it is interpretable and computationally cheap.
+The first is **linearity in features**. The log-odds of each consequence are taken to be a linear function of the feature representation. Linear models are a natural first approximation — they are the simplest parameterization that lets feature variation matter at all, and they are what most subsequent generalizations will be compared against. Whether the assumption is innocuous depends on how the features were constructed: a flexible representation can absorb a fair amount of structure into the linear map. The [foundational report notes the alternatives](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#interpretation) — a nonlinear function in place of `beta * w`, hierarchical variation in `beta` across problem types, or constraints on `beta` informed by domain knowledge — but the default model uses the linear form because it is interpretable, computationally cheap, and a natural starting point against which richer alternatives can be compared.
 
 The second is **a shared coefficient matrix**. The same `beta` applies to every alternative. The model does not learn one mapping for one alternative and a different mapping for another; it learns a single rule that turns feature vectors into belief vectors. That is what gives the model leverage: when two alternatives appear in different problems, their estimated beliefs are tied together through `beta`.
 
@@ -99,13 +101,15 @@ The second decision is how to parameterize utilities so that the SEU machinery s
 
 Part 1 emphasized that the sensitivity parameter `alpha` only has a stable meaning once the utility scale is fixed. If we are allowed to multiply every utility difference by a constant, we can offset that by dividing `alpha` by the same constant, and the model produces identical choice probabilities. The standardization that fixes this is the convention that the worst consequence has utility 0, the best has utility 1, and the intermediate consequences are ordered between them.
 
-The `m_0` model enforces both the ordering and the standardization through an incremental construction:
+The `m_0` model enforces both the ordering and the standardization through [an incremental construction](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#utility-parameterization):
 
 ```stan
 upsilon = cumulative_sum(append_row(0, delta));
 ```
 
 Here `delta` is a `(K-1)`-simplex (non-negative entries summing to 1). Prepending a zero and taking the cumulative sum produces a vector `upsilon` of length `K` with `upsilon[1] = 0`, `upsilon[K] = 1`, and `upsilon[k] <= upsilon[k+1]` for every `k`. Ordering and standardization come out automatically, by construction.
+
+![Incremental utility construction. Left: three sample $\delta$ vectors drawn from a Dirichlet(1,1) prior. Right: the corresponding utility vectors $\upsilon$, each satisfying $\upsilon_1 = 0$ and $\upsilon_K = 1$ by construction. Spacing on the unit interval is the only thing $\delta$ can vary.](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation_files/figure-html/fig-utility-construction-output-1.svg){#fig-utility-construction fig-alt="Two-panel figure illustrating the cumulative-sum construction of ordered utilities from a Dirichlet simplex. The left panel shows three example delta vectors as bars; the right panel shows the corresponding cumulative utilities anchored at 0 and 1."}
 
 This is one of several possible parameterizations. We could have parameterized the interior utilities directly with constraints, or used an `ordered` vector and rescaled. The simplex-and-cumulative-sum route has the practical advantage that it makes the *spacing* the unknown, which is the quantity a prior on utilities should naturally express.
 
@@ -117,13 +121,13 @@ delta ~ dirichlet(rep_vector(1, K-1));
 
 a symmetric Dirichlet with concentration 1, which is uniform over the simplex. Every valid configuration of utility spacings is equally likely a priori. For the moderate case `K = 3`, this means the middle utility has a prior mean of 0.5 and a prior standard deviation of roughly 0.29 — broad but not pathological.
 
-Two things are worth flagging about this default. The prior is intentionally weakly informative; it expresses no preference for how utilities should be spaced. And it has a subtle dependence on `K`: as `K` grows, the marginal distribution of each increment concentrates around `1/(K-1)`, which means interior utilities cluster more tightly around equally spaced values. For larger `K`, a different concentration parameter may better express the prior uncertainty one actually has.
+A few things are worth flagging about this default. The prior is a natural starting point under the familiar appeal to uniformity: in the absence of substantive information about how the consequences should be spaced, every admissible spacing is treated as equally likely. It should not be read as a substantive commitment of the SEU-sensitivity project. In particular, the multiplicative coupling of $\beta$ and $\delta$ inside $\eta_r = \psi_r^{\top} \upsilon$ creates an identification problem that the choice of utility prior interacts with; a later series in this blog will revisit the Dirichlet choice in that connection. The Foundations series intentionally suppresses that complexity to focus inference on the main parameter, $\alpha$. There is also a subtle dependence on `K`: as `K` grows, the marginal distribution of each increment concentrates around `1/(K-1)`, which means interior utilities cluster more tightly around equally spaced values. For larger `K`, a different concentration parameter may better express the prior uncertainty one actually has.
 
 ## Choice 3: A lognormal prior on alpha
 
 The third decision is the prior on the sensitivity parameter itself.
 
-The default in `m_0` is
+The [default in `m_0`](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#prior-distributions) is
 
 ```stan
 alpha ~ lognormal(0, 1);
@@ -133,7 +137,7 @@ Lognormal is a natural choice because it has positive support, matching the cons
 
 What does that mean substantively? Recall from Part 1 the three regimes implied by the sensitivity parameter. Very low `alpha` produces nearly uniform random choice. Moderate `alpha` produces probabilistic choice that visibly favors higher expected-utility alternatives. Very high `alpha` produces near-deterministic SEU maximization. A Lognormal(0, 1) prior on `alpha` places non-trivial mass across all three of these regimes. It does not assume in advance that the decision maker is nearly random, nor that the decision maker is nearly an SEU maximizer.
 
-That breadth is appropriate as an exploratory default but it is also the prior that most often needs adjustment in real applications. A study of LLM decision behavior, for example, may have prior reasons to expect substantial sensitivity — the temperature study replaces this default with `Lognormal(3.0, 0.75)`, whose median sits near 20 rather than 1, because the foundational default places almost all of its mass well below the regime where LLM choice data actually live. The next post returns to how that kind of mismatch is detected and corrected; the point here is only that the prior on `alpha` is the one most directly tied to a substantive assumption about the application domain.
+That breadth is appropriate as an exploratory default but it is also the prior that most often needs adjustment in real applications. A study of LLM decision behavior, for example, may have prior reasons to expect substantial sensitivity — the [initial temperature study](https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html) replaces this default with `Lognormal(3.0, 0.75)`, whose median sits near 20 rather than 1, because the foundational default places almost all of its mass well below the regime where the observed LLM choice data actually live. The next post returns to how that kind of mismatch is detected and corrected; the point here is only that the prior on `alpha` is the one most directly tied to a substantive assumption about the application domain.
 
 The default prior on `beta` is similarly weakly informative: each entry receives an independent standard normal. In log-odds units, that places roughly 95% of coefficients within `±2`, allowing probability ratios per unit feature change up to about `e^2 ≈ 7.4` — moderately informative, but not narrow.
 
@@ -175,11 +179,11 @@ It is worth pausing on the explicit list, because the rest of this series turns 
 
 The `m_0` model assumes:
 
-- The log-odds of each consequence are *linear* in the features of an alternative, with the same coefficient matrix used across all alternatives.
-- Utilities are *ordered* on the standardized `[0, 1]` interval, parameterized by a Dirichlet-distributed simplex of increments.
-- The sensitivity parameter `alpha` follows a *lognormal* prior with substantial mass across the random / moderate / sharp regimes.
-- The feature-to-belief coefficients follow weakly informative independent standard normal priors.
-- Conditional on `psi` and `upsilon`, choices in different problems are *exchangeable*: the same alternative appearing in two problems shares its expected utility but is not required to be chosen identically.
+- The log-odds of each consequence are *linear* in the features of an alternative, with the same coefficient matrix used across all alternatives ([Report 2 §0.5](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#subjective-probability-formation)).
+- Utilities are *ordered* on the standardized `[0, 1]` interval, parameterized by a Dirichlet-distributed simplex of increments ([Report 2 §0.6](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#utility-parameterization)).
+- The sensitivity parameter `alpha` follows a *lognormal* prior with substantial mass across the random / moderate / sharp regimes ([Report 2 §0.8](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#prior-distributions)).
+- The feature-to-belief coefficients follow weakly informative independent standard normal priors (same section).
+- Conditional on `psi` and `upsilon`, the same alternative appearing in two problems shares its expected utility but is not required to be chosen identically — stable beliefs, probabilistic choice (see the behavioral-assumption note in [Report 2 §0.3](https://jeffhelzner.github.io/seu-sensitivity/foundations/02_concrete_implementation.html#data-structure)).
 
 None of these is forced by the abstract framework from Part 1. Each was made because it is interpretable and computationally clean. Each could be changed — and in some applications should be.
 

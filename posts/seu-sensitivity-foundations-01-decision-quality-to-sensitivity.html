@@ -91,6 +91,35 @@ ul.task-list li input[type="checkbox"] {
 </script>
 <meta name="quarto:status" content="draft">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="quarto-custom.css">
 <meta property="og:title" content="From Decision Quality to SEU Sensitivity – Jeff Helzner">
@@ -151,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul class="collapse">
   <li><a href="#from-a-standard-to-a-sensitivity-question" id="toc-from-a-standard-to-a-sensitivity-question" class="nav-link active" data-scroll-target="#from-a-standard-to-a-sensitivity-question">From a standard to a sensitivity question</a></li>
-  <li><a href="#what-alpha-means" id="toc-what-alpha-means" class="nav-link" data-scroll-target="#what-alpha-means">What alpha means</a></li>
+  <li><a href="#what-α-means" id="toc-what-α-means" class="nav-link" data-scroll-target="#what-α-means">What α means</a></li>
   <li><a href="#why-scale-matters" id="toc-why-scale-matters" class="nav-link" data-scroll-target="#why-scale-matters">Why scale matters</a></li>
   <li><a href="#what-the-model-is-describing" id="toc-what-the-model-is-describing" class="nav-link" data-scroll-target="#what-the-model-is-describing">What the model is describing</a></li>
   <li><a href="#why-this-is-not-just-accuracy-in-different-clothes" id="toc-why-this-is-not-just-accuracy-in-different-clothes" class="nav-link" data-scroll-target="#why-this-is-not-just-accuracy-in-different-clothes">Why this is not just accuracy in different clothes</a></li>
@@ -203,9 +232,9 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Foundations of SEU Sensitivity</strong> · Part 1 of 3<br>
 Part 1 · <a href="seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html">Part 2</a> · <a href="seu-sensitivity-foundations-03-when-measurement-is-meaningful.html">Part 3</a></p>
 </div>
-<p>The first series argued that decision quality under uncertainty cannot be reduced to outcomes or labeled accuracy. If a decision maker chooses before the uncertainty is resolved, then an evaluation has to ask something about the quality of the choice given what was knowable at the time. If the decision maker is supposed to combine beliefs and preferences in a principled way, then we also need to say what that principle is.</p>
-<p>Subjective expected utility theory is one possible answer. On the SEU view, alternatives are evaluated by combining beliefs about possible consequences with utilities for those consequences. The alternative with the highest expected utility is the one favored by the standard.</p>
-<p>But this immediately raises a practical problem. Real decision makers rarely satisfy an ideal standard exactly. Human decision makers make mistakes, attend unevenly, and respond to framing. AI systems may give answers that are approximately responsive to the relevant tradeoffs without behaving like perfect expected-utility maximizers. Human-machine processes may be more stable in some regions of a decision problem than in others.</p>
+<p>The first series began from a familiar point in decision analysis: the quality of a decision is not reducible to its outcome. The point is older than the SEU framework and applies to decision making in general, not specifically to decision making under uncertainty. What the first series did was draw out its relevance to the <em>evaluation of decision makers</em> — AI or human — and to argue that any such evaluation has to specify, in advance, the standard against which choices will be assessed.</p>
+<p>The standard adopted across this project is <em>subjective expected utility theory</em>. SEU is not just one option in a list; it is the culmination of a long tradition that began with expected-value maximization, was refined into expected-utility maximization to handle attitudes toward risk (von Neumann and Morgenstern), and was given its mature subjective form by Savage. On this view, alternatives are evaluated by combining the decision maker’s beliefs about possible consequences with the decision maker’s utilities for those consequences. The alternatives with the highest subjective expected utility — possibly more than one, if there are ties — are the ones endorsed by the standard.</p>
+<p>But this immediately raises a practical problem. Decision makers rarely satisfy an ideal standard exactly. Human decision makers make mistakes, attend unevenly, and respond to framing. AI systems may give answers that are approximately responsive to the relevant tradeoffs without behaving like perfect expected-utility maximizers. Human-machine processes may be more stable in some regions of a decision problem than in others.</p>
 <p>So the useful question is not only:</p>
 <blockquote class="blockquote">
 <p>Does the decision maker satisfy SEU exactly?</p>
@@ -217,24 +246,30 @@ Part 1 · <a href="seu-sensitivity-foundations-02-estimating-sensitivity-from-ch
 <p>That second question is the entry point for the SEU Sensitivity framework.</p>
 <section id="from-a-standard-to-a-sensitivity-question" class="level2">
 <h2 class="anchored" data-anchor-id="from-a-standard-to-a-sensitivity-question">From a standard to a sensitivity question</h2>
-<p>Suppose a decision problem contains several alternatives. Each alternative has an expected utility according to the SEU standard. Some alternatives have higher expected utility than others. A perfectly SEU-maximizing decision maker would always choose an alternative with maximal expected utility, at least when the values are specified and there is a unique best alternative.</p>
+<p>Suppose a decision problem contains several alternatives. Each alternative has an expected utility according to the SEU standard. Some alternatives have higher expected utility than others. A perfectly SEU-maximizing decision maker would always choose an alternative with maximal expected utility.</p>
 <p>That gives us a clean reference point, but it is too rigid for many applied evaluations. If an AI system chooses a slightly lower expected-utility alternative in a close case, that departure is not necessarily as informative as choosing a much worse alternative in a high-stakes case. If two systems both make some departures from SEU, we may still want to know which one is more responsive to the expected-utility structure of the problem.</p>
 <p>The SEU Sensitivity framework treats this as a graded relationship. It asks how choice probabilities change as expected utilities change.</p>
-<p>The mathematical device used in the first foundational report is a softmax choice rule. In its abstract form, each alternative receives a value. The probability of choosing an alternative increases with that value, and a sensitivity parameter, called <code>alpha</code>, controls how sharply the probabilities concentrate on higher-valued alternatives.</p>
-<p>When the value function is expected utility, <code>alpha</code> becomes a measure of sensitivity to SEU differences.</p>
+<p>The mathematical device used in the <a href="https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html">first foundational report</a> is a softmax choice rule. In its abstract form, each alternative receives a value. The probability of choosing an alternative increases with that value, and a sensitivity parameter <span class="math inline">\(\alpha\)</span> controls how sharply the probabilities concentrate on higher-valued alternatives.</p>
+<p>When the value function is expected utility, <span class="math inline">\(\alpha\)</span> becomes a measure of sensitivity to SEU differences. Concretely, the <a href="https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html#seu-as-a-value-function">SEU specialization in Report 1</a> gives the choice probability for alternative <span class="math inline">\(r\)</span> in problem <span class="math inline">\(m\)</span> as</p>
+<p><span class="math display">\[
+\chi_{m,r} \;=\; \frac{\exp(\alpha \cdot \eta_r)}{\sum_{j \in \text{problem } m} \exp(\alpha \cdot \eta_j)},
+\qquad
+\eta_r \;=\; \psi_r^{\top} \upsilon \;=\; \sum_{k=1}^{K} \psi_{r,k}\, \upsilon_k,
+\]</span></p>
+<p>where <span class="math inline">\(\psi_r\)</span> is the decision maker’s subjective probability distribution over the <span class="math inline">\(K\)</span> possible consequences of alternative <span class="math inline">\(r\)</span>, <span class="math inline">\(\upsilon\)</span> is the utility vector over those consequences, and <span class="math inline">\(\eta_r\)</span> is the resulting expected utility. The displayed formula is the only formal object the rest of this post depends on; everything that follows is interpretive commentary on it.</p>
 </section>
-<section id="what-alpha-means" class="level2">
-<h2 class="anchored" data-anchor-id="what-alpha-means">What alpha means</h2>
-<p>In the model, <code>alpha</code> controls the relation between expected utility and choice.</p>
-<p>When <code>alpha</code> is low, choices are only weakly related to expected utility. In the limiting case as <code>alpha</code> approaches zero, the model approaches uniform random choice among the available alternatives. Expected utility no longer makes much difference to what is chosen.</p>
-<p>When <code>alpha</code> is high, choices become more sharply concentrated on alternatives with higher expected utility. In the limiting case as <code>alpha</code> grows without bound, the model approaches deterministic SEU maximization. If one alternative uniquely maximizes expected utility, it is chosen with probability approaching one.</p>
+<section id="what-α-means" class="level2">
+<h2 class="anchored" data-anchor-id="what-α-means">What α means</h2>
+<p>In the model, <span class="math inline">\(\alpha\)</span> controls the relation between expected utility and choice.</p>
+<p>When <span class="math inline">\(\alpha\)</span> is low, choices are only weakly related to expected utility. In the limiting case as <span class="math inline">\(\alpha\)</span> approaches zero, the model approaches uniform random choice among the available alternatives. Expected utility no longer makes much difference to what is chosen.</p>
+<p>When <span class="math inline">\(\alpha\)</span> is high, choices become more sharply concentrated on alternatives with higher expected utility. In the limiting case as <span class="math inline">\(\alpha\)</span> grows without bound, the model approaches deterministic SEU maximization. If one alternative uniquely maximizes expected utility, it is chosen with probability approaching one.</p>
 <p>Between those limits, the decision maker is neither random nor perfectly optimizing. The decision maker tends to choose higher expected-utility alternatives, but not with perfect consistency.</p>
 <p>This is useful because many real evaluation problems live in that middle region. We do not expect the decision maker to be a theorem prover for SEU. But we may care whether its choices are mostly insensitive to expected-utility differences, moderately responsive, or highly concentrated on the alternatives favored by the standard.</p>
-<p>The first foundational report establishes three basic properties of this setup.</p>
-<p>First, holding expected utilities fixed, increasing <code>alpha</code> increases the probability assigned to expected-utility-maximizing alternatives and decreases the probability assigned to lower expected-utility alternatives.</p>
-<p>Second, as <code>alpha</code> becomes very large, the model converges to expected-utility maximization.</p>
-<p>Third, as <code>alpha</code> approaches zero, the model converges to random choice.</p>
-<p>These properties are simple, but they do important interpretive work. They justify reading <code>alpha</code> as a sensitivity parameter rather than as an arbitrary fitting knob.</p>
+<p>The first foundational report establishes <a href="https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html#fundamental-properties-of-softmax-choice">three basic properties</a> of this setup.</p>
+<p>First, holding expected utilities fixed, increasing <span class="math inline">\(\alpha\)</span> increases the probability assigned to expected-utility-maximizing alternatives and decreases the probability assigned to lower expected-utility alternatives.</p>
+<p>Second, as <span class="math inline">\(\alpha\)</span> becomes very large, the model converges to expected-utility maximization.</p>
+<p>Third, as <span class="math inline">\(\alpha\)</span> approaches zero, the model converges to random choice.</p>
+<p>These properties are simple, but they do important interpretive work. They justify reading <span class="math inline">\(\alpha\)</span> as a sensitivity parameter rather than as an arbitrary fitting knob.</p>
 <div id="fig-softmax-three-properties" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Visual summary of the three core softmax properties. The left panel shows the probability of the value-maximizing alternative increasing as alpha increases. The middle panel illustrates convergence toward deterministic optimization as alpha becomes large. The right panel illustrates convergence toward uniform random choice as alpha approaches zero.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-softmax-three-properties-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -249,9 +284,9 @@ Figure&nbsp;1: Three fundamental softmax properties: increasing sensitivity conc
 <section id="why-scale-matters" class="level2">
 <h2 class="anchored" data-anchor-id="why-scale-matters">Why scale matters</h2>
 <p>There is one important complication. Utility scales are not unique. If a utility function represents the same preferences after being stretched or shifted, then the numerical size of utility differences is not meaningful until a scale has been fixed.</p>
-<p>That matters because <code>alpha</code> multiplies expected utility differences. If we double every utility difference, we can offset that by cutting <code>alpha</code> in half. The model could produce the same choice probabilities with a different utility scale and a different sensitivity value.</p>
-<p>The framework resolves this by standardizing utilities to the interval from 0 to 1. The worst consequence receives utility 0, the best consequence receives utility 1, and intermediate consequences fall between them. This is a familiar decision-theoretic convention, and it gives <code>alpha</code> a stable interpretation.</p>
-<p>With utilities standardized, expected utilities also lie between 0 and 1. Then <code>alpha</code> can be read as the log-odds change associated with a one-unit difference in standardized expected utility. Since a one-unit difference is the largest possible expected-utility difference under this convention, <code>alpha</code> tells us how much the model favors the better alternative across the full standardized range.</p>
+<p>That matters because <span class="math inline">\(\alpha\)</span> multiplies expected utility differences. If we double every utility difference, we can offset that by cutting <span class="math inline">\(\alpha\)</span> in half. The model could produce the same choice probabilities with a different utility scale and a different sensitivity value.</p>
+<p>The framework resolves this by standardizing utilities to the interval from 0 to 1. The worst consequence receives utility 0, the best consequence receives utility 1, and intermediate consequences fall between them. This is a familiar decision-theoretic convention, and it gives <span class="math inline">\(\alpha\)</span> a stable interpretation.</p>
+<p>With utilities standardized, expected utilities also lie between 0 and 1. Then <span class="math inline">\(\alpha\)</span> can be read as the log-odds change associated with a one-unit difference in standardized expected utility. Since a one-unit difference is the largest possible expected-utility difference under this convention, <span class="math inline">\(\alpha\)</span> tells us how much the model favors the better alternative across the full standardized range.</p>
 <p>For a reader who does not need the algebra, the practical point is enough: the framework fixes the utility scale so that sensitivity estimates are comparable and interpretable.</p>
 </section>
 <section id="what-the-model-is-describing" class="level2">
@@ -259,21 +294,21 @@ Figure&nbsp;1: Three fundamental softmax properties: increasing sensitivity conc
 <p>It is important not to overread the framework.</p>
 <p>The model does not claim that the decision maker consciously computes expected utilities. It does not claim that an AI system has beliefs and preferences in the same sense a person might. It does not provide a psychological or mechanistic account of deliberation. It specifies a probabilistic relationship between the expected-utility ranking supplied by the model and the choices we observe.</p>
 <p>That makes the framework an as-if model. We ask whether the decision maker’s behavior can be described as if it were generated by a process that is committed to SEU maximization but has limited sensitivity to the implications of that commitment.</p>
-<p>One helpful analogy from the first foundational report is the distinction between commitment and performance. A person may be committed to arithmetic while sometimes making arithmetic errors. The errors do not show that the person rejects arithmetic as a standard. They show imperfect performance relative to the standard.</p>
-<p>Similarly, if SEU is used as the reference standard, <code>alpha</code> can be understood as measuring performance relative to that standard. Low sensitivity does not necessarily mean the decision maker has a rival theory of choice. It means the observed choices are weakly aligned with the SEU ranking.</p>
+<p>One helpful analogy, developed in Report 1’s <a href="https://jeffhelzner.github.io/seu-sensitivity/foundations/01_abstract_formulation.html#a-conceptual-lens-commitment-and-performance">commitment-and-performance discussion</a>, is Isaac Levi’s distinction between commitment and performance. A person may be committed to arithmetic while sometimes making arithmetic errors. The errors do not show that the person rejects arithmetic as a standard. They show imperfect performance relative to the standard.</p>
+<p>Similarly, if SEU is used as the reference standard, <span class="math inline">\(\alpha\)</span> can be understood as measuring performance relative to that standard. Low sensitivity does not necessarily mean the decision maker has a rival theory of choice. It means the observed choices are weakly aligned with the SEU ranking.</p>
 <p>That distinction matters for AI evaluation. A system may be prompted, designed, or institutionally deployed in a way that makes SEU-like reasoning the relevant standard. But its observed outputs may only partially track that standard. Sensitivity gives us a way to describe that partial tracking.</p>
 </section>
 <section id="why-this-is-not-just-accuracy-in-different-clothes" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-is-not-just-accuracy-in-different-clothes">Why this is not just accuracy in different clothes</h2>
-<p>The sensitivity question differs from ordinary accuracy because it uses the structure of the decision problem.</p>
-<p>An accuracy score asks how often the decision maker matched a label or benchmark. A sensitivity estimate asks how strongly choices respond to expected-utility differences. These can come apart.</p>
-<p>A system might match many labels because most cases are easy, while still being poorly sensitive in the hard cases where tradeoffs matter. Another system might disagree with some historical labels while being more consistently responsive to the stated decision standard. Two systems might have similar accuracy but different sensitivity: one may choose the SEU-favored alternative reliably when the expected-utility gap is large, while another may be unstable across both close and clear cases.</p>
-<p>This is why the framework is especially relevant for AI-assisted decisions under uncertainty. We often care not only about whether the system got a case right in retrospect, but whether its choices moved appropriately as probabilities, consequences, and utilities changed.</p>
+<p>The sensitivity question differs from ordinary accuracy because it uses the <em>structure</em> of the decision problem rather than only the chosen-vs.-correct label.</p>
+<p>An accuracy score asks how often the decision maker picked the alternative that some benchmark calls correct. A sensitivity estimate asks how strongly choice probabilities respond to expected-utility differences across the entire choice set. The two answer different questions, and a system’s score on one does not determine its score on the other.</p>
+<p>A simple illustration. Consider a decision problem with three alternatives whose standardized expected utilities are <span class="math inline">\(\eta_A = 0.80\)</span>, <span class="math inline">\(\eta_B = 0.78\)</span>, and <span class="math inline">\(\eta_C = 0.20\)</span>, and suppose the benchmark labels <span class="math inline">\(A\)</span> as correct. A system that always chooses <span class="math inline">\(A\)</span> scores 100% accuracy; so does a system that chooses <span class="math inline">\(A\)</span> when the gap to the runner-up is large but is equally likely to choose <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> when the top two are nearly tied — in this problem, both systems’ choices typically agree with the label. Sensitivity discriminates between them. The first system behaves like a high-<span class="math inline">\(\alpha\)</span> chooser across the full set; the second behaves like a high-<span class="math inline">\(\alpha\)</span> chooser only when the expected-utility gap is large, and like a near-random chooser otherwise. Conversely, two systems can have very different accuracy scores against a particular benchmark and still have indistinguishable sensitivities — if the benchmark labels are noisy in cases where the SEU-favored alternative is itself ambiguous, agreement with the label is not the same thing as responsiveness to expected utility.</p>
+<p>This is why the framework is especially relevant for AI-assisted decisions under uncertainty. We often care not only about whether the system got a case right in retrospect, but whether its choices moved appropriately as probabilities, consequences, and utilities changed. The <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html">temperature study</a> in the next series makes this concrete with real LLM choice data.</p>
 </section>
 <section id="the-bridge-to-estimation" class="level2">
 <h2 class="anchored" data-anchor-id="the-bridge-to-estimation">The bridge to estimation</h2>
-<p>So far, the story is conceptual. If expected utilities are known and choices are observed, <code>alpha</code> gives us a way to express how strongly choices track expected utility differences.</p>
-<p>But applications are not that simple. We do not observe a decision maker’s subjective probabilities directly. We do not observe its utility function directly. We observe choices across a set of decision problems. From those choices, we need to estimate the quantities that connect the decision maker to the SEU standard.</p>
+<p>So far, the story is conceptual. If expected utilities are known and choices are observed, <span class="math inline">\(\alpha\)</span> gives us a way to express how strongly choices track expected utility differences. From here on, the discussion shifts from the abstract object <span class="math inline">\(\alpha\)</span> to its concrete realization in a Bayesian computational pipeline, and we will write <code>alpha</code> in the typewriter form the Stan code uses.</p>
+<p>Applications are not as simple as the abstract story suggests. We do not observe a decision maker’s subjective probabilities directly. We do not observe its utility function directly. We observe choices across a set of decision problems. From those choices, we need to estimate the quantities that connect the decision maker to the SEU standard.</p>
 <p>That requires a statistical model.</p>
 <p>The next post takes the first step. It turns the abstract framework above into a concrete Stan program — the <code>m_0</code> model — and, more importantly, <em>names the modeling choices the implementation commits us to</em>: how features of an alternative map to subjective probabilities, how ordered utilities are parameterized on the unit interval, and what priors are placed on <code>alpha</code>, on the feature-to-belief mapping, and on the utility increments. Each of these is a decision that could in principle have been made differently, and each one shapes what the eventual posterior over <code>alpha</code> is allowed to mean.</p>
 <p>The post after that asks whether the resulting implementation is one we should trust. It walks through the modern Bayesian workflow as applied to <code>m_0</code> — prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks — because a posterior is only as good as the model that produced it. Sensitivity is not a score directly read off from a decision maker. It is an uncertain estimate from finite observed choices, and the trust we can place in that estimate has to be earned by checks of the model that produced it.</p>
