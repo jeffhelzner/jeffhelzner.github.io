@@ -1,6 +1,6 @@
 ---
 title: "Probing the SEU Model: A Bayesian Workflow Tour"
-date: 2026-07-01
+date: 2026-05-16
 author: "Jeff Helzner"
 slug: "seu-sensitivity-foundations-part-3-when-measurement-is-meaningful"
 description: "Probing the m_0 SEU sensitivity model with the modern Bayesian workflow: prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks."
@@ -9,13 +9,13 @@ image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","subjective-expected-utility","bayesian-workflow","sbc","posterior-predictive-checks","series:seu-sensitivity-foundations"]
 series: "Foundations of SEU Sensitivity"
 part: 3
-draft: true
+draft: false
 format:
   html:
     include-in-header:
       text: |
         <link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-03-when-measurement-is-meaningful.html">
-        <meta name="robots" content="noindex, nofollow">
+        <meta name="robots" content="index, follow">
         <meta property="og:type" content="article">
         <script type="application/ld+json">
         {
@@ -24,8 +24,8 @@ format:
           "headline": "Probing the SEU Model: A Bayesian Workflow Tour",
           "description": "Probing the m_0 SEU sensitivity model with the modern Bayesian workflow: prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
-          "datePublished": "2026-07-01",
-          "dateModified": "2026-05-14",
+          "datePublished": "2026-05-16",
+          "dateModified": "2026-05-16",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-03-when-measurement-is-meaningful.html",
           "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},

@@ -1,5 +1,26 @@
 [
   {
+    "slug": "seu-sensitivity-foundations-part-1-decision-quality-to-sensitivity",
+    "title": "Part 1 — From Decision Quality to SEU Sensitivity",
+    "date": "2026-05-16",
+    "summary": "Once SEU is used as a reference standard, the useful question is not only whether choices satisfy it exactly. It is how strongly choices move with expected utility differences.",
+    "url": "/posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html"
+  },
+  {
+    "slug": "seu-sensitivity-foundations-part-2-estimating-sensitivity-from-choices",
+    "title": "Part 2 — From the Abstract Model to a Stan Implementation",
+    "date": "2026-05-16",
+    "summary": "Three choices turn the abstract softmax-over-expected-utility model into something we can fit: how features map to subjective probabilities, how ordered utilities are parameterized, and which priors we place on the resulting parameters.",
+    "url": "/posts/seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html"
+  },
+  {
+    "slug": "seu-sensitivity-foundations-part-3-when-measurement-is-meaningful",
+    "title": "Part 3 — Probing the SEU Model: A Bayesian Workflow Tour",
+    "date": "2026-05-16",
+    "summary": "Four checks ask four different questions of the same model. Together they tell us whether an SEU sensitivity estimate is something we should be willing to interpret.",
+    "url": "/posts/seu-sensitivity-foundations-03-when-measurement-is-meaningful.html"
+  },
+  {
     "slug": "evaluating-ai-decisions-part-1-why-measure",
     "title": "Part 1 — Why measure how an AI agent decides?",
     "date": "2026-05-01",

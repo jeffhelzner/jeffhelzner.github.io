@@ -1,6 +1,6 @@
 ---
 title: "From Decision Quality to SEU Sensitivity"
-date: 2026-05-24
+date: 2026-05-16
 author: "Jeff Helzner"
 slug: "seu-sensitivity-foundations-part-1-decision-quality-to-sensitivity"
 description: "How the SEU Sensitivity framework turns a stated decision standard into a graded measure of how consistently choices track expected utility."
@@ -9,13 +9,13 @@ image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","subjective-expected-utility","evaluation","series:seu-sensitivity-foundations"]
 series: "Foundations of SEU Sensitivity"
 part: 1
-draft: true
+draft: false
 format:
   html:
     include-in-header:
       text: |
         <link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">
-        <meta name="robots" content="noindex, nofollow">
+        <meta name="robots" content="index, follow">
         <meta property="og:type" content="article">
         <script type="application/ld+json">
         {
@@ -24,8 +24,8 @@ format:
           "headline": "From Decision Quality to SEU Sensitivity",
           "description": "How the SEU Sensitivity framework turns a stated decision standard into a graded measure of how consistently choices track expected utility.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
-          "datePublished": "2026-05-24",
-          "dateModified": "2026-05-02",
+          "datePublished": "2026-05-16",
+          "dateModified": "2026-05-16",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html",
           "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},

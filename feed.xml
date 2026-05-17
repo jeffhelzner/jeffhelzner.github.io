@@ -5,8 +5,29 @@
     <link>https://jeffhelzner.github.io/posts/</link>
     <description>Essays on decision-making, uncertainty, and AI evaluation.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 May 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://jeffhelzner.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>From Decision Quality to SEU Sensitivity</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html</guid>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <description>How the SEU Sensitivity framework turns a stated decision standard into a graded measure of how consistently choices track expected utility.</description>
+    </item>
+    <item>
+      <title>From the Abstract Model to a Stan Implementation</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html</guid>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <description>Turning the abstract SEU sensitivity model into a concrete Stan implementation, and naming the modeling choices the implementation commits us to.</description>
+    </item>
+    <item>
+      <title>Probing the SEU Model: A Bayesian Workflow Tour</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-03-when-measurement-is-meaningful.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-03-when-measurement-is-meaningful.html</guid>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <description>Probing the m_0 SEU sensitivity model with the modern Bayesian workflow: prior predictive checks, parameter recovery, simulation-based calibration, and posterior predictive checks.</description>
+    </item>
     <item>
       <title>Evaluating AI Decisions Under Uncertainty: Why Outcomes Are Not Enough</title>
       <link>https://jeffhelzner.github.io/posts/evaluating-ai-decisions-01-why-measure.html</link>

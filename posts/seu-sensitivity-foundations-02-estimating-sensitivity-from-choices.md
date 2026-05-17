@@ -1,6 +1,6 @@
 ---
 title: "From the Abstract Model to a Stan Implementation"
-date: 2026-06-14
+date: 2026-05-16
 author: "Jeff Helzner"
 slug: "seu-sensitivity-foundations-part-2-estimating-sensitivity-from-choices"
 description: "Turning the abstract SEU sensitivity model into a concrete Stan implementation, and naming the modeling choices the implementation commits us to."
@@ -9,13 +9,13 @@ image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","subjective-expected-utility","stan","bayesian-modeling","series:seu-sensitivity-foundations"]
 series: "Foundations of SEU Sensitivity"
 part: 2
-draft: true
+draft: false
 format:
   html:
     include-in-header:
       text: |
         <link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html">
-        <meta name="robots" content="noindex, nofollow">
+        <meta name="robots" content="index, follow">
         <meta property="og:type" content="article">
         <script type="application/ld+json">
         {
@@ -24,8 +24,8 @@ format:
           "headline": "From the Abstract Model to a Stan Implementation",
           "description": "Turning the abstract SEU sensitivity model into a concrete Stan implementation, and naming the modeling choices the implementation commits us to.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
-          "datePublished": "2026-06-14",
-          "dateModified": "2026-05-14",
+          "datePublished": "2026-05-16",
+          "dateModified": "2026-05-16",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html",
           "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
