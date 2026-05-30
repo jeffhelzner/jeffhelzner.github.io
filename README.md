@@ -92,6 +92,14 @@ Copy the generated publishable article HTML and required assets from `posts/_sit
 
 Update `posts.json`, `sitemap.xml`, and `feed.xml` when publishing new posts.
 
+## Visitor analytics
+
+The site uses a small GoatCounter loader in [analytics.js](analytics.js). It only runs on `jeffhelzner.github.io`, so local previews are not counted.
+
+To activate tracking, create a GoatCounter site for `jeffhelzner.goatcounter.com` at https://www.goatcounter.com. If you choose a different GoatCounter code or provider, update `goatCounterEndpoint` in [analytics.js](analytics.js).
+
+Root-level pages include [analytics.js](analytics.js) directly. Quarto posts inherit the same script through [posts/analytics-goatcounter.html](posts/analytics-goatcounter.html), configured in [posts/_quarto.yml](posts/_quarto.yml).
+
 ## Resume workflow
 
 The site links to `resume.pdf`. To regenerate it from `Jeff_Helzner_Resume.md`, run:
