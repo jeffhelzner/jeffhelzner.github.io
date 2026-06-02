@@ -8,9 +8,9 @@
 
 <meta name="author" content="Jeff Helzner">
 <meta name="dcterms.date" content="2026-08-23">
-<meta name="description" content="What happened when the initial GPT-4o temperature finding was tested with Claude on the same insurance triage task.">
+<meta name="description" content="Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task that did not reproduce the pattern, and what the contrast licenses by way of conclusion.">
 
-<title>A Temperature Result That Did Not Travel – Jeff Helzner</title>
+<title>What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude – Jeff Helzner</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,6 +71,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../analytics.js" defer=""></script>
 <link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html">
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="article">
@@ -78,30 +79,29 @@ ul.task-list li input[type="checkbox"] {
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "A Temperature Result That Did Not Travel",
-  "description": "What happened when the initial GPT-4o temperature finding was tested with Claude on the same insurance triage task.",
+  "headline": "What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude",
+  "description": "Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task, and what the contrast licenses by way of conclusion.",
   "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
   "datePublished": "2026-08-23",
-  "dateModified": "2026-05-14",
+  "dateModified": "2026-06-01",
   "image": "https://jeffhelzner.github.io/assets/social-card.png",
   "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html",
   "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
-  "keywords": ["SEU sensitivity", "Claude", "LLM replication", "temperature", "AI decision evaluation"]
+  "keywords": ["SEU sensitivity", "Claude", "GPT-4o", "LLM replication", "temperature", "AI decision evaluation", "hierarchical model"]
 }
 </script>
 <meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="quarto-custom.css">
-<meta property="og:title" content="A Temperature Result That Did Not Travel – Jeff Helzner">
-<meta property="og:description" content="What happened when the initial GPT-4o temperature finding was tested with Claude on the same insurance triage task.">
+<meta property="og:title" content="What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude – Jeff Helzner">
+<meta property="og:description" content="Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task that did not reproduce the pattern, and what the contrast licenses by way of conclusion.">
 <meta property="og:image" content="https://jeffhelzner.github.io/assets/social-card.png">
 <meta property="og:site_name" content="Jeff Helzner">
-<meta name="twitter:title" content="A Temperature Result That Did Not Travel – Jeff Helzner">
-<meta name="twitter:description" content="What happened when the initial GPT-4o temperature finding was tested with Claude on the same insurance triage task.">
+<meta name="twitter:title" content="What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude – Jeff Helzner">
+<meta name="twitter:description" content="Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task that did not reproduce the pattern, and what the contrast licenses by way of conclusion.">
 <meta name="twitter:image" content="https://jeffhelzner.github.io/assets/social-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<script src="../analytics.js" defer></script>
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -151,12 +151,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#holding-the-task-constant" id="toc-holding-the-task-constant" class="nav-link active" data-scroll-target="#holding-the-task-constant">Holding the task constant</a></li>
-  <li><a href="#the-pattern-changed" id="toc-the-pattern-changed" class="nav-link" data-scroll-target="#the-pattern-changed">The pattern changed</a></li>
-  <li><a href="#the-model-still-fit-the-data" id="toc-the-model-still-fit-the-data" class="nav-link" data-scroll-target="#the-model-still-fit-the-data">The model still fit the data</a></li>
-  <li><a href="#why-the-result-might-differ-by-llm" id="toc-why-the-result-might-differ-by-llm" class="nav-link" data-scroll-target="#why-the-result-might-differ-by-llm">Why the result might differ by LLM</a></li>
-  <li><a href="#why-this-is-not-an-embarrassment" id="toc-why-this-is-not-an-embarrassment" class="nav-link" data-scroll-target="#why-this-is-not-an-embarrassment">Why this is not an embarrassment</a></li>
-  <li><a href="#what-the-comparison-teaches" id="toc-what-the-comparison-teaches" class="nav-link" data-scroll-target="#what-the-comparison-teaches">What the comparison teaches</a></li>
+  <li><a href="#what-the-gpt-4o-study-found" id="toc-what-the-gpt-4o-study-found" class="nav-link active" data-scroll-target="#what-the-gpt-4o-study-found">What the GPT-4o study found</a></li>
+  <li><a href="#a-natural-follow-up-hold-the-task-vary-the-llm" id="toc-a-natural-follow-up-hold-the-task-vary-the-llm" class="nav-link" data-scroll-target="#a-natural-follow-up-hold-the-task-vary-the-llm">A natural follow-up: hold the task, vary the LLM</a></li>
+  <li><a href="#what-the-claude-study-found" id="toc-what-the-claude-study-found" class="nav-link" data-scroll-target="#what-the-claude-study-found">What the Claude study found</a></li>
+  <li><a href="#reading-the-contrast" id="toc-reading-the-contrast" class="nav-link" data-scroll-target="#reading-the-contrast">Reading the contrast</a></li>
+  <li><a href="#what-comes-next" id="toc-what-comes-next" class="nav-link" data-scroll-target="#what-comes-next">What comes next</a></li>
   <li><a href="#sources" id="toc-sources" class="nav-link" data-scroll-target="#sources">Sources</a></li>
   </ul>
 </nav>
@@ -166,12 +165,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">A Temperature Result That Did Not Travel</h1>
+<h1 class="title">What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude</h1>
 </div>
 
 <div>
   <div class="description">
-    What happened when the initial GPT-4o temperature finding was tested with Claude on the same insurance triage task.
+    Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task that did not reproduce the pattern, and what the contrast licenses by way of conclusion.
   </div>
 </div>
 
@@ -201,72 +200,88 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="series-nav">
-<p><strong>Applying SEU Sensitivity to LLM Decisions</strong> · Part 2 of 3 <a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1</a> · Part 2 · <a href="seu-sensitivity-applications-03-from-demo-to-robust-evaluation.html">Part 3</a></p>
+<p><strong>Applying SEU Sensitivity to LLM Decisions</strong> · Part 2 of 2<br>
+<a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1</a> · Part 2</p>
 </div>
-<p>The initial GPT-4o study found a clear broad relationship: higher sampling temperature was associated with lower estimated sensitivity to subjective expected utility differences. That was encouraging because it showed the SEU Sensitivity framework doing useful empirical work on real LLM choices. But a single pilot does not settle the more important question.</p>
-<p>Does the pattern travel?</p>
-<p>This matters because temperature was always a probe of the measurement device, not a deep substantive commitment. It is plausible that increasing token-sampling temperature could make choices noisier. It is also plausible that the effect could depend on the model provider, its post-training, the prompt, the domain, the temperature range, the feature construction, or the stage of the decision process most affected by sampling randomness.</p>
-<p>The second pilot held the task fixed and changed the LLM.</p>
-<section id="holding-the-task-constant" class="level2">
-<h2 class="anchored" data-anchor-id="holding-the-task-constant">Holding the task constant</h2>
-<p>The follow-up study used Claude on the same insurance claims triage task. As before, the model was asked to choose which claim to prioritize from a small set of alternatives. As before, there were 100 base problems presented three times with positions shuffled, yielding about 300 observations per temperature condition. As before, the analysis used the <code>m_01</code> SEU Sensitivity model for a three-consequence insurance task.</p>
-<p>This design is useful because it isolates one source of variation better than a study that changes both the task and the model at once. The comparison is not perfect, but it is much cleaner than simply asking whether an effect appears somewhere else. GPT-4o and Claude were applied to the same broad decision domain with the same modeling framework.</p>
-<p>The temperature grid differed because provider APIs differ. The Claude study used temperatures 0.0, 0.2, 0.5, 0.8, and 1.0. The GPT-4o study had used 0.0, 0.3, 0.7, 1.0, and 1.5. That complicates quantitative slope comparisons. A temperature of 0.5 from one provider is not guaranteed to correspond to the same effective entropy as a temperature of 0.5 from another provider. The narrower Anthropic range also reduces power to detect large temperature effects.</p>
-<p>Still, the qualitative question remains meaningful. If temperature is a general dial for reducing SEU sensitivity in this kind of LLM choice task, we would expect at least some downward trend for Claude.</p>
-<p>That is not what the study found.</p>
-</section>
-<section id="the-pattern-changed" class="level2">
-<h2 class="anchored" data-anchor-id="the-pattern-changed">The pattern changed</h2>
-<p>The Claude estimates did not show a clear negative relationship between temperature and <code>alpha</code>.</p>
-<p>The posterior median sensitivity estimates were high at temperature 0.0, lower at 0.2, higher again at 0.5 and 0.8, and lower again at 1.0. The posterior distributions overlapped heavily, and there was no clear ordering by temperature.</p>
-<div id="fig-claude-insurance-summary" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Summary visualization from the Claude insurance study. The left panel shows alpha estimates by temperature with a flat, non-monotonic pattern. The right panel shows pairwise posterior probabilities across temperature conditions.">
+<p><a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1</a> set up the initial GPT-4o temperature study: an insurance claims triage task, five temperature conditions, a calibrated prior, parameter recovery for <code>alpha</code> at the application’s scale, and posterior predictive adequacy at every temperature. With that scaffolding in place, the per-condition <code>alpha</code> posteriors can be compared as inference rather than as raw numbers. This post takes up that comparison, then turns to a follow-up study that held the task fixed and changed the LLM, and closes with what the two studies — read together — license by way of conclusion.</p>
+<section id="what-the-gpt-4o-study-found" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-gpt-4o-study-found">What the GPT-4o study found</h2>
+<p>The headline pattern is the one a reader of <a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1</a> would expect to look for. Posterior medians for <code>alpha</code> were highest at temperature <code>0.0</code> and lowest at temperature <code>1.5</code>, with the intermediate temperatures falling between those endpoints. The full posterior summaries are in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#sec-posterior-summaries">§Posterior Summaries</a>. The forest plot makes the per-condition uncertainty visible alongside the central tendency.</p>
+<div id="fig-gpt4o-forest" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Forest plot showing posterior alpha for GPT-4o at temperatures 0.0, 0.3, 0.7, 1.0, and 1.5; alpha is highest at 0.0 and declines toward 1.5, with overlapping intervals at 0.3 and 0.7.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-claude-insurance-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study_files/figure-html/fig-summary-output-1.svg" class="img-fluid figure-img" alt="Summary visualization from the Claude insurance study. The left panel shows alpha estimates by temperature with a flat, non-monotonic pattern. The right panel shows pairwise posterior probabilities across temperature conditions.">
+<div aria-describedby="fig-gpt4o-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study_files/figure-html/fig-forest-output-1.svg" class="img-fluid figure-img" alt="Forest plot showing posterior alpha for GPT-4o at temperatures 0.0, 0.3, 0.7, 1.0, and 1.5; alpha is highest at 0.0 and declines toward 1.5, with overlapping intervals at 0.3 and 0.7.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-claude-insurance-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Claude insurance study summary: alpha versus temperature and pairwise posterior probabilities across temperature conditions.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gpt4o-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Forest plot of posterior <code>alpha</code> distributions across the five temperature conditions for GPT-4o. Points are posterior medians; thick bars span the 50% credible interval and thin bars the 90% credible interval.
 </figcaption>
 </figure>
 </div>
-<p>The global slope summary captured this difference. In the GPT-4o study, the slope of <code>alpha</code> against temperature was clearly negative, with a posterior probability above 0.99 that the slope was below zero. In the Claude insurance study, the slope was close to zero: the median was about -3.6, with a wide interval spanning both negative and positive values, and the posterior probability of a negative slope was only about 0.56.</p>
-<p>Strict monotonicity was also essentially absent. The probability that <code>alpha</code> decreased across all five Claude temperature levels was below 0.01.</p>
-<p>It is tempting to read the up-and-down sequence as a genuine oscillatory response to temperature. The updated analysis pushes back on that reading. No individual pairwise comparison reaches a conventionally notable level, and the overall posterior is consistent with noise around a roughly flat function. The honest summary is not that Claude has a complex temperature-response curve; it is that the data do not support the negative temperature-sensitivity relationship seen with GPT-4o.</p>
-<p>The conclusion is not that Claude made bad decisions. It is not that the model failed the task. It is not even that temperature had no effect on anything Claude did. The conclusion is narrower and more useful: the temperature-sensitivity relationship observed with GPT-4o on this insurance task did not replicate with Claude on the same task.</p>
+<section id="global-slope" class="level3">
+<h3 class="anchored" data-anchor-id="global-slope">Global slope</h3>
+<p>The aggregate question — whether <code>alpha</code> declines with temperature on the whole — is summarised by the posterior over a draw-wise linear slope <code>Δalpha/ΔT</code>. For each posterior draw, the report fits an ordinary least-squares line through the five <code>alpha</code> values and records the slope; the collection of slopes across draws is the posterior the report displays. (This is a derived quantity, not a regression model in its own right.) The result, in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#sec-monotonicity">§Monotonicity Analysis</a>, is a posterior median of approximately <code>-31</code> with a 90% credible interval of <code>[-66, -8]</code> and <code>P(slope &lt; 0) ≈ 0.99</code>.</p>
+<div id="fig-gpt4o-slope" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Posterior distribution of the global slope of alpha against temperature for GPT-4o, with the entire 90% credible interval to the left of zero.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gpt4o-slope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study_files/figure-html/fig-slope-output-1.svg" class="img-fluid figure-img" alt="Posterior distribution of the global slope of alpha against temperature for GPT-4o, with the entire 90% credible interval to the left of zero.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gpt4o-slope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Posterior distribution of the draw-wise slope <code>Δalpha/ΔT</code> for GPT-4o across temperatures <code>0.0</code>–<code>1.5</code>. The 90% credible interval lies entirely below zero.
+</figcaption>
+</figure>
+</div>
+<p>So at the global level the evidence for a negative relationship is strong. The local pattern is less tidy: <code>T = 0.3</code> and <code>T = 0.7</code> are nearly indistinguishable, and the probability that <code>alpha</code> is strictly decreasing across all five temperature levels is only about <code>0.12</code>, driven almost entirely by the overlap between the two intermediate conditions. Collapsing <code>T = 0.3</code> and <code>T = 0.7</code> into a single intermediate level raises the probability of the resulting coarser ordering to about <code>0.38</code>. The headline directional claim — <code>alpha</code> decreases with temperature on the whole — is much better supported than any fine-grained claim about every adjacent step.</p>
 </section>
-<section id="the-model-still-fit-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="the-model-still-fit-the-data">The model still fit the data</h2>
-<p>One tempting explanation for a non-replication is that the model simply failed in the new setting. If the SEU Sensitivity model fit GPT-4o but not Claude, then the comparison would be harder to interpret. The missing temperature effect might just be an artifact of model inadequacy.</p>
-<p>The adequacy checks did not point in that direction.</p>
-<p>The Claude study included study-specific parameter recovery. The primary sensitivity parameter <code>alpha</code> was recoverable under the Claude insurance design. The absolute recovery metrics differ from those reported for the GPT-4o study, but that difference reflects the random seeds of two synthetic recoveries drawn from the same prior – not anything LLM-specific. Anchoring the comparison on the relative metrics (relative bias, relative RMSE, coverage) is what makes the two recoveries comparable, and <code>alpha</code> recovery is fit for purpose for this study on those terms. As in the earlier work, the decomposition into feature effects and utility increments remained less directly identified, but the primary sensitivity question was supported by the recovery analysis.</p>
-<p>Simulation-based calibration was not rerun for the Claude cell. It was inherited from the initial GPT-4o study, which used the same model and prior. That is the kind of inheritance simulation-based calibration permits: the procedure validates the sampler under the prior and likelihood, both of which are identical here. The study-specific recovery analysis fills the role of design-specific validation under Claude’s actual data characteristics.</p>
-<p>The posterior predictive checks also looked adequate. The model could reproduce the observed choice data across the Claude temperature conditions using the same general summaries: log-likelihood, modal choice frequency, and mean predicted probability. The posterior predictive p-values were comfortably away from extreme values.</p>
-<p>This is a subtle but important result. The absence of a GPT-4o-like temperature trend is not obviously due to the model being unable to describe Claude’s choices. The model appears adequate enough to estimate sensitivity, and the estimated sensitivities simply do not organize themselves by temperature in the same way.</p>
-<p>For a measurement framework, that is exactly the kind of distinction we need. A framework that only produces positive-looking demonstrations is not very useful. A framework that can say “the model fits, but this hypothesized relationship is not supported here” is more valuable.</p>
+<section id="a-design-induced-correlation-caveat" class="level3">
+<h3 class="anchored" data-anchor-id="a-design-induced-correlation-caveat">A design-induced correlation caveat</h3>
+<p>There is a subtler caveat about how confidently the conditions can be compared, set out in the <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#pairwise-comparisons">Independence Caveat</a> within the pairwise-comparisons section. The five temperature conditions in this study draw their decision problems from a single fixed pool of <code>R = 30</code> insurance claims. Whatever is idiosyncratic about that particular pool — the embedding geometry that happens to fall out of those texts, the spread of expected utilities across alternatives, the typical gap between the best and second-best option — shifts every condition’s estimate in the same direction. Fitting <code>m_01</code> independently at each temperature treats the five datasets as the only sources of evidence and so reports five posterior summaries that look statistically unrelated even though they share a common, unmodelled nuisance factor.</p>
+<p>The practical consequence is that the pairwise comparisons across temperature conditions, which treat the per-temperature posteriors as if they were independent, slightly overstate how confidently we can resolve between-temperature differences. The same point applies, more mildly, to the global-slope summary above, which is also a function of independent per-condition fits. A hierarchical version of the model — for example one that writes <code>log alpha(T) = γ₀ + γ₁ · T + η</code> with a small condition-level random effect — would handle this on two fronts: it makes the common effect of the shared claim pool a single estimated quantity, so design-induced shifts cancel out of between-condition contrasts; and it borrows strength across conditions for the systematic effect of interest, producing a single calibrated uncertainty statement about the temperature–sensitivity relationship. As <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#next-steps">§Next Steps</a> of the technical report notes, this hierarchical extension has already been developed; the underlying machinery is laid out in foundational reports 8 through 12, available from the <a href="https://jeffhelzner.github.io/seu-sensitivity/">SEU Sensitivity project page</a>, and it will be the subject of a separate blog series. The qualitative direction of the headline result is not threatened by the caveat, but the fine-grained ordering across adjacent temperatures should be read as more provisional than independent fits make it look.</p>
 </section>
-<section id="why-the-result-might-differ-by-llm" class="level2">
-<h2 class="anchored" data-anchor-id="why-the-result-might-differ-by-llm">Why the result might differ by LLM</h2>
-<p>The current studies cannot decide among candidate explanations, but they help state the possibilities more precisely.</p>
-<p>First, the temperature parameter may not be equivalent across providers. The APIs expose a parameter with the same name, but the underlying models, decoding implementations, and post-training regimes differ. The same nominal temperature need not imply the same change in effective sampling entropy. Second, the models may differ in which decision stage temperature most affects. The LLM produces claim assessments, those assessments become embedded features, and the LLM later makes choices; temperature could move assessment wording more than final selection in one model and the reverse in another. Third, Claude’s post-training may regularize task behavior so that surface expression varies under temperature without the selected claim varying much. Fourth, the observed up-and-down pattern may simply be posterior noise around a roughly flat relationship rather than a substantive oscillation.</p>
-<p>These explanations are not mutually exclusive, and the present design cannot separate them. They are listed here to make the inference problem visible, not to settle it.</p>
 </section>
-<section id="why-this-is-not-an-embarrassment" class="level2">
-<h2 class="anchored" data-anchor-id="why-this-is-not-an-embarrassment">Why this is not an embarrassment</h2>
-<p>It is tempting to narrate the follow-up as a failed replication. That phrase is not wrong, but it can be misleading if it suggests the project failed. The better framing is that the initial result did not travel – and that is methodologically informative. The first pilot showed that the framework could detect a structured relationship between temperature and estimated sensitivity for GPT-4o on this task. The second pilot showed that the relationship was not automatic on the same task with a different LLM.</p>
-<p>This is exactly the kind of thing an evaluation framework should be able to surface. If a practitioner were tuning temperature for AI-assisted decisions, it would be risky to assume that a setting that improves one model’s choice consistency will have the same effect on another. The Claude result pushes against that assumption. It also reinforces the role of uncertainty and diagnostics in interpretation: a single score or a tidy graph from the first study would have been easier to overgeneralize than a posterior with adequacy checks attached.</p>
+<section id="a-natural-follow-up-hold-the-task-vary-the-llm" class="level2">
+<h2 class="anchored" data-anchor-id="a-natural-follow-up-hold-the-task-vary-the-llm">A natural follow-up: hold the task, vary the LLM</h2>
+<p>A single pilot, however carefully checked, cannot tell us whether the pattern travels. Temperature was always a probe of the measurement device rather than a deep substantive commitment, and there are several reasons the relationship could plausibly turn out to be model-specific: provider APIs implement temperature in different decoding stacks; post-training regimes differ; the stage of the decision pipeline most affected by sampling randomness could differ. The cleanest way to put the framework’s portability to a first test is to hold the task fixed and change the LLM.</p>
+<p>That is the design of the second pilot, <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html">Temperature and SEU Sensitivity: Claude × Insurance Study</a>. The task is the same insurance triage task used in <a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1</a>. The choice model is the same <code>m_01</code> variant under the same <code>Lognormal(3.0, 0.75)</code> prior on <code>alpha</code>. The same 100 base problems, three position-counterbalanced presentations, and pooled-PCA feature pipeline are used. The only intentional change is the underlying LLM: Claude 3.5 Sonnet (Anthropic) in place of GPT-4o (OpenAI).</p>
+<p>One design parameter does change for reasons outside the experimenter’s control. The Anthropic API supports temperature values in <code>[0.0, 1.0]</code>, against OpenAI’s <code>[0.0, 2.0]</code>. The Claude study uses temperatures <code>{0.0, 0.2, 0.5, 0.8, 1.0}</code> rather than the GPT-4o study’s <code>{0.0, 0.3, 0.7, 1.0, 1.5}</code>. The narrower span reduces statistical power to detect a large temperature effect and complicates direct numerical comparisons of slope magnitudes; nothing about it threatens the qualitative reading.</p>
 </section>
-<section id="what-the-comparison-teaches" class="level2">
-<h2 class="anchored" data-anchor-id="what-the-comparison-teaches">What the comparison teaches</h2>
-<p>The contrast between the two pilots teaches three modest lessons.</p>
-<p>First, application matters. The foundations series established what the sensitivity parameter means and how to check whether estimates are meaningful. Real LLM behavior can still surprise us, and a method becomes useful when it can survive contact with those surprises.</p>
-<p>Second, on this task, the temperature-sensitivity relationship looks at least partly model-specific. The same task and same modeling framework produced different temperature patterns across GPT-4o and Claude. A single comparison cell cannot establish that LLM identity is the dominant factor in general; it does establish that LLM temperature should not be treated as a provider-independent control knob for decision quality.</p>
-<p>Third, non-replication is evidence. It narrows the scope of the original claim. It identifies a factor that may be responsible for heterogeneity. And it motivates designs that vary model, task, and prompt factors more systematically, alongside better separation between assessment-stage and choice-stage effects.</p>
-<p>The contrast also clarifies the role of the original temperature hypothesis. It was useful because it generated a real empirical test of the SEU Sensitivity framework. But the larger project is not about proving that higher temperature always reduces sensitivity. It is about developing a disciplined way to measure how AI decision behavior relates to a stated decision standard under uncertainty.</p>
-<p>That is why the next post steps back from the particular temperature result and asks what these pilots show about evaluation itself.</p>
+<section id="what-the-claude-study-found" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-claude-study-found">What the Claude study found</h2>
+<p>The Claude <code>alpha</code> estimates do not exhibit a clear negative relationship with temperature. Posterior medians are roughly <code>74</code> at <code>T = 0.0</code>, drop to <code>55</code> at <code>T = 0.2</code>, rise back to <code>77</code> at <code>T = 0.5</code> and <code>74</code> at <code>T = 0.8</code>, and fall again to <code>57</code> at <code>T = 1.0</code>. The posteriors overlap substantially, and no clear ordering by temperature emerges. The full summary table is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html#sec-posterior-summaries">§Posterior Summaries</a> of the Claude report.</p>
+<p>The cross-study comparison plot puts the two patterns side by side under the same task and choice model.</p>
+<div id="fig-cross-study" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two-panel cross-study plot. Left panel shows alpha declining with temperature for GPT-4o; right panel shows a flat, non-monotonic pattern for Claude on the same insurance task.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cross-study-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study_files/figure-html/fig-cross-study-output-1.svg" class="img-fluid figure-img" alt="Two-panel cross-study plot. Left panel shows alpha declining with temperature for GPT-4o; right panel shows a flat, non-monotonic pattern for Claude on the same insurance task.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cross-study-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Cross-study comparison isolating the LLM effect. Left: GPT-4o on the insurance task shows a clear decline in <code>alpha</code> as temperature increases. Right: Claude on the same task shows a flat, non-monotonic pattern.
+</figcaption>
+</figure>
+</div>
+<p>The global slope quantifies the contrast. For Claude, the posterior median slope is approximately <code>-3.6</code>, the 90% credible interval is <code>[-54, 39]</code>, and <code>P(slope &lt; 0) ≈ 0.56</code> — barely above chance. The probability of strict monotonic decrease across all five Claude temperature levels is below <code>0.01</code>. A formal cross-study comparison reported in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html#sec-comparison">§Comparison with Initial Temperature Study</a> puts <code>P(GPT-4o slope &lt; Claude slope) ≈ 0.82</code>. The temperature-sensitivity relationship observed for GPT-4o on this task did not reproduce when the same task was run with Claude.</p>
+<p>It is tempting to read the up-and-down sequence of Claude posterior medians as a genuine non-monotonic response to temperature. The oscillation analysis in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html#sec-characterising-oscillation">§Characterising the Oscillatory Pattern</a> does not support that reading: no individual pairwise comparison reaches a conventionally notable level, and the pattern is consistent with posterior noise around a roughly flat function. The honest summary is not that Claude has a complex temperature-response curve on this task; it is that on this task Claude does not exhibit the negative temperature–sensitivity relationship that GPT-4o does.</p>
+<section id="the-model-still-fit-claudes-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-model-still-fit-claudes-data">The model still fit Claude’s data</h3>
+<p>The natural worry to rule out is that the absence of a temperature trend is an artefact of model failure on Claude’s data. The adequacy checks do not support that reading. Study-specific parameter recovery for <code>alpha</code> under the Claude design is fit for purpose on the relative metrics that anchor cross-study comparison; the differences in absolute recovery numbers between the two reports reflect the random seeds of two synthetic recoveries drawn from the same prior, not anything LLM-specific. The simulation-based calibration of <code>alpha</code> under this prior and likelihood was already established in the initial GPT-4o study and is inherited validly here; SBC tests the sampler under the prior and likelihood, both of which are identical across the two applications. Posterior predictive p-values across the five Claude conditions fall in <code>[0.3, 0.7]</code>, indicating no systematic misfit. The detail is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html#sec-model-validation">§Model Validation</a> and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html#sec-posterior-predictive-checks">§Posterior Predictive Checks</a> of the Claude report.</p>
+<p>Sometimes a model fails to detect an effect because it is inadequate for the data; sometimes the model is adequate and the hypothesised effect is not present. A useful measurement framework should help tell those two cases apart. In the Claude study the model is adequate and the hypothesised effect is, at the resolution this design supports, not present.</p>
+</section>
+</section>
+<section id="reading-the-contrast" class="level2">
+<h2 class="anchored" data-anchor-id="reading-the-contrast">Reading the contrast</h2>
+<p>The temperature parameter exposed by provider APIs is not, on this evidence, a portable behavioural instrument. The same nominal temperature need not imply the same effective sampling entropy across providers; it need not affect the same stage of a multi-stage decision pipeline in the same way across providers; and the LLM’s post-training regime can in principle regularise task behaviour so that surface expression varies under temperature without the selected alternative varying. The Claude report’s discussion in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html#sec-why-differ">§Why Does the Effect Differ Across LLMs?</a> lists these candidate explanations more fully. The present designs cannot adjudicate among them and do not try to.</p>
+<p>The contrast also illustrates what the comparative reading of <code>alpha</code> is, and what it is not. The reading the two studies support is a within-design one: under a shared task, prior, feature pipeline, and choice model, GPT-4o’s choices on this task concentrate more sharply on the alternative ranked highest by the fitted utility at low temperature than at high temperature, and Claude’s choices on this task do not show that pattern. That is a comparative claim about <code>alpha</code> under a fixed measurement device. It is not a claim that the absolute level of <code>alpha</code> certifies one LLM as more rational than another in some context-free sense. The construct-validity layering — between within-model consistency, comparative claims under a shared design, and absolute claims about EU rationality — is laid out at greater length in the <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html#construct-validity-of-">construct-validity discussion</a> of the initial-study report.</p>
+<p>The methodological value of the contrast is that the framework was able to detect a structured relationship when one was present and to refuse to support one when the data did not contain it. That is not a flashy finding, but it is the kind of finding that distinguishes an evaluation framework from a scoreboard.</p>
+</section>
+<section id="what-comes-next" class="level2">
+<h2 class="anchored" data-anchor-id="what-comes-next">What comes next</h2>
+<p>Two threads run forward from these two pilots.</p>
+<p>The first is the hierarchical extension already mentioned in connection with the design-induced correlation caveat. The model in question — <code>h_m01</code> — is the <code>m_01</code> likelihood extended across experimental cells, with cell-specific <code>alpha</code>-values regressed on cell covariates and a shared scale parameter. It addresses the shared-pool nuisance directly and frames between-condition contrasts as regression effects on <code>log alpha</code>, giving a single calibrated uncertainty statement for the temperature–sensitivity relationship rather than five independent fits stitched together after the fact. The construction and validation of <code>h_m01</code> are spelled out in foundational reports 8 through 12 on the <a href="https://jeffhelzner.github.io/seu-sensitivity/">SEU Sensitivity project page</a>, and they will be the subject of a separate blog series.</p>
+<p>The second is the natural substantive next step for the applications programme. The insurance triage task served well as a vehicle for the first methodological tests, but it is not the most informative setting for asking what the framework can tell us about an LLM’s relationship to a stated decision standard. A planned next applications series moves the underlying task to <strong>Ellsberg-style decision problems</strong>, where the structure of the decision setting makes the EU standard sharper and the comparison across LLMs and conditions more directly interpretable. The corresponding technical reports are <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html">GPT-4o × Ellsberg</a> and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html">Ellsberg study</a>.</p>
+<p>The value of these first two pilots is not that every result generalised. It is that the framework made the generalisation question measurable.</p>
 </section>
 <section id="sources" class="level2">
 <h2 class="anchored" data-anchor-id="sources">Sources</h2>
-<p>This post draws on <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html">Temperature and SEU Sensitivity: Claude x Insurance Study</a> and compares it with <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html">Temperature and SEU Sensitivity: Initial Results</a>.</p>
+<p>This post draws on <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html">Temperature and SEU Sensitivity: Initial Results</a> and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html">Temperature and SEU Sensitivity: Claude × Insurance Study</a>, with background from the <a href="seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">foundations series</a> and the SEU Sensitivity project’s foundational reports.</p>
 
 
 </section>
