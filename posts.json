@@ -1,5 +1,19 @@
 [
   {
+    "slug": "seu-sensitivity-applications-part-1-temperature-as-methodological-probe",
+    "title": "Part 1 — Probing SEU Sensitivity With LLM Temperature",
+    "date": "2026-06-01",
+    "summary": "Before any temperature result can be read, the measurement device has to be set up: a defensible task, a calibrated prior, identifiable parameters for the quantity of interest, and adequacy checks that constrain what the eventual estimate is allowed to mean.",
+    "url": "/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html"
+  },
+  {
+    "slug": "seu-sensitivity-applications-part-2-result-that-did-not-travel",
+    "title": "Part 2 — What the GPT-4o Result Showed, and Why It Did Not Travel to Claude",
+    "date": "2026-06-01",
+    "summary": "The GPT-4o study found a clear broad decline in estimated SEU sensitivity as temperature increased. The same task with Claude produced no such pattern. The contrast — and its caveats — is what the framework is built to expose.",
+    "url": "/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html"
+  },
+  {
     "slug": "seu-sensitivity-foundations-part-1-decision-quality-to-sensitivity",
     "title": "Part 1 — From Decision Quality to SEU Sensitivity",
     "date": "2026-05-16",

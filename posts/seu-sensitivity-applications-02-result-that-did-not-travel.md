@@ -1,6 +1,6 @@
 ---
 title: "What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude"
-date: 2026-08-23
+date: 2026-06-01
 author: "Jeff Helzner"
 slug: "seu-sensitivity-applications-part-2-result-that-did-not-travel"
 description: "Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task that did not reproduce the pattern, and what the contrast licenses by way of conclusion."
@@ -9,13 +9,12 @@ image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","subjective-expected-utility","replication","series:seu-sensitivity-applications"]
 series: "Applying SEU Sensitivity to LLM Decisions"
 part: 2
-draft: true
+draft: false
 format:
   html:
     include-in-header:
       text: |
         <link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html">
-        <meta name="robots" content="noindex, nofollow">
         <meta property="og:type" content="article">
         <script type="application/ld+json">
         {
@@ -24,7 +23,7 @@ format:
           "headline": "What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude",
           "description": "Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task, and what the contrast licenses by way of conclusion.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
-          "datePublished": "2026-08-23",
+          "datePublished": "2026-06-01",
           "dateModified": "2026-06-01",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html",

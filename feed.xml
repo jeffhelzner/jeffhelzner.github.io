@@ -5,8 +5,22 @@
     <link>https://jeffhelzner.github.io/posts/</link>
     <description>Essays on decision-making, uncertainty, and AI evaluation.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 16 May 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://jeffhelzner.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Probing SEU Sensitivity With LLM Temperature: Design and Model Checks</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Background, study design, prior calibration, and model checking for the initial GPT-4o temperature study, which applies the SEU Sensitivity framework to real LLM choice data.</description>
+    </item>
+    <item>
+      <title>What the GPT-4o Temperature Result Showed, and Why It Did Not Travel to Claude</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-applications-02-result-that-did-not-travel.html</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Results of the initial GPT-4o temperature study, a follow-up Claude study on the same insurance task that did not reproduce the pattern, and what the contrast licenses by way of conclusion.</description>
+    </item>
     <item>
       <title>From Decision Quality to SEU Sensitivity</title>
       <link>https://jeffhelzner.github.io/posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html</link>

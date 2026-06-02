@@ -1,6 +1,6 @@
 ---
 title: "Probing SEU Sensitivity With LLM Temperature: Design and Model Checks"
-date: 2026-08-02
+date: 2026-06-01
 author: "Jeff Helzner"
 slug: "seu-sensitivity-applications-part-1-temperature-as-methodological-probe"
 description: "Background, study design, prior calibration, and model checking for the initial GPT-4o temperature study, which applies the SEU Sensitivity framework to real LLM choice data."
@@ -9,13 +9,12 @@ image: "https://jeffhelzner.github.io/assets/social-card.png"
 tags: ["ai","decision-making","subjective-expected-utility","temperature","series:seu-sensitivity-applications"]
 series: "Applying SEU Sensitivity to LLM Decisions"
 part: 1
-draft: true
+draft: false
 format:
   html:
     include-in-header:
       text: |
         <link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html">
-        <meta name="robots" content="noindex, nofollow">
         <meta property="og:type" content="article">
         <script type="application/ld+json">
         {
@@ -24,7 +23,7 @@ format:
           "headline": "Probing SEU Sensitivity With LLM Temperature: Design and Model Checks",
           "description": "Background, study design, prior calibration, and model checking for the initial GPT-4o temperature study.",
           "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
-          "datePublished": "2026-08-02",
+          "datePublished": "2026-06-01",
           "dateModified": "2026-06-01",
           "image": "https://jeffhelzner.github.io/assets/social-card.png",
           "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html",

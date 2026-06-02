@@ -45,24 +45,19 @@
       <section class="series-feature" aria-labelledby="series-title">
         <div class="series-feature-inner">
           <p class="series-kicker">Featured series</p>
-          <h2 id="series-title">Foundations of SEU Sensitivity</h2>
-          <p>A three-part introduction to the SEU Sensitivity framework: how a decision standard becomes a graded sensitivity question, how the abstract model becomes a Stan implementation, and how Bayesian workflow checks determine whether the estimate is meaningful.</p>
+          <h2 id="series-title">Applying SEU Sensitivity to LLM Decisions</h2>
+          <p>A two-part application of the SEU Sensitivity framework to real LLM choice data: how the measurement device is set up for an initial GPT-4o temperature study, and what the GPT-4o result — together with a Claude follow-up that did not reproduce it — actually licenses.</p>
 
           <div class="series-list" aria-label="Series posts">
-            <a class="series-item" href="./seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">
+            <a class="series-item" href="./seu-sensitivity-applications-01-temperature-as-methodological-probe.html">
               <span class="part-label">Part 1</span>
-              <strong>From Decision Quality to SEU Sensitivity</strong>
-              <span>How exact SEU maximization becomes a graded question about how strongly choices track expected utility differences.</span>
+              <strong>Probing SEU Sensitivity With LLM Temperature</strong>
+              <span>Background, study design, prior calibration, and model checking for the initial GPT-4o temperature study.</span>
             </a>
-            <a class="series-item" href="./seu-sensitivity-foundations-02-estimating-sensitivity-from-choices.html">
+            <a class="series-item" href="./seu-sensitivity-applications-02-result-that-did-not-travel.html">
               <span class="part-label">Part 2</span>
-              <strong>From the Abstract Model to a Stan Implementation</strong>
-              <span>The modeling choices that turn softmax-over-expected-utility into something we can fit.</span>
-            </a>
-            <a class="series-item" href="./seu-sensitivity-foundations-03-when-measurement-is-meaningful.html">
-              <span class="part-label">Part 3</span>
-              <strong>Probing the SEU Model: A Bayesian Workflow Tour</strong>
-              <span>Why prior predictive checks, recovery, SBC, and posterior predictive checks determine whether an estimate can be interpreted.</span>
+              <strong>What the GPT-4o Result Showed, and Why It Did Not Travel to Claude</strong>
+              <span>The GPT-4o temperature finding, the Claude non-replication on the same task, and what the contrast — with its caveats — actually licenses.</span>
             </a>
           </div>
         </div>
@@ -72,6 +67,14 @@
         <h2>All Posts</h2>
         <noscript>
           <div class="post-list">
+            <article class="card">
+              <h3><a href="./seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1 - Probing SEU Sensitivity With LLM Temperature</a></h3>
+              <p>Before any temperature result can be read, the measurement device has to be set up: a defensible task, a calibrated prior, identifiable parameters, and adequacy checks.</p>
+            </article>
+            <article class="card">
+              <h3><a href="./seu-sensitivity-applications-02-result-that-did-not-travel.html">Part 2 - What the GPT-4o Result Showed, and Why It Did Not Travel to Claude</a></h3>
+              <p>The GPT-4o temperature finding, the Claude non-replication on the same task, and what the contrast licenses by way of conclusion.</p>
+            </article>
             <article class="card">
               <h3><a href="./seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">Part 1 - From Decision Quality to SEU Sensitivity</a></h3>
               <p>Once SEU is used as a reference standard, the useful question is not only whether choices satisfy it exactly. It is how strongly choices move with expected utility differences.</p>
