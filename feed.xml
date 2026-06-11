@@ -5,8 +5,29 @@
     <link>https://jeffhelzner.github.io/posts/</link>
     <description>Essays on decision-making, uncertainty, and AI evaluation.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Jun 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://jeffhelzner.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>From Insurance to Urns: Background and the Ellsberg Paradigm</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-01-from-insurance-to-urns.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-01-from-insurance-to-urns.html</guid>
+      <pubDate>Mon, 08 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Bridging from the insurance applications series to a new task family — Ellsberg-style urn gambles — and setting out the historical and interpretive weight that Ellsberg's example carries.</description>
+    </item>
+    <item>
+      <title>Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html</guid>
+      <pubDate>Mon, 08 Jun 2026 00:00:00 GMT</pubDate>
+      <description>The K=4 prior recalibration, validation focused on alpha, and the per-condition results for the GPT-4o and Claude 3.5 Sonnet Ellsberg studies.</description>
+    </item>
+    <item>
+      <title>Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide</title>
+      <link>https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-03-factorial-synthesis.html</link>
+      <guid isPermaLink="true">https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-03-factorial-synthesis.html</guid>
+      <pubDate>Mon, 08 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.</description>
+    </item>
     <item>
       <title>Probing SEU Sensitivity With LLM Temperature: Design and Model Checks</title>
       <link>https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html</link>

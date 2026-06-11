@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jeff Helzner">
+<meta name="dcterms.date" content="2026-06-08">
+<meta name="description" content="The K = 4 prior recalibration, validation focused on alpha, and the per-condition results for the GPT-4o and Claude 3.5 Sonnet Ellsberg studies.">
+
+<title>Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results – Jeff Helzner</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../analytics.js" defer=""></script>
+<link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">
+<meta property="og:type" content="article">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results",
+  "description": "The K = 4 prior recalibration, validation focused on alpha, and the per-condition results for the GPT-4o and Claude 3.5 Sonnet Ellsberg studies.",
+  "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
+  "datePublished": "2026-06-08",
+  "dateModified": "2026-06-08",
+  "image": "https://jeffhelzner.github.io/assets/social-card.png",
+  "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html",
+  "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
+  "keywords": ["SEU sensitivity", "Ellsberg paradox", "GPT-4o", "Claude 3.5 Sonnet", "LLM temperature", "prior calibration", "parameter recovery", "Bayesian decision model"]
+}
+</script>
+
+
+<link rel="stylesheet" href="quarto-custom.css">
+<meta property="og:title" content="Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results – Jeff Helzner">
+<meta property="og:description" content="The K = 4 prior recalibration, validation focused on alpha, and the per-condition results for the GPT-4o and Claude 3.5 Sonnet Ellsberg studies.">
+<meta property="og:image" content="https://jeffhelzner.github.io/assets/social-card.png">
+<meta property="og:site_name" content="Jeff Helzner">
+<meta name="twitter:title" content="Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results – Jeff Helzner">
+<meta name="twitter:description" content="The K = 4 prior recalibration, validation focused on alpha, and the per-condition results for the GPT-4o and Claude 3.5 Sonnet Ellsberg studies.">
+<meta name="twitter:image" content="https://jeffhelzner.github.io/assets/social-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Jeff Helzner</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./../"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="././"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./../#projects"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#a-new-prior-for-the-k-4-task" id="toc-a-new-prior-for-the-k-4-task" class="nav-link active" data-scroll-target="#a-new-prior-for-the-k-4-task">A new prior for the K = 4 task</a></li>
+  <li><a href="#validation-focused-on-alpha" id="toc-validation-focused-on-alpha" class="nav-link" data-scroll-target="#validation-focused-on-alpha">Validation focused on alpha</a></li>
+  <li><a href="#gpt-4o-on-ellsberg-gambles" id="toc-gpt-4o-on-ellsberg-gambles" class="nav-link" data-scroll-target="#gpt-4o-on-ellsberg-gambles">GPT-4o on Ellsberg gambles</a></li>
+  <li><a href="#claude-on-ellsberg-gambles" id="toc-claude-on-ellsberg-gambles" class="nav-link" data-scroll-target="#claude-on-ellsberg-gambles">Claude on Ellsberg gambles</a></li>
+  <li><a href="#the-same-qualitative-shape-as-the-insurance-pair" id="toc-the-same-qualitative-shape-as-the-insurance-pair" class="nav-link" data-scroll-target="#the-same-qualitative-shape-as-the-insurance-pair">The same qualitative shape as the insurance pair</a></li>
+  <li><a href="#sources" id="toc-sources" class="nav-link" data-scroll-target="#sources">Sources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results</h1>
+</div>
+
+<div>
+  <div class="description">
+    The K = 4 prior recalibration, validation focused on alpha, and the per-condition results for the GPT-4o and Claude 3.5 Sonnet Ellsberg studies.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jeff Helzner </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 8, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="series-nav">
+<p><strong>Applying SEU Sensitivity to Ellsberg-Style Decisions</strong> · Part 2 of 3<br>
+<a href="seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">Part 1</a> · Part 2 · Part 3</p>
+</div>
+<p><a href="seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">Part 1</a> set out the choice of Ellsberg-style urn gambles as the next task family, the historical and interpretive weight that Ellsberg’s example carries, and the scope of what the studies in this series do and do not measure. This post turns to the measurement device: the prior recalibration that the change of consequence space forces, the validation that licenses comparing per-condition <code>alpha</code> posteriors, and the per-LLM headline results for both Ellsberg studies. <a href="seu-sensitivity-ellsberg-03-factorial-synthesis.html">Part 3</a> reads the four resulting cells — LLM crossed with task — as a single comparative picture.</p>
+<p>The two technical reports drawn on here are <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html">Temperature and SEU Sensitivity: Ellsberg Study</a> (Claude 3.5 Sonnet) and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html">Temperature and SEU Sensitivity: GPT-4o × Ellsberg Study</a> (GPT-4o). As in the previous series, the post links into specific sections of those reports wherever the high-level summary abstracts away a choice an interested reader might want to inspect.</p>
+<section id="a-new-prior-for-the-k-4-task" class="level2">
+<h2 class="anchored" data-anchor-id="a-new-prior-for-the-k-4-task">A new prior for the K = 4 task</h2>
+<p>The model fit in both Ellsberg studies is the same softmax-over-expected-utility model used in the insurance pair. The structural form is unchanged; what changes is the prior on <code>alpha</code>.</p>
+<p>The reason is the change in the consequence space. The insurance task had <code>K = 3</code> consequences (forward to investigation, decline, hold) and the <a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html"><code>m_01</code> variant</a> used the prior <code>Lognormal(3.0, 0.75)</code>, calibrated so that the prior-implied SEU-maximization rate sat near 78% under the insurance design. Carrying that prior unchanged into the Ellsberg setting would change its interpretation: with <code>K = 4</code> and a random-choice baseline of <code>1/4</code> rather than <code>1/3</code>, the same <code>alpha</code> value implies a different SEU-maximization rate. A prior that was “moderately informative about reasonably EU-aligned LLM choices” in the insurance setting would no longer be calibrated to that target on the Ellsberg task.</p>
+<p>The fix, in both Ellsberg studies, is a recalibrated variant called <code>m_02</code>: structurally identical to <code>m_0</code> and <code>m_01</code>, with a slightly wider lognormal prior on <code>alpha</code> of <code>Lognormal(3.5, 0.75)</code>. The calibration was done by the same prior-predictive grid search procedure used in the initial study — for each candidate prior, draw values of <code>alpha</code>, simulate choice data under the actual study design, and record the implied SEU-maximization rate. The selected prior implies a rate of approximately 76% under the Ellsberg design, within a few percentage points of the insurance studies’ 78%. The prior has a median near <code>alpha = 33</code> and a 90% interval roughly <code>[7, 150]</code>. The full grid and discussion are in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#prior-predictive-grid-search">§Prior Predictive Grid Search</a> of the Claude report; the GPT-4o study uses the same <code>m_02</code> prior so that any cross-LLM comparison on the Ellsberg task is not confounded by a difference in prior or model variant.</p>
+<p>Two consequences of this calibration are worth flagging up front, because they shape what the comparisons later in this series can and cannot claim.</p>
+<p>First, cross-<em>task</em> comparisons of <code>alpha</code> <em>magnitudes</em> — comparing the level of <code>alpha</code> on insurance to the level on Ellsberg — are not what the calibration is designed to support. The insurance studies use <code>m_01</code> with <code>Lognormal(3.0, 0.75)</code> and <code>K = 3</code>; the Ellsberg studies use <code>m_02</code> with <code>Lognormal(3.5, 0.75)</code> and <code>K = 4</code>. An <code>alpha</code> of, say, 80 implies different choice probabilities under those two configurations, because the softmax operates over different-sized simplices. What the calibration <em>is</em> designed to support is parallel interpretation of within-task contrasts across the two studies — the sign and shape of how <code>alpha</code> moves with temperature inside a single task family.</p>
+<p>Second, cross-<em>LLM</em> comparisons on the Ellsberg task can use the per-condition <code>alpha</code> posteriors directly, because both Ellsberg cells share <code>m_02</code>, <code>Lognormal(3.5, 0.75)</code>, <code>K = 4</code>, the same gamble pool, the same feature pipeline, and the same <code>R = 30</code>. Within the Ellsberg task, the two LLM cells are as close to a clean apples-to-apples comparison as the design permits, modulo the temperature-grid difference treated in <a href="seu-sensitivity-ellsberg-03-factorial-synthesis.html">Part 3</a>.</p>
+</section>
+<section id="validation-focused-on-alpha" class="level2">
+<h2 class="anchored" data-anchor-id="validation-focused-on-alpha">Validation focused on alpha</h2>
+<p>Before the per-condition <code>alpha</code> posteriors can be read as inference, the model has to be shown to recover <code>alpha</code> at the application’s actual scale and to do so with calibrated uncertainty.</p>
+<p>Parameter recovery for <code>m_02</code> was run at the Ellsberg studies’ design parameters (<code>M ≈ 300</code>, <code>K = 4</code>, <code>D = 32</code>, <code>R = 30</code>). In the Claude study’s recovery report, across the 20 iterations the relative-scale metrics for <code>alpha</code> are fit for purpose: 90% credible intervals contain the true value at the nominal rate, and the RMSE is small relative to the spread the prior places on <code>alpha</code>. The GPT-4o study reproduces the recovery at the same design parameters and reports relative bias within roughly ±10% and 90% coverage at nominal. The detail is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#parameter-recovery">§Parameter Recovery</a> of the Claude report and the corresponding <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#parameter-recovery">section</a> of the GPT-4o report.</p>
+<p>The recovery picture for the other model components — the feature weights <code>beta</code> and the utility increments <code>delta</code> — carries the same partial-identification pattern documented in the foundational reports for <code>m_0</code> and inherited by <code>m_01</code> and <code>m_02</code>. As in the previous applications series, the temperature comparison here is a within-task, within-LLM comparison of <code>alpha</code> across conditions that share the same prior, features, and design, and the partial identification of the other components does not undermine that comparison. Readers who want to engage with the <code>beta</code>–<code>delta</code> identification issues should consult the <a href="https://jeffhelzner.github.io/seu-sensitivity/foundations/04_parameter_recovery.html">foundational recovery report</a>; the present series sets them aside.</p>
+<p>Simulation-based calibration for <code>m_02</code> was run at the Ellsberg design at reduced scale (75 iterations). The rank distribution for <code>alpha</code> is consistent with uniformity (χ² <em>p</em> = 0.18), and the overall count of nominally significant rank tests across all 132 parameters (9) is consistent with the binomial chance expectation. The details are in the <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#appendix-sbc-results-for-m_02">SBC appendix</a> of the Claude report. The GPT-4o study inherits this SBC result rather than rerunning it, since SBC tests the sampler under the prior and likelihood — both of which are identical across the two Ellsberg cells.</p>
+<p>Together, parameter recovery and SBC support treating the per-condition <code>alpha</code> posteriors as honest statements about uncertainty when the temperature conditions are compared within each LLM. Two further checks live between this validation and substantive interpretation.</p>
+<p>MCMC diagnostics across all ten fits (five GPT-4o + five Claude) are clean. Divergent transition rates are at most about 0.15% across conditions, R̂ values for <code>alpha</code> are well below the conventional 1.01 threshold throughout, and effective sample sizes and E-BFMI are comfortably in range. The full diagnostic tables are in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#mcmc-diagnostics">§MCMC Diagnostics</a> of the Claude report and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#mcmc-diagnostics">§MCMC Diagnostics</a> of the GPT-4o report. Had any condition shown sustained R̂ inflation, many divergent transitions, or low effective sample size, the per-condition posterior could not have been read as a sample from the intended target, and the comparison across conditions would have to be set aside until the sampling problem was resolved.</p>
+<p>Posterior predictive checks ask whether the fitted model can reproduce features of the observed choice data. Three complementary summaries — log-likelihood, modal choice frequency, and mean predicted probability of the chosen alternative — are computed at every temperature in both studies. All fifteen p-values in the Claude study fall in <code>[0.30, 0.60]</code>; all fifteen in the GPT-4o study fall in <code>[0.32, 0.53]</code>. Neither study shows evidence of systematic misfit at any temperature. The detail is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#posterior-predictive-checks">§Posterior Predictive Checks</a> of the Claude report and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#posterior-predictive-checks">§Posterior Predictive Checks</a> of the GPT-4o report.</p>
+<p>The reason to belabor these checks is the same as in the previous series. Sometimes a model fails to detect a structured pattern because it is inadequate for the data; sometimes the model is adequate and the pattern is not there. A useful measurement framework should help tell those two cases apart. In both Ellsberg studies, at every temperature condition, the model is adequate. Whatever pattern appears — or fails to appear — in the per-condition <code>alpha</code> posteriors is a property of the data rather than of the measurement device.</p>
+</section>
+<section id="gpt-4o-on-ellsberg-gambles" class="level2">
+<h2 class="anchored" data-anchor-id="gpt-4o-on-ellsberg-gambles">GPT-4o on Ellsberg gambles</h2>
+<p>The GPT-4o × Ellsberg study uses temperatures <code>{0.0, 0.3, 0.7, 1.0, 1.5}</code> — the same grid as the insurance study. Posterior summaries by condition are in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#posterior-summaries">§Posterior Summaries</a> of the report; the forest plot puts the per-condition uncertainty alongside the central tendency.</p>
+<div id="fig-gpt4o-ellsberg-forest" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Forest plot showing posterior alpha for GPT-4o on Ellsberg gambles at temperatures 0.0, 0.3, 0.7, 1.0, and 1.5; alpha is highest at 0.0 (around 114) and declines toward 1.5 (around 54), with substantial overlap among the four lower-temperature conditions.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gpt4o-ellsberg-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study_files/figure-html/fig-forest-output-1.svg" class="img-fluid figure-img" alt="Forest plot showing posterior alpha for GPT-4o on Ellsberg gambles at temperatures 0.0, 0.3, 0.7, 1.0, and 1.5; alpha is highest at 0.0 (around 114) and declines toward 1.5 (around 54), with substantial overlap among the four lower-temperature conditions.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gpt4o-ellsberg-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Forest plot of posterior <code>alpha</code> distributions across the five temperature conditions for GPT-4o on the Ellsberg gambles. Points are posterior medians; thick bars span the 50% credible interval and thin bars the 90% credible interval. <code>alpha</code> declines from approximately 114 at <code>T = 0.0</code> to approximately 54 at <code>T = 1.5</code>, with the largest separation between <code>T = 1.0</code> and <code>T = 1.5</code>.
+</figcaption>
+</figure>
+</div>
+<p>The headline pattern is the qualitative shape that a reader of the insurance studies would expect to look for. Posterior medians for <code>alpha</code> are 114 at <code>T = 0.0</code>, 111 at <code>T = 0.3</code>, 104 at <code>T = 0.7</code>, 87 at <code>T = 1.0</code>, and 54 at <code>T = 1.5</code>. The aggregate slope <code>Δalpha/ΔT</code>, computed as in the insurance study via a draw-wise OLS line through the five <code>alpha</code> values, has a posterior median of approximately <code>−48</code>, a 90% credible interval of <code>[−90, −13]</code> excluding zero, and <code>P(slope &lt; 0) ≈ 0.98</code>. The full monotonicity analysis is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#monotonicity-analysis">§Monotonicity Analysis</a> of the report.</p>
+<p>The local picture is, as in the insurance study, less tidy than the global one. The pairwise probabilities for adjacent low/mid-temperature comparisons are modest — <code>P(alpha(0.0) &gt; alpha(0.3)) ≈ 0.53</code>, <code>P(alpha(0.3) &gt; alpha(0.7)) ≈ 0.58</code>, <code>P(alpha(0.7) &gt; alpha(1.0)) ≈ 0.68</code> — while the high-temperature comparisons are clean: <code>P(alpha(1.0) &gt; alpha(1.5)) ≈ 0.91</code> and <code>P(alpha(0.0) &gt; alpha(1.5)) ≈ 0.98</code>. The probability of strict monotonic decrease across all five levels is about <code>0.09</code>, driven primarily by overlap among the four lower-temperature conditions. The pairwise table is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#pairwise-comparisons">§Pairwise Comparisons</a>. The honest summary is that the global decline is real and is dominated by the gap between <code>T = 1.0</code> and <code>T = 1.5</code>, not a step-by-step decline at every adjacent pair.</p>
+<p>One robustness question is whether the negative global slope depends on having the high-temperature <code>T = 1.5</code> condition in the grid at all. The Anthropic API does not permit <code>T &gt; 1.0</code>, and so the Claude side of the cross-LLM comparison in Part 3 cannot include that condition. The GPT-4o report computes a matched-range slope restricted to <code>T ∈ [0.0, 1.0]</code> for symmetry: the posterior median is <code>≈ −33</code>, the 90% credible interval is <code>[−111, 37]</code>, and <code>P(slope &lt; 0) ≈ 0.77</code>. The negative direction survives the restriction, though the 90% interval now includes zero — exactly what one would expect when the most informative endpoint is dropped. The restricted analysis is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html#restricted-range-slope-t-in-0.0-1.0">§Restricted-Range Slope</a>.</p>
+<p>The qualitative pattern from the GPT-4o × Insurance study reappears on the Ellsberg task: under a different task family and a different prior calibrated to its consequence space, GPT-4o’s choices concentrate more sharply on the SEU-maximizing alternative at low temperature than at high temperature.</p>
+</section>
+<section id="claude-on-ellsberg-gambles" class="level2">
+<h2 class="anchored" data-anchor-id="claude-on-ellsberg-gambles">Claude on Ellsberg gambles</h2>
+<p>The Claude × Ellsberg study uses the Anthropic-permitted grid <code>{0.0, 0.2, 0.5, 0.8, 1.0}</code>. The forest plot tells the story.</p>
+<div id="fig-claude-ellsberg-forest" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Forest plot showing posterior alpha for Claude on Ellsberg gambles at temperatures 0.0, 0.2, 0.5, 0.8, and 1.0; estimates alternate between higher values at 0.0 and 0.5 and lower values at 0.2 and 0.8, with 1.0 intermediate.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-claude-ellsberg-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study_files/figure-html/fig-forest-output-1.svg" class="img-fluid figure-img" alt="Forest plot showing posterior alpha for Claude on Ellsberg gambles at temperatures 0.0, 0.2, 0.5, 0.8, and 1.0; estimates alternate between higher values at 0.0 and 0.5 and lower values at 0.2 and 0.8, with 1.0 intermediate.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-claude-ellsberg-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Forest plot of posterior <code>alpha</code> distributions across the five temperature conditions for Claude 3.5 Sonnet on the Ellsberg gambles. Points are posterior medians; thick bars span the 50% credible interval and thin bars the 90% credible interval. Estimates alternate between higher values at <code>T = 0.0</code> and <code>T = 0.5</code> and lower values at <code>T = 0.2</code> and <code>T = 0.8</code>, with <code>T = 1.0</code> intermediate.
+</figcaption>
+</figure>
+</div>
+<p>The per-condition posterior medians do not decline monotonically with temperature. They are 88 at <code>T = 0.0</code>, 58 at <code>T = 0.2</code>, 87 at <code>T = 0.5</code>, 55 at <code>T = 0.8</code>, and 69 at <code>T = 1.0</code>. The posteriors overlap substantially, and no clear ordering by temperature emerges. The full table is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#posterior-summaries">§Posterior Summaries</a> of the report.</p>
+<p>The global slope quantifies the comparison. The draw-wise OLS slope <code>Δalpha/ΔT</code> has a posterior median of approximately <code>−19</code>, a 90% credible interval of <code>[−65, 24]</code>, and <code>P(slope &lt; 0) ≈ 0.77</code>. The 90% interval comfortably spans zero. The probability of strict monotonic decrease across all five Claude conditions is approximately <code>0.009</code>. The full monotonicity analysis is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#monotonicity-analysis">§Monotonicity Analysis</a> of the report.</p>
+<p>It is tempting to read the alternating sequence of posterior medians as a genuine non-monotonic temperature response. The report’s discussion in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#the-non-monotonic-pattern">§The Non-Monotonic Pattern</a> does not support that reading. With about 300 observations per condition and the posterior widths the model returns, sampling variability is a viable explanation for the local pattern, and the pairwise comparisons do not reach a level that would force a structured non-monotonic mechanism on the data. The honest summary is not that Claude has a complex non-monotonic temperature response on this task; it is that on this task Claude does not exhibit the negative temperature–<code>alpha</code> relationship that GPT-4o does.</p>
+<p>This is the same shape of result that the Claude × Insurance study returned: model adequate, alpha posteriors overlapping, no clear monotonic temperature trend, and no clean directional aggregate slope. The Claude report’s <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html#within-llm-comparison-across-tasks-claude">within-LLM comparison across tasks</a> puts the two Claude cells side by side on the same temperature grid <code>{0.0, 0.2, 0.5, 0.8, 1.0}</code> and reports that within Claude the non-replication of the GPT-4o pattern is not task-specific.</p>
+</section>
+<section id="the-same-qualitative-shape-as-the-insurance-pair" class="level2">
+<h2 class="anchored" data-anchor-id="the-same-qualitative-shape-as-the-insurance-pair">The same qualitative shape as the insurance pair</h2>
+<p>Stepping back from the per-condition detail, the qualitative shape of the two Ellsberg studies is the shape of the two insurance studies. GPT-4o exhibits a clear broad decline in estimated <code>alpha</code> as temperature increases, with a global negative slope whose 90% credible interval excludes zero; Claude exhibits no such decline, with a global slope whose interval comfortably spans zero. The pattern observed under one task family carries through under a second task family that was historically constructed to put the SEU standard itself under pressure.</p>
+<p>That carry-through is not, on its own, a cross-LLM attribution. The Ellsberg studies share with the insurance studies the property that the GPT-4o cells use one provider’s temperature scale and one set of design parameters, while the Claude cells use another — and the four cells were fit independently, with no shared parameters across them. To read the cross-LLM contrast as a substantive claim about how temperature interacts with <code>alpha</code> in each model, the cells have to be put together. That is the work of <a href="seu-sensitivity-ellsberg-03-factorial-synthesis.html">Part 3</a>.</p>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources</h2>
+<p>This post draws on <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html">Temperature and SEU Sensitivity: Ellsberg Study</a> and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html">Temperature and SEU Sensitivity: GPT-4o × Ellsberg Study</a>, with background from the <a href="seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">foundations series</a> and the previous <a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">applications series</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<aside class="ai-use-note" aria-labelledby="ai-use-note-title">
+  <h2 id="ai-use-note-title">AI use note</h2>
+  <p>I sometimes use AI tools while developing posts, code, and examples for this site. They help with brainstorming, editing, technical implementation, and checking clarity. I review, revise, and take responsibility for all published material.</p>
+</aside>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jeffhelzner\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

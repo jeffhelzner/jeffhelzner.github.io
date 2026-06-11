@@ -13,6 +13,24 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-01-from-insurance-to-urns.html</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-03-factorial-synthesis.html</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jeffhelzner.github.io/posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>monthly</changefreq>

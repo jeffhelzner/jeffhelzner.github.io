@@ -1,5 +1,26 @@
 [
   {
+    "slug": "seu-sensitivity-ellsberg-part-1-from-insurance-to-urns",
+    "title": "Part 1 — From Insurance to Urns: Background and the Ellsberg Paradigm",
+    "date": "2026-06-08",
+    "summary": "Bridging from the insurance applications series to a new task family — Ellsberg-style urn gambles — and setting out the historical and interpretive weight that Ellsberg's example carries.",
+    "url": "/posts/seu-sensitivity-ellsberg-01-from-insurance-to-urns.html"
+  },
+  {
+    "slug": "seu-sensitivity-ellsberg-part-2-prior-calibration-and-per-llm-results",
+    "title": "Part 2 — Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results",
+    "date": "2026-06-08",
+    "summary": "GPT-4o shows a clear broad decline in alpha as temperature increases on the Ellsberg gambles; Claude shows no such decline. The same qualitative shape as the insurance pair, in a task family designed to put SEU itself under pressure.",
+    "url": "/posts/seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html"
+  },
+  {
+    "slug": "seu-sensitivity-ellsberg-part-3-factorial-synthesis",
+    "title": "Part 3 — Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide",
+    "date": "2026-06-08",
+    "summary": "Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.",
+    "url": "/posts/seu-sensitivity-ellsberg-03-factorial-synthesis.html"
+  },
+  {
     "slug": "seu-sensitivity-applications-part-1-temperature-as-methodological-probe",
     "title": "Part 1 — Probing SEU Sensitivity With LLM Temperature",
     "date": "2026-06-01",

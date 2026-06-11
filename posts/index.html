@@ -45,19 +45,24 @@
       <section class="series-feature" aria-labelledby="series-title">
         <div class="series-feature-inner">
           <p class="series-kicker">Featured series</p>
-          <h2 id="series-title">Applying SEU Sensitivity to LLM Decisions</h2>
-          <p>A two-part application of the SEU Sensitivity framework to real LLM choice data: how the measurement device is set up for an initial GPT-4o temperature study, and what the GPT-4o result — together with a Claude follow-up that did not reproduce it — actually licenses.</p>
+          <h2 id="series-title">Applying SEU Sensitivity to Ellsberg-Style Decisions</h2>
+          <p>A three-part application of the SEU Sensitivity framework to Ellsberg-style urn gambles, asking whether the GPT-4o-versus-Claude temperature pattern observed in the insurance pair travels to a task family that was historically constructed to put SEU itself under pressure.</p>
 
           <div class="series-list" aria-label="Series posts">
-            <a class="series-item" href="./seu-sensitivity-applications-01-temperature-as-methodological-probe.html">
+            <a class="series-item" href="./seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">
               <span class="part-label">Part 1</span>
-              <strong>Probing SEU Sensitivity With LLM Temperature</strong>
-              <span>Background, study design, prior calibration, and model checking for the initial GPT-4o temperature study.</span>
+              <strong>From Insurance to Urns: Background and the Ellsberg Paradigm</strong>
+              <span>Why Ellsberg-style urns as the next task family, the historical and interpretive weight Ellsberg's example carries, and the scope of what this series does and does not measure.</span>
             </a>
-            <a class="series-item" href="./seu-sensitivity-applications-02-result-that-did-not-travel.html">
+            <a class="series-item" href="./seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">
               <span class="part-label">Part 2</span>
-              <strong>What the GPT-4o Result Showed, and Why It Did Not Travel to Claude</strong>
-              <span>The GPT-4o temperature finding, the Claude non-replication on the same task, and what the contrast — with its caveats — actually licenses.</span>
+              <strong>Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results</strong>
+              <span>The K=4 prior recalibration, validation focused on alpha, and the per-condition results for both LLMs.</span>
+            </a>
+            <a class="series-item" href="./seu-sensitivity-ellsberg-03-factorial-synthesis.html">
+              <span class="part-label">Part 3</span>
+              <strong>Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide</strong>
+              <span>Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task effect, and an uninformative interaction.</span>
             </a>
           </div>
         </div>
@@ -67,6 +72,18 @@
         <h2>All Posts</h2>
         <noscript>
           <div class="post-list">
+            <article class="card">
+              <h3><a href="./seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">Part 1 - From Insurance to Urns: Background and the Ellsberg Paradigm</a></h3>
+              <p>Bridging from the insurance applications series to a new task family — Ellsberg-style urn gambles — and setting out the historical and interpretive weight Ellsberg's example carries.</p>
+            </article>
+            <article class="card">
+              <h3><a href="./seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">Part 2 - Prior Calibration, Model Checks, and the Per-LLM Ellsberg Results</a></h3>
+              <p>GPT-4o shows a clear broad decline in alpha as temperature increases on Ellsberg gambles; Claude shows no such decline.</p>
+            </article>
+            <article class="card">
+              <h3><a href="./seu-sensitivity-ellsberg-03-factorial-synthesis.html">Part 3 - Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide</a></h3>
+              <p>Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task effect, and an uninformative interaction.</p>
+            </article>
             <article class="card">
               <h3><a href="./seu-sensitivity-applications-01-temperature-as-methodological-probe.html">Part 1 - Probing SEU Sensitivity With LLM Temperature</a></h3>
               <p>Before any temperature result can be read, the measurement device has to be set up: a defensible task, a calibrated prior, identifiable parameters, and adequacy checks.</p>

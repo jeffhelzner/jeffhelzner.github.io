@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jeff Helzner">
+<meta name="dcterms.date" content="2026-06-08">
+<meta name="description" content="Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.">
+
+<title>Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide – Jeff Helzner</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../analytics.js" defer=""></script>
+<link rel="canonical" href="https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-03-factorial-synthesis.html">
+<meta property="og:type" content="article">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide",
+  "description": "Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.",
+  "author": {"@type": "Person", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/"},
+  "datePublished": "2026-06-08",
+  "dateModified": "2026-06-08",
+  "image": "https://jeffhelzner.github.io/assets/social-card.png",
+  "mainEntityOfPage": "https://jeffhelzner.github.io/posts/seu-sensitivity-ellsberg-03-factorial-synthesis.html",
+  "isPartOf": {"@type": "Blog", "name": "Jeff Helzner", "url": "https://jeffhelzner.github.io/posts/"},
+  "keywords": ["SEU sensitivity", "Ellsberg paradox", "factorial design", "GPT-4o", "Claude 3.5 Sonnet", "LLM evaluation", "hierarchical model"]
+}
+</script>
+
+
+<link rel="stylesheet" href="quarto-custom.css">
+<meta property="og:title" content="Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide – Jeff Helzner">
+<meta property="og:description" content="Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.">
+<meta property="og:image" content="https://jeffhelzner.github.io/assets/social-card.png">
+<meta property="og:site_name" content="Jeff Helzner">
+<meta name="twitter:title" content="Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide – Jeff Helzner">
+<meta name="twitter:description" content="Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.">
+<meta name="twitter:image" content="https://jeffhelzner.github.io/assets/social-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Jeff Helzner</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./../"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="././"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./../#projects"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#the-22-design-and-an-important-caveat" id="toc-the-22-design-and-an-important-caveat" class="nav-link active" data-scroll-target="#the-22-design-and-an-important-caveat">The 2×2 design and an important caveat</a></li>
+  <li><a href="#llm-main-effect-the-dominant-pattern" id="toc-llm-main-effect-the-dominant-pattern" class="nav-link" data-scroll-target="#llm-main-effect-the-dominant-pattern">LLM main effect: the dominant pattern</a></li>
+  <li><a href="#task-main-effect-secondary" id="toc-task-main-effect-secondary" class="nav-link" data-scroll-target="#task-main-effect-secondary">Task main effect: secondary</a></li>
+  <li><a href="#interaction-uninformative" id="toc-interaction-uninformative" class="nav-link" data-scroll-target="#interaction-uninformative">Interaction: uninformative</a></li>
+  <li><a href="#a-matched-temperature-range-sensitivity-check" id="toc-a-matched-temperature-range-sensitivity-check" class="nav-link" data-scroll-target="#a-matched-temperature-range-sensitivity-check">A matched-temperature-range sensitivity check</a></li>
+  <li><a href="#comparability-caveats-called-out-rather-than-buried" id="toc-comparability-caveats-called-out-rather-than-buried" class="nav-link" data-scroll-target="#comparability-caveats-called-out-rather-than-buried">Comparability caveats, called out rather than buried</a></li>
+  <li><a href="#limitations-and-what-the-synthesis-cannot-decide" id="toc-limitations-and-what-the-synthesis-cannot-decide" class="nav-link" data-scroll-target="#limitations-and-what-the-synthesis-cannot-decide">Limitations and what the synthesis cannot decide</a></li>
+  <li><a href="#where-this-leaves-the-program" id="toc-where-this-leaves-the-program" class="nav-link" data-scroll-target="#where-this-leaves-the-program">Where this leaves the program</a></li>
+  <li><a href="#sources" id="toc-sources" class="nav-link" data-scroll-target="#sources">Sources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Factorial Synthesis: What Travels, What Does Not, and What the Design Cannot Decide</h1>
+</div>
+
+<div>
+  <div class="description">
+    Reading the four cells of the 2x2 LLM-by-task design together: a dominant LLM main effect, a secondary task main effect, and an uninformative interaction.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jeff Helzner </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 8, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="series-nav">
+<p><strong>Applying SEU Sensitivity to Ellsberg-Style Decisions</strong> · Part 3 of 3<br>
+<a href="seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">Part 1</a> · <a href="seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">Part 2</a> · Part 3</p>
+</div>
+<p><a href="seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">Part 2</a> established the per-LLM Ellsberg results: a clear broad decline in <code>alpha</code> for GPT-4o as temperature increases, no such decline for Claude. The qualitative shape mirrors the insurance pair from the <a href="seu-sensitivity-applications-02-result-that-did-not-travel.html">previous applications series</a>. With both Ellsberg cells in hand alongside the two insurance cells, the natural object of analysis is the 2×2 design that crosses LLM (GPT-4o vs.&nbsp;Claude 3.5 Sonnet) with task (insurance triage vs.&nbsp;Ellsberg gambles).</p>
+<p>This post takes that 2×2 design as a single comparative picture. It reads what the LLM and task factors contribute, what an interaction analysis can and cannot license here, and what limitations the design carries forward into any next step. The underlying machinery is in the <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html">Factorial Synthesis</a> report; the present post abstracts the headline picture and links into the report’s sections where the abstraction loses detail an interested reader might want.</p>
+<section id="the-22-design-and-an-important-caveat" class="level2">
+<h2 class="anchored" data-anchor-id="the-22-design-and-an-important-caveat">The 2×2 design and an important caveat</h2>
+<p>The four cells are summarized in the table below. Each cell is an independent Bayesian fit at the design parameters and prior appropriate for its task; the synthesis loads the per-condition <code>alpha</code> posteriors from those fits and combines derived summaries across them.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 5%">
+<col style="width: 27%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cell</th>
+<th>LLM</th>
+<th>Task</th>
+<th>K</th>
+<th>Model variant</th>
+<th>Temperature grid</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(1,1)</td>
+<td>GPT-4o</td>
+<td>Insurance</td>
+<td>3</td>
+<td><code>m_01</code></td>
+<td>{0.0, 0.3, 0.7, 1.0, 1.5}</td>
+</tr>
+<tr class="even">
+<td>(1,2)</td>
+<td>GPT-4o</td>
+<td>Ellsberg</td>
+<td>4</td>
+<td><code>m_02</code></td>
+<td>{0.0, 0.3, 0.7, 1.0, 1.5}</td>
+</tr>
+<tr class="odd">
+<td>(2,1)</td>
+<td>Claude 3.5 Sonnet</td>
+<td>Insurance</td>
+<td>3</td>
+<td><code>m_01</code></td>
+<td>{0.0, 0.2, 0.5, 0.8, 1.0}</td>
+</tr>
+<tr class="even">
+<td>(2,2)</td>
+<td>Claude 3.5 Sonnet</td>
+<td>Ellsberg</td>
+<td>4</td>
+<td><code>m_02</code></td>
+<td>{0.0, 0.2, 0.5, 0.8, 1.0}</td>
+</tr>
+</tbody>
+</table>
+<p>The caveat that needs to be on the page before any cross-cell statement is the following. The synthesis combines posterior draws from four independently fitted models, with no shared parameters across cells. It is not a single hierarchical model. Between-cell contrasts therefore carry more uncertainty than the within-cell statements that Part 2 reported, and the right reading of the cross-cell probabilities below is as comparative summaries rather than as posterior probabilities of a unified parameter. A hierarchical extension — one in which <code>log alpha</code> is regressed on cell covariates inside a single likelihood — would tighten these between-cell contrasts and is the subject of a future blog series, drawing on foundational reports 8 through 12 from the <a href="https://jeffhelzner.github.io/seu-sensitivity/">SEU Sensitivity project page</a>. The synthesis here is explicitly exploratory.</p>
+<p>The per-cell global slopes, reproduced from the previous posts and from the <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html#monotonicity-summary">§Monotonicity Summary</a> of the report, are the following.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 19%">
+<col style="width: 10%">
+<col style="width: 19%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cell</th>
+<th>Median slope</th>
+<th>90% CI</th>
+<th>P(slope &lt; 0)</th>
+<th>P(strict monotonic decrease)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPT-4o × Insurance</td>
+<td>−30.8</td>
+<td>[−65.5, −8.3]</td>
+<td>0.991</td>
+<td>0.125</td>
+</tr>
+<tr class="even">
+<td>GPT-4o × Ellsberg</td>
+<td>−48.0</td>
+<td>[−90.2, −12.5]</td>
+<td>0.984</td>
+<td>0.090</td>
+</tr>
+<tr class="odd">
+<td>Claude × Insurance</td>
+<td>−3.6</td>
+<td>[−53.6, 38.5]</td>
+<td>0.560</td>
+<td>0.008</td>
+</tr>
+<tr class="even">
+<td>Claude × Ellsberg</td>
+<td>−18.8</td>
+<td>[−65.3, 24.5]</td>
+<td>0.766</td>
+<td>0.009</td>
+</tr>
+</tbody>
+</table>
+<p>The within-cell evidence concentrates on a single qualitative split: the two GPT-4o cells show clear negative slopes (<code>P(slope &lt; 0) &gt; 0.98</code> in both), and the two Claude cells do not (<code>P(slope &lt; 0) ≈ 0.56</code> and <code>≈ 0.77</code>).</p>
+</section>
+<section id="llm-main-effect-the-dominant-pattern" class="level2">
+<h2 class="anchored" data-anchor-id="llm-main-effect-the-dominant-pattern">LLM main effect: the dominant pattern</h2>
+<p>Holding the task fixed, the LLM contrast asks whether GPT-4o’s slope is more negative than Claude’s. The relevant figure puts the two slopes side by side within each task.</p>
+<div id="fig-llm-effect" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Cross-LLM slope comparison plot showing GPT-4o's slope distribution to the left of Claude's within both the insurance task and the Ellsberg task.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-llm-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis_files/figure-html/fig-llm-effect-output-1.svg" class="img-fluid figure-img" alt="Cross-LLM slope comparison plot showing GPT-4o's slope distribution to the left of Claude's within both the insurance task and the Ellsberg task.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-llm-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Cross-LLM slope comparison within each task. Top row: GPT-4o slopes; bottom row: Claude slopes. Within both tasks, GPT-4o’s posterior global slope is more negative than Claude’s, with <code>P(GPT-4o slope &lt; Claude slope) ≈ 0.82</code> (insurance) and <code>≈ 0.80</code> (Ellsberg).
+</figcaption>
+</figure>
+</div>
+<p>The two within-task LLM probabilities are <code>P(GPT-4o slope &lt; Claude slope) ≈ 0.817</code> on insurance and <code>≈ 0.797</code> on Ellsberg. The detail is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html#llm-main-effect">§LLM Main Effect</a> of the report. The directional claim is consistent across tasks; the magnitude is moderate rather than decisive. This gap between the within-cell evidence (<code>P &gt; 0.98</code> for GPT-4o’s slope being negative) and the between-cell evidence (<code>P ≈ 0.80</code> for the cross-LLM ordering) is exactly the slack that the independent-fits caveat above predicts. Independent fits give up sharing of information across cells, and the cross-cell posterior pays for it in width.</p>
+<p>Read together with the per-cell evidence in <a href="seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">Part 2</a>, the LLM factor accounts for most of the qualitative variation across the four cells. GPT-4o shows a clear negative temperature–<code>alpha</code> slope on both tasks; Claude shows at best a weak negative trend on either.</p>
+</section>
+<section id="task-main-effect-secondary" class="level2">
+<h2 class="anchored" data-anchor-id="task-main-effect-secondary">Task main effect: secondary</h2>
+<p>Holding the LLM fixed, the task contrast asks whether the Ellsberg cells have steeper slopes than the insurance cells.</p>
+<div id="fig-task-effect" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Within-LLM task comparison plot showing GPT-4o slopes declining on both insurance and Ellsberg tasks, and Claude slopes flat-to-weakly-negative on both tasks.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-task-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis_files/figure-html/fig-task-effect-output-1.svg" class="img-fluid figure-img" alt="Within-LLM task comparison plot showing GPT-4o slopes declining on both insurance and Ellsberg tasks, and Claude slopes flat-to-weakly-negative on both tasks.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-task-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Within-LLM task comparison. Left: GPT-4o — both tasks show declining <code>alpha</code> with temperature, with the Ellsberg slope somewhat steeper. Right: Claude — neither task shows a convincing decline, though the Ellsberg slope is slightly more negative than the insurance slope.
+</figcaption>
+</figure>
+</div>
+<p>The within-LLM probabilities are <code>P(Ellsberg slope &lt; Insurance slope) ≈ 0.713</code> for GPT-4o and <code>≈ 0.655</code> for Claude. The detail is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html#task-main-effect">§Task Main Effect</a>. Changing the task neither eliminates GPT-4o’s effect nor creates one for Claude. Within GPT-4o, the Ellsberg slope may be somewhat steeper than the insurance slope, but both tasks show the same qualitative direction; within Claude, neither task produces a convincing slope. The task factor is a secondary contributor relative to LLM identity.</p>
+<p>The cross-task magnitudes are not directly comparable in the strict sense — the insurance cells use <code>m_01</code> and <code>K = 3</code> and the Ellsberg cells use <code>m_02</code> and <code>K = 4</code>, so an Ellsberg <code>alpha</code> of 80 does not have the same behavioral meaning as an insurance <code>alpha</code> of 80. The slope analysis is less affected than a comparison of <code>alpha</code> levels would be, because the prior is held constant within each task and the slope is a within-task contrast across temperature. Still, the magnitudes should be read directionally rather than absolutely.</p>
+</section>
+<section id="interaction-uninformative" class="level2">
+<h2 class="anchored" data-anchor-id="interaction-uninformative">Interaction: uninformative</h2>
+<p>Once the two main effects are in view, the obvious next question is whether the four cells are additively decomposable or whether an LLM × task interaction is needed. The natural summary is a difference-in-differences contrast: the GPT-4o cross-task slope difference (Ellsberg minus Insurance) minus the Claude cross-task slope difference.</p>
+<p>The factorial synthesis reports this contrast as having a posterior median of approximately <code>−2</code>, a 90% credible interval of roughly <code>[−88, 79]</code>, and <code>P(interaction &gt; 0) ≈ 0.49</code>. The 90% interval spans on the order of 170 slope units. The interval shape is what propagating uncertainty through two differences of independently estimated slopes produces, and the right reading is not that the interaction is small. The right reading is that the data are uninformative about its magnitude or sign. The detail is in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html#interaction">§Interaction</a>.</p>
+<p>The visual evidence supports the same reading. The medians plotted in <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html#pairwise-comparison-heatmaps">§Pairwise Comparison Heatmaps</a> and the interaction figure are roughly parallel, which is consistent with an additive decomposition; but parallel medians of two heavily overlapping posteriors do not, on their own, support an equivalence claim. A formal equivalence statement would require defining a region of practical equivalence on the interaction-effect scale and showing that the posterior concentrates within it, which the current independent-fits design does not support.</p>
+</section>
+<section id="a-matched-temperature-range-sensitivity-check" class="level2">
+<h2 class="anchored" data-anchor-id="a-matched-temperature-range-sensitivity-check">A matched-temperature-range sensitivity check</h2>
+<p>The cross-LLM comparison reads off the GPT-4o slope over <code>T ∈ [0.0, 1.5]</code> against the Claude slope over <code>T ∈ [0.0, 1.0]</code>. The most informative endpoint in the GPT-4o data — <code>T = 1.5</code> — is not available on the Anthropic side. It is worth asking whether the qualitative LLM contrast survives when the GPT-4o slope is restricted to the Claude-supported range.</p>
+<p>The report’s <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html#temperature-range-confound">matched-range analysis</a> recomputes the GPT-4o slope over <code>T ≤ 1.0</code> and reruns the within-task LLM comparison. On insurance the matched-range probability is <code>P(GPT matched slope &lt; Claude slope) ≈ 0.824</code> — essentially unchanged from the full-range <code>≈ 0.817</code>. On Ellsberg the matched-range probability falls to <code>≈ 0.612</code>. The qualitative LLM conclusion — GPT-4o declining on both tasks, Claude flat on both — is not an artifact of the wider GPT-4o range. The cross-LLM Ellsberg probability, however, weakens enough on the matched range to be worth flagging as a place where the cross-LLM contrast on this task is on softer ground than the full-range number suggests.</p>
+</section>
+<section id="comparability-caveats-called-out-rather-than-buried" class="level2">
+<h2 class="anchored" data-anchor-id="comparability-caveats-called-out-rather-than-buried">Comparability caveats, called out rather than buried</h2>
+<p>Two comparability assumptions sit underneath the synthesis and are worth restating explicitly.</p>
+<p>The first is that comparisons across the task dimension use different priors and different consequence-space dimensions (<code>m_01</code> with <code>K = 3</code> for insurance vs.&nbsp;<code>m_02</code> with <code>K = 4</code> for Ellsberg). The priors were chosen so that the prior-implied SEU-maximization rates match across tasks within a few percentage points (78% vs.&nbsp;76%), which makes the priors comparable as expressions of background expectation about EU-aligned LLM choice behavior in each setting. It does not make cross-task <code>alpha</code> magnitudes directly comparable. The synthesis therefore focuses on directional and rank quantities — slope signs, <code>P(slope &lt; 0)</code>, and pairwise probabilities — rather than on absolute <code>alpha</code> levels.</p>
+<p>The second is that comparisons across the LLM dimension assume that the temperature parameter is functionally comparable across providers. The nominal API range differs (<code>[0, 1]</code> for Anthropic, <code>[0, 2]</code> for OpenAI), and the provider-side decoding implementations are not transparent. Even if the underlying mapping from nominal temperature to effective sampling entropy were identical across providers — which there is no particular reason to assume — the multi-stage prompting pipeline used in these studies could in principle be sensitive to that mapping at different stages in different models. The cross-LLM contrast should be read as a contrast under “same nominal temperature label” rather than as a contrast under “same effective sampling regime.”</p>
+</section>
+<section id="limitations-and-what-the-synthesis-cannot-decide" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-what-the-synthesis-cannot-decide">Limitations and what the synthesis cannot decide</h2>
+<p>A handful of limitations beyond comparability are worth holding in view.</p>
+<p>The factorial structure was imposed after the fact, in response to the initial non-replication. The synthesis is exploratory and was not pre-registered. The published applications series and the present series should be read jointly as a methodological line, with the next step being a properly hierarchical analysis rather than another independent-fits aggregation.</p>
+<p>The pooled-tier scope note from <a href="seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">Part 1</a> carries forward here. Both Ellsberg cells pool across the three ambiguity tiers and fit a single <code>alpha</code> per condition. The synthesis therefore speaks to overall SEU sensitivity on Ellsberg-style stimuli, not to ambiguity-specific processing. Whether GPT-4o or Claude exhibits an analogue of ambiguity aversion — and, separately, whether the standard responses to Ellsberg’s example should be read psychologically, normatively (as Ellsberg himself argued), or as violations of completeness on the ordering of acts (as Levi argued) — are questions the model fit here cannot adjudicate. A tier-stratified analysis would begin to address the empirical version of the first question and is identified as a priority for future work in both Ellsberg reports.</p>
+<p>The design covers two LLMs and two tasks. The synthesis cannot say whether the GPT-4o-versus-Claude qualitative split would generalize to other model families (Llama, Gemini) or to other task families with different structural properties. The temperature implementations, training data, post-training regimes, and decoding stacks of GPT-4o and Claude differ along many dimensions at once, and the present design cannot decompose the “LLM main effect” into any of them.</p>
+<p>Per-condition sample size (<code>M ≈ 300</code>) is generous enough to identify <code>alpha</code> cleanly within each cell, as the parameter recovery and posterior predictive checks of <a href="seu-sensitivity-ellsberg-02-prior-calibration-and-per-llm-results.html">Part 2</a> showed. It is not generous enough to license sharp claims about local non-monotonic structure within either Claude cell. The alternating Claude × Ellsberg pattern is read here as consistent with posterior noise around a roughly flat function; whether it would resolve into a systematic mechanism under larger samples or a hierarchical analysis is an open question.</p>
+</section>
+<section id="where-this-leaves-the-program" class="level2">
+<h2 class="anchored" data-anchor-id="where-this-leaves-the-program">Where this leaves the program</h2>
+<p>Stepping back from the four-cell detail, the substantive headline is the one the per-cell evidence already pointed to: under both task families covered so far, GPT-4o’s choices concentrate more sharply on the SEU-maximizing alternative at low temperature than at high temperature, and Claude’s choices do not. The task factor is a secondary contributor to this picture; the interaction is unresolved.</p>
+<p>The methodological headline is the more general one. The framework can identify a structured temperature–<code>alpha</code> relationship when one is present in the data; it can refuse to support one when it is not; and it can compare those two cases — under a calibrated prior, with diagnostics that constrain the comparison — across LLMs and tasks. The value of the framework here is not that every first result generalized. It is that the generalization question became measurable, and the data licensed a clean qualitative split on the LLM axis while leaving the interaction question honestly unresolved.</p>
+<p>The natural next step from this synthesis is hierarchical modeling. A model that estimates <code>log alpha</code> as a function of LLM, task, and temperature inside a single likelihood — rather than synthesizing four independent fits after the fact — would sharpen the between-cell contrasts, allow a principled interaction-effect estimate with calibrated uncertainty, and provide a single device against which a region-of-practical-equivalence statement could be made. The construction and validation of that model — the <code>h_m01</code> and <code>h_m02</code> extensions — are laid out in foundational reports 8 through 12 on the <a href="https://jeffhelzner.github.io/seu-sensitivity/">SEU Sensitivity project page</a> and will be the subject of a separate blog series.</p>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources</h2>
+<p>This post draws on the <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/factorial_synthesis/01_factorial_synthesis.html">Factorial Synthesis</a> report, together with the four underlying cell reports: <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/temperature_study/01_initial_study.html">Temperature and SEU Sensitivity: Initial Results</a>, <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/claude_insurance_study/01_claude_insurance_study.html">Temperature and SEU Sensitivity: Claude × Insurance Study</a>, <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/ellsberg_study/01_ellsberg_study.html">Temperature and SEU Sensitivity: Ellsberg Study</a>, and <a href="https://jeffhelzner.github.io/seu-sensitivity/applications/gpt4o_ellsberg_study/01_gpt4o_ellsberg_study.html">Temperature and SEU Sensitivity: GPT-4o × Ellsberg Study</a>. Background from the <a href="seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">foundations series</a>, the previous <a href="seu-sensitivity-applications-01-temperature-as-methodological-probe.html">applications series</a>, and Part 1 and Part 2 of the present series.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<aside class="ai-use-note" aria-labelledby="ai-use-note-title">
+  <h2 id="ai-use-note-title">AI use note</h2>
+  <p>I sometimes use AI tools while developing posts, code, and examples for this site. They help with brainstorming, editing, technical implementation, and checking clarity. I review, revise, and take responsibility for all published material.</p>
+</aside>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jeffhelzner\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
