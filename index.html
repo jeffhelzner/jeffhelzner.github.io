@@ -29,7 +29,10 @@
         "@type": "Person",
         "name": "Jeff Helzner",
         "url": "https://jeffhelzner.github.io/",
-        "sameAs": ["https://www.linkedin.com/in/jeff-helzner-109a5498/"]
+        "sameAs": [
+          "https://www.linkedin.com/in/jeff-helzner-109a5498/",
+          "https://philpeople.org/profiles/jeffrey-helzner"
+        ]
       }
     </script>
   </head>
@@ -55,7 +58,8 @@
         <h1 class="site-title">Jeff Helzner</h1>
         <nav aria-label="Primary">
           <ul class="nav">
-            <li><a href="#about">About & Focus</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#papers">Papers</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="./posts/">Blog</a></li>
             <li><a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF, opens in a new tab)">Resume</a></li>
@@ -83,12 +87,23 @@
       </div>
 
       <section id="about" class="section">
-        <h2>About & Research Focus</h2>
-        <p>I'm a decision scientist with over a decade of experience building data systems, probabilistic models, and decision tools in the insurance industry. Before that, I was a philosophy professor, teaching and researching the foundations of decision theory, probability, and logic. My career has been shaped by a single question: how should decision makers—whether human or algorithmic—form beliefs, choose actions, and revise their thinking in light of evidence?</p>
+        <h2>About</h2>
+        <p>I'm a decision scientist with over a decade of experience building data systems, probabilistic models, and decision tools in the insurance industry. Before that, after earning my PhD at Carnegie Mellon, I was a philosophy professor teaching and researching the foundations of decision theory, formal epistemology, and logic. Both careers have been shaped by a single question: how should decision makers—whether human or algorithmic—form beliefs, choose actions, and revise their thinking in light of evidence?</p>
 
         <p>In my industry work, I focus on designing systems where human expertise and machine intelligence complement each other. This has included building Bayesian models that blend actuarial benchmarks with underwriter judgment, implementing monitoring systems that surface unexpected patterns for human review, and developing AI‑powered tools that augment—rather than replace—the judgment of claims adjusters and underwriters.</p>
 
-        <p>The projects featured here approach these same questions from a more foundational angle: evaluating decision makers (human and AI) against formal standards of rationality, developing frameworks for coherent belief and calibrated uncertainty, and building tooling to make alignment claims testable and experimentally verifiable.</p>
+        <p>The projects featured here are about methods for evaluating and improving how decision makers reason under uncertainty—and, increasingly, how AI systems do. I tend to reach for tools and frameworks that resonate with my background in logic and formal epistemology, drawing on both probabilistic modeling and formal proof. The aim is to take a claim like "this system reasons well under uncertainty" and turn it into something you can test, and then improve.</p>
+      </section>
+
+      <section id="papers" class="section">
+        <h2>Working Papers</h2>
+
+        <div id="papers-list" class="projects-grid" aria-live="polite"></div>
+        <div id="papers-status" class="status muted" role="status" aria-live="polite"></div>
+
+        <noscript>
+          <p class="muted">Enable JavaScript to load the working papers list.</p>
+        </noscript>
       </section>
 
       <section id="projects" class="section">
@@ -107,7 +122,7 @@
       <div class="container">
         <p class="muted">© <span id="year"></span> Jeff Helzner •
           <a href="https://www.linkedin.com/in/jeff-helzner-109a5498/" target="_blank" rel="noopener noreferrer me" aria-label="LinkedIn profile">LinkedIn</a> •
-          <a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF)">Resume</a>
+          <a href="https://philpeople.org/profiles/jeffrey-helzner" target="_blank" rel="noopener noreferrer me" aria-label="PhilPeople profile">PhilPeople</a>
         </p>
       </div>
     </footer>

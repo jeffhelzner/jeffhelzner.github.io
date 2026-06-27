@@ -13,6 +13,8 @@
 
   const $list = document.getElementById('projects-list');
   const $status = document.getElementById('projects-status');
+  const $papersList = document.getElementById('papers-list');
+  const $papersStatus = document.getElementById('papers-status');
   const $postsList = document.getElementById('posts-list');
   const $postsStatus = document.getElementById('posts-status');
 
@@ -77,6 +79,27 @@
         stars: null,
         topics: p.tags || [],
         _key: (p.report_url || p.repo || p.url || p.name || '').toLowerCase(),
+      }));
+    } catch {
+      return [];
+    }
+  }
+
+  async function loadPapers() {
+    try {
+      const res = await fetch('./papers.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(`papers.json: ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      return data.map(p => ({
+        title: p.title || p.name || 'Untitled',
+        description: p.excerpt || p.description || '',
+        href: p.pdf_url || p.url || p.repo || '#',
+        primaryLabel: 'Paper (PDF)',
+        repoHref: p.repo || null,
+        stars: null,
+        topics: p.tags || [],
+        _key: (p.pdf_url || p.repo || p.name || '').toLowerCase(),
       }));
     } catch {
       return [];
@@ -155,6 +178,19 @@
     $list.appendChild(frag);
   }
 
+  function renderPapers(items) {
+    if (!$papersList) return;
+    $papersList.innerHTML = '';
+    if (!items.length) {
+      if ($papersStatus) $papersStatus.textContent = 'No working papers yet.';
+      return;
+    }
+    if ($papersStatus) $papersStatus.textContent = '';
+    const frag = document.createDocumentFragment();
+    items.forEach(i => frag.appendChild(card(i)));
+    $papersList.appendChild(frag);
+  }
+
   function renderPosts(items) {
     if (!$postsList) return;
     $postsList.innerHTML = '';
@@ -201,6 +237,12 @@
 
     const combined = dedupe([...(manual || []), ...(gh || [])]);
     render(combined);
+
+    // load and render working papers if papers-list exists
+    if ($papersList) {
+      const papers = await loadPapers();
+      renderPapers(papers);
+    }
 
     // load and render posts if posts-list exists
     if ($postsList) {
