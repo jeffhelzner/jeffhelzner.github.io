@@ -3,54 +3,75 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jeff Helzner — Home</title>
-    <meta name="description" content="Jeff Helzner - Former philosophy professor exploring rational decision-making, logic, and uncertainty through code and applied research." />
+    <title>Jeff Helzner — Decision Scientist | Bayesian Modeling &amp; AI Decision Evaluation</title>
+    <meta name="description" content="Jeff Helzner is Director of Data Strategy and Analytics at Berkley Enterprise Risk Solutions, building Bayesian decision systems and methods for evaluating how people and AI systems reason under uncertainty. Former philosophy professor at Columbia University; PhD, Carnegie Mellon." />
     <link rel="stylesheet" href="./styles.css" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://jeffhelzner.github.io/" />
     <link rel="alternate" type="application/rss+xml" title="Jeff Helzner blog" href="https://jeffhelzner.github.io/feed.xml" />
     <script src="./analytics.js" defer></script>
-    <!-- Open Graph / Twitter (placeholders; update per-page for posts) -->
-    <meta property="og:site_name" content="Jeff Helzner" />
-    <meta property="og:title" content="Jeff Helzner — Home" />
-    <meta property="og:description" content="Research and projects on rational decision-making and AI alignment." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://jeffhelzner.github.io/" />
-    <meta property="og:image" content="/assets/social-card.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Jeff Helzner — Home" />
-    <meta name="twitter:description" content="Research and projects on rational decision-making and AI alignment." />
-    <meta name="twitter:image" content="/assets/social-card.png" />
 
-    <!-- JSON-LD organization (includes LinkedIn) -->
+    <!-- Open Graph / Twitter -->
+    <meta property="og:site_name" content="Jeff Helzner" />
+    <meta property="og:title" content="Jeff Helzner — Decision Scientist" />
+    <meta property="og:description" content="Bayesian decision systems, and methods for evaluating how people and AI systems reason under uncertainty." />
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://jeffhelzner.github.io/" />
+    <meta property="og:image" content="https://jeffhelzner.github.io/assets/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jeff Helzner — Decision Scientist" />
+    <meta name="twitter:description" content="Bayesian decision systems, and methods for evaluating how people and AI systems reason under uncertainty." />
+    <meta name="twitter:image" content="https://jeffhelzner.github.io/assets/social-card.png" />
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Jeff Helzner",
         "url": "https://jeffhelzner.github.io/",
+        "image": "https://jeffhelzner.github.io/assets/jeff-helzner-400.jpg",
+        "jobTitle": "Director of Data Strategy and Analytics",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Berkley Enterprise Risk Solutions"
+        },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "Carnegie Mellon University" },
+          { "@type": "CollegeOrUniversity", "name": "University at Buffalo" },
+          { "@type": "CollegeOrUniversity", "name": "University of Massachusetts" }
+        ],
+        "knowsAbout": [
+          "Decision theory",
+          "Bayesian statistics",
+          "Subjective expected utility",
+          "Decision-making under uncertainty",
+          "AI evaluation",
+          "Formal epistemology",
+          "Mathematical logic",
+          "Insurance analytics"
+        ],
         "sameAs": [
           "https://www.linkedin.com/in/jeff-helzner-109a5498/",
-          "https://philpeople.org/profiles/jeffrey-helzner"
+          "https://philpeople.org/profiles/jeffrey-helzner",
+          "https://github.com/jeffhelzner"
         ]
       }
     </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "headline": "Sensitivity to Subjective Expected Utility Maximization: A Methodological Study, with an Illustrative Application to LLM Decision-Making",
+        "author": { "@type": "Person", "name": "Jeff Helzner" },
+        "datePublished": "2026-06-01",
+        "creativeWorkStatus": "Working paper",
+        "url": "https://arxiv.org/abs/2607.11920",
+        "keywords": ["decision making", "rationality", "subjective expected utility", "large language models"]
+      }
+    </script>
   </head>
-  <!--
-    Configure Projects behavior using data attributes on <body>:
-
-    data-projects-source:
-      - "manual"  -> only use projects.json
-      - "github"  -> only use GitHub API (requires data-gh-username)
-      - "both"    -> show projects.json first, then append GitHub projects
-
-    data-gh-username:
-      - Set to your GitHub username to enable auto-loading from GitHub API
-
-    data-github-topic-filter (optional):
-      - If set (e.g., "showcase"), only repos with that topic will be shown.
-  -->
-  <body data-projects-source="manual" data-gh-username="jeffhelzner" data-github-topic-filter="showcase">
+  <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">
@@ -58,9 +79,10 @@
         <h1 class="site-title">Jeff Helzner</h1>
         <nav aria-label="Primary">
           <ul class="nav">
+            <li><a href="#research">Research</a></li>
+            <li><a href="#writing">Writing</a></li>
+            <li><a href="#experience">Experience</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#papers">Working Papers</a></li>
-            <li><a href="#projects">Projects</a></li>
             <li><a href="./posts/">Blog</a></li>
             <li><a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF, opens in a new tab)">Resume</a></li>
           </ul>
@@ -69,59 +91,203 @@
     </header>
 
     <main id="main" class="container">
-      <section class="intro" aria-labelledby="intro-title">
-        <p class="intro-meta">Better decisions under uncertainty</p>
-        <h2 id="intro-title">How can we make better decisions when information is highly incomplete?</h2>
-        <p class="lede">My work connects decision theory with practical questions about how people and AI systems should reason from incomplete information.</p>
-        <p><a href="./posts/">Read the currently featured blog series</a>.</p>
+      <section class="identity" aria-labelledby="intro-title">
+        <div class="identity-text">
+          <p class="intro-meta">Decision science under uncertainty</p>
+          <h2 id="intro-title">How can we make better decisions when information is highly incomplete?</h2>
+          <p class="lede">I build decision systems where human judgment and algorithmic inference reinforce each other, and methods for testing whether those systems actually reason well. My work connects decision theory to practical questions about how people and AI systems should reason from incomplete information.</p>
+        </div>
+        <img
+          class="headshot"
+          src="./assets/jeff-helzner-400.jpg"
+          srcset="./assets/jeff-helzner-200.jpg 200w, ./assets/jeff-helzner-400.jpg 400w"
+          sizes="(max-width: 720px) 128px, 200px"
+          width="200"
+          height="200"
+          alt="Portrait of Jeff Helzner"
+        />
       </section>
 
-      <div class="hero">
-        <img class="hero-card" src="/assets/social-card.png" alt="Jeff Helzner — Rational decision-making & AI alignment" />
-      </div>
+      <ul class="credentials" aria-label="Current role and background">
+        <li><strong>Director of Data Strategy &amp; Analytics</strong>, Berkley Enterprise Risk Solutions</li>
+        <li>Former Associate Professor of Philosophy, Columbia University</li>
+        <li>Ph.D., Carnegie Mellon University</li>
+      </ul>
 
-      <div class="author-strip" aria-label="Professional context">
-        <span><strong>Data strategy and analytics professional</strong></span>
-        <span>Former philosophy professor</span>
-        <span>Human and AI decision-making</span>
-      </div>
+      <p class="methods">Bayesian modeling (Stan, PyMC) · LLM decision evaluation · Formal methods (Lean&nbsp;4) · Python, R, SQL</p>
+
+      <section id="research" class="section">
+        <h2>Selected research</h2>
+        <p>Methods for evaluating and improving how decision makers reason under uncertainty, and increasingly how AI systems do.</p>
+
+        <article class="paper">
+          <p class="paper-status">Working paper · 2026</p>
+          <h3><a href="https://arxiv.org/abs/2607.11920" target="_blank" rel="noopener">Sensitivity to Subjective Expected Utility Maximization: A Methodological Study, with an Illustrative Application to LLM Decision-Making</a></h3>
+          <p>A framework for estimating how strongly a decision maker's choices respond to differences in expected utility, together with the adequacy checks that constrain when such an estimate can be meaningfully interpreted. Illustrated on LLM decision-making under varying sampling temperature.</p>
+          <div class="meta">
+            <a href="https://arxiv.org/abs/2607.11920" target="_blank" rel="noopener">arXiv:2607.11920</a>
+            <button type="button" class="report-link" data-bibtex-toggle aria-expanded="false" aria-controls="bibtex-seu">Cite</button>
+            <span class="badge">Decision making</span>
+            <span class="badge">Rationality</span>
+          </div>
+          <pre id="bibtex-seu" class="bibtex" hidden>@misc{helzner2026seu,
+  title  = {Sensitivity to Subjective Expected Utility Maximization: A Methodological
+            Study, with an Illustrative Application to LLM Decision-Making},
+  author = {Helzner, Jeff},
+  year   = {2026},
+  eprint = {2607.11920},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2607.11920}
+}</pre>
+        </article>
+
+        <h3 class="subhead">Selected publications</h3>
+        <ol class="publications">
+          <li>
+            <a href="https://philpapers.org/rec/DUTTDG" target="_blank" rel="noopener">The Description–Experience Gap in Risky and Ambiguous Gambles</a>
+            <p class="pub-authors">with Varun Dutt, Horacio Arló-Costa, and Cleotilde Gonzalez</p>
+            <p class="pub-venue"><em>Journal of Behavioral Decision Making</em> 27 (4): 316–327. 2014.</p>
+          </li>
+          <li>
+            <a href="https://philpapers.org/rec/HELRTC" target="_blank" rel="noopener">Rationalizing two-tiered choice functions through conditional choice</a>
+            <p class="pub-venue"><em>Synthese</em> 190 (6): 929–951. 2013.</p>
+          </li>
+          <li>
+            <a href="https://philpapers.org/rec/HELOTA" target="_blank" rel="noopener">On the Application of Multiattribute Utility Theory to Models of Choice</a>
+            <p class="pub-venue"><em>Theory and Decision</em> 66 (4): 301–315. 2009.</p>
+          </li>
+          <li>
+            <a href="https://philpapers.org/rec/AVITPI-2" target="_blank" rel="noopener">Transfer principles in nonstandard intuitionistic arithmetic</a>
+            <p class="pub-authors">with Jeremy Avigad</p>
+            <p class="pub-venue"><em>Archive for Mathematical Logic</em> 41 (6): 581–602. 2002.</p>
+          </li>
+        </ol>
+        <p class="muted pub-more"><a href="https://philpeople.org/profiles/jeffrey-helzner" target="_blank" rel="noopener">Full publication list on PhilPeople</a></p>
+
+        <h3 class="subhead" id="projects">Projects</h3>
+        <div class="projects-grid">
+          <article class="card">
+            <h4><a href="https://jeffhelzner.github.io/seu-sensitivity/" target="_blank" rel="noopener">SEU Sensitivity</a></h4>
+            <p>A Bayesian framework modeling sensitivity to Subjective Expected Utility maximization, with a full workflow from prior calibration through model adequacy checks.</p>
+            <div class="meta">
+              <a href="https://github.com/jeffhelzner/seu-sensitivity" target="_blank" rel="noopener">Source</a>
+              <span class="badge">Stan</span>
+              <span class="badge">Bayesian workflow</span>
+            </div>
+          </article>
+
+          <article class="card">
+            <h4><a href="https://jeffhelzner.github.io/conditional-admissibility-judgments/" target="_blank" rel="noopener">Conditional Admissibility Judgments</a></h4>
+            <p>Technical reports and a Lean&nbsp;4 formalization of conditional judgments of admissibility under uncertainty, pairing machine-checked proof with applied decision theory.</p>
+            <div class="meta">
+              <a href="https://github.com/jeffhelzner/conditional-admissibility-judgments" target="_blank" rel="noopener">Source</a>
+              <span class="badge">Lean 4</span>
+              <span class="badge">Formalization</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="writing" class="section">
+        <h2>Writing</h2>
+        <p>Four series tracing one argument: from why AI decision quality needs measuring, to a method for measuring it, to what happens when that method meets harder cases. The hardest of those cases are Ellsberg-style ambiguity problems — the same territory as my <a href="https://philpapers.org/rec/DUTTDG" target="_blank" rel="noopener">2014 work on risky and ambiguous gambles</a>, approached now with a Bayesian measurement framework and an LLM in the decision seat.</p>
+
+        <ol class="series-index">
+          <li>
+            <a href="./posts/seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">
+              <strong>Applying SEU Sensitivity to Ellsberg-Style Decisions</strong>
+              <span>Three parts · June 2026 — Urn gambles designed to put SEU itself under pressure, and a factorial synthesis of what travels across models and tasks.</span>
+            </a>
+          </li>
+          <li>
+            <a href="./posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html">
+              <strong>Applying SEU Sensitivity to LLM Decisions</strong>
+              <span>Two parts · June 2026 — A clear temperature effect in GPT-4o that did not replicate in Claude, and why the non-replication is the informative part.</span>
+            </a>
+          </li>
+          <li>
+            <a href="./posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">
+              <strong>Foundations of SEU Sensitivity</strong>
+              <span>Three parts · May 2026 — From decision quality to an estimable quantity, its Stan implementation, and the checks that make an estimate interpretable.</span>
+            </a>
+          </li>
+          <li>
+            <a href="./posts/evaluating-ai-decisions-01-why-measure.html">
+              <strong>Evaluating AI Decision-Makers</strong>
+              <span>Three parts · May 2026 — Why outcomes are not decision quality, what a measurement of alignment has to do, and how to tell evidence from noise.</span>
+            </a>
+          </li>
+        </ol>
+
+        <p><a href="./posts/">All eleven posts</a> · <a href="./feed.xml">RSS</a></p>
+      </section>
+
+      <section id="experience" class="section">
+        <h2>Experience</h2>
+        <p>Across four organizations I have built decision-science capability from zero: founding teams, platforms, and data infrastructure where none existed. Fully remote since 2020, including team leadership.</p>
+
+        <ol class="timeline">
+          <li>
+            <p class="timeline-date">2024 — present</p>
+            <h3>Director of Data Strategy &amp; Analytics</h3>
+            <p class="timeline-org">Berkley Enterprise Risk Solutions (a W. R. Berkley company)</p>
+            <p>A California-based startup writing large workers' compensation policies. I lead the data systems, probabilistic models, and AI tools behind underwriting and claims decisions — including five Bayesian and machine learning models in production, automated monitoring that surfaces anomalous shifts in claim frequency and severity for human review, and LLM-powered drafting tools adopted broadly by claims adjusters.</p>
+          </li>
+          <li>
+            <p class="timeline-date">2020 — 2024</p>
+            <h3>Decision Scientist</h3>
+            <p class="timeline-org">Joyn Insurance</p>
+            <p>At an early-stage insurtech, helped build a data-driven underwriting platform from the ground up, embedding the integration of model output with underwriter judgment into both the technical infrastructure and the culture.</p>
+          </li>
+          <li>
+            <p class="timeline-date">2018 — 2020</p>
+            <h3>Decision Scientist, Blackboard Insurance</h3>
+            <p class="timeline-org">AIG</p>
+            <p>At AIG's insurtech subsidiary, developed methods for extracting behavioral insight from operational data, and worked with R&amp;D on NLP and OCR pipelines for structuring unstructured documents.</p>
+          </li>
+          <li>
+            <p class="timeline-date">2014 — 2018</p>
+            <h3>Head of Behavioral Science</h3>
+            <p class="timeline-org">AIG</p>
+            <p>Founded and led a five-person team including one PhD and two MS-level statisticians — among the first behavioral science teams in the insurance industry. Worked closely with Daniel Kahneman on noise-reduction studies that demonstrably reduced variance in adjuster case-reserve estimates. Presented findings to the CEO and Chief Underwriting Officer, and represented the team at board meetings.</p>
+          </li>
+          <li>
+            <p class="timeline-date">2003 — 2014</p>
+            <h3>Assistant, then Associate Professor of Philosophy</h3>
+            <p class="timeline-org">Columbia University</p>
+            <p>Taught undergraduate and graduate courses in logic, probability, decision theory, and the philosophy of science. Research focused on the foundations of decision theory under uncertainty.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="education" class="section">
+        <h2>Education</h2>
+        <ul class="degrees">
+          <li><strong>Ph.D., Logic, Computation, and Methodology</strong> · Carnegie Mellon University</li>
+          <li><strong>M.S., Logic and Computation</strong> · Carnegie Mellon University</li>
+          <li><strong>M.A., Mathematics</strong> · University at Buffalo</li>
+          <li><strong>B.A., Mathematics</strong> · University of Massachusetts</li>
+        </ul>
+      </section>
 
       <section id="about" class="section">
         <h2>About</h2>
-        <p>I'm a decision scientist with over a decade of experience building data systems, probabilistic models, and decision tools in the insurance industry. Before that, after earning my PhD at Carnegie Mellon, I was a philosophy professor teaching and researching the foundations of decision theory, formal epistemology, and logic. Both careers have been shaped by a single question: how should decision makers—whether human or algorithmic—form beliefs, choose actions, and revise their thinking in light of evidence?</p>
+        <p>I'm a decision scientist with over a decade of experience building data systems, probabilistic models, and decision tools in the insurance industry. Before that, after earning my PhD at Carnegie Mellon, I was a philosophy professor at Columbia teaching and researching the foundations of decision theory, formal epistemology, and logic. Both careers have been shaped by a single question: how should decision makers—whether human or algorithmic—form beliefs, choose actions, and revise their thinking in light of evidence?</p>
 
-        <p>In my industry work, I focus on designing systems where human expertise and machine intelligence complement each other. This has included building Bayesian models that blend actuarial benchmarks with underwriter judgment, implementing monitoring systems that surface unexpected patterns for human review, and developing AI‑powered tools that augment—rather than replace—the judgment of claims adjusters and underwriters.</p>
+        <p>The bridge between them was noise. In 2014 I left Columbia to found one of the insurance industry's first behavioral science teams, where I worked closely with Daniel Kahneman on reducing unwanted variability in expert judgment. That work turned out to be the same problem I had been studying formally, now with adjusters and underwriters in place of idealized agents.</p>
 
-        <p>The projects featured here are about methods for evaluating and improving how decision makers reason under uncertainty—and, increasingly, how AI systems do. I tend to reach for tools and frameworks that resonate with my background in logic and formal epistemology, drawing on both probabilistic modeling and formal proof. The aim is to take a claim like "this system reasons well under uncertainty" and turn it into something you can test, and then improve.</p>
-      </section>
+        <p>Since then I have focused on designing systems where human expertise and machine intelligence complement each other: Bayesian models that blend actuarial benchmarks with underwriter judgment, monitoring that surfaces unexpected patterns for human review, and AI-powered tools that augment—rather than replace—the judgment of claims adjusters and underwriters.</p>
 
-      <section id="papers" class="section">
-        <h2>Working Papers</h2>
-
-        <div id="papers-list" class="projects-grid" aria-live="polite"></div>
-        <div id="papers-status" class="status muted" role="status" aria-live="polite"></div>
-
-        <noscript>
-          <p class="muted">Enable JavaScript to load the working papers list.</p>
-        </noscript>
-      </section>
-
-      <section id="projects" class="section">
-        <h2>Projects</h2>
-
-        <div id="projects-list" class="projects-grid" aria-live="polite"></div>
-        <div id="projects-status" class="status muted" role="status" aria-live="polite"></div>
-
-        <noscript>
-          <p class="muted">Enable JavaScript to load the projects list.</p>
-        </noscript>
+        <p>The research featured here extends that work to AI systems themselves. I tend to reach for tools that resonate with my background in logic and formal epistemology, drawing on both probabilistic modeling and formal proof. The aim is to take a claim like "this system reasons well under uncertainty" and turn it into something you can test, and then improve.</p>
       </section>
     </main>
 
     <footer class="site-footer">
       <div class="container">
-        <p class="muted">© <span id="year"></span> Jeff Helzner •
+        <p class="muted">© <span id="year">2026</span> Jeff Helzner •
+          <span class="js-email" data-u="jeffhelzner" data-d="gmail.com">jeffhelzner [at] gmail [dot] com</span> •
           <a href="https://www.linkedin.com/in/jeff-helzner-109a5498/" target="_blank" rel="noopener noreferrer me" aria-label="LinkedIn profile">LinkedIn</a> •
+          <a href="https://github.com/jeffhelzner" target="_blank" rel="noopener noreferrer me" aria-label="GitHub profile">GitHub</a> •
           <a href="https://philpeople.org/profiles/jeffrey-helzner" target="_blank" rel="noopener noreferrer me" aria-label="PhilPeople profile">PhilPeople</a>
         </p>
       </div>

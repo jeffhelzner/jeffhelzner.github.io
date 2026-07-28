@@ -168,9 +168,9 @@ hr {
 ---
 
 ## Summary
-I design data systems and decision frameworks that help insurance organizations make better underwriting, claims, and portfolio decisions by combining human judgment with algorithmic intelligence. My background combines formal training in mathematics, logic, and decision theory (Ph.D., Carnegie Mellon) with a decade as a philosophy professor at Columbia University and more than ten years building production data infrastructure, probabilistic models, and human-in-the-loop decision tools in the insurance industry.
+I design data systems and decision frameworks that help insurance organizations make better underwriting, claims, and portfolio decisions by combining human judgment with algorithmic intelligence. Across four organizations I have built decision-science capability from zero — founding teams, platforms, and data infrastructure where none existed. My background combines formal training in mathematics, logic, and decision theory (Ph.D., Carnegie Mellon) with a decade as a philosophy professor at Columbia University and more than ten years building production data infrastructure, probabilistic models, and human-in-the-loop decision tools in the insurance industry.
 
-My work spans the full data lifecycle — from data pipelines and models to dashboards and executive reporting — with a particular focus on systems that allow underwriters, adjusters, and portfolio managers to blend domain expertise with principled uncertainty quantification. I lead teams and partner with senior leadership to translate model outputs into auditable, decision-ready workflows.
+My work spans the full data lifecycle — from data pipelines and models to dashboards and executive reporting — with a particular focus on systems that allow underwriters, adjusters, and portfolio managers to blend domain expertise with principled uncertainty quantification. I lead teams and partner with senior leadership to translate model outputs into auditable, decision-ready workflows. I have worked fully remotely since 2020, including in team leadership roles.
 
 ---
 
@@ -178,18 +178,18 @@ My work spans the full data lifecycle — from data pipelines and models to dash
 
 <div class="job-header">
 <h3>Director of Data Strategy and Analytics</h3>
-<span class="company">Berkley Enterprise Risk Solutions (a Berkley company)</span> <span class="date">March 2024 – Present</span>
+<span class="company">Berkley Enterprise Risk Solutions (a W. R. Berkley company)</span> <span class="date">March 2024 – Present</span>
 </div>
 
 <div class="job-description">
-Lead the design and development of data systems, probabilistic models, and AI-powered tools that support underwriting and claims decisions. My role bridges data engineering and decision science, focusing on building systems that combine algorithmic outputs with human expertise to improve decision quality.
+Lead the design and development of data systems, probabilistic models, and AI-powered tools that support underwriting and claims decisions at a California-based startup writing large workers' compensation policies. My role bridges data engineering and decision science, focusing on building systems that combine algorithmic outputs with human expertise to improve decision quality.
 
-- Created pipelines for ingestion and transformation of underwriting and exposure data to support ~10 weekly submissions (minimum required premium ≈ $500K) and ongoing claims monitoring for <100 claims/week.
+- Created pipelines for ingestion and transformation of underwriting and exposure data supporting submission intake and ongoing claims monitoring.
 - Designed and integrated Bayesian models combining class-rate priors with submission-level loss and payroll data to produce principled loss picks; deployed five Bayesian/ML models to production.
-- Built automated alerting (≈10 weekly checks across the book of business) that surfaces anomalous shifts in claim-type frequency or severity for proactive portfolio management.
+- Built automated alerting (roughly ten weekly checks across the book of business) that surfaces anomalous shifts in claim-type frequency or severity for proactive portfolio management.
 - Built ML pipelines to standardize and impute missing fields in OCR-extracted loss records.
-- Developed automation workflows to generate client-facing service booklets delivered monthly, reducing preparation time by ~50%.
-- Developed LLM-powered applications to draft claim status updates for adjusters; adopted broadly by adjusters and estimated to cut prep time by ~35%.
+- Developed automation workflows to generate client-facing service booklets delivered monthly, substantially reducing preparation time.
+- Developed LLM-powered applications to draft claim status updates for adjusters; adopted broadly across the claims team, with a marked reduction in preparation time.
 - Partnered with leadership to define decision-aligned metrics and dashboards used in underwriting and portfolio reviews.
 </div>
 
@@ -207,17 +207,7 @@ At this early-stage insurtech, I helped build a data-driven underwriting platfor
 - Developed machine learning and Bayesian models to prioritize submissions.
 - Created tools and dashboards that surfaced model outputs in intuitive, actionable formats for underwriters.
 - Collaborated with product and engineering teams to ensure data integrity and model interpretability.
-- Platform supported ~5 underwriters during production use and rollout.
-</div>
-<div class="job-description">
-At this early-stage insurtech, I helped build a data-driven underwriting platform from the ground up, embedding decision science principles—particularly the integration of model outputs with underwriter judgment—into the company's technical infrastructure and culture.
-
-- Designed and maintained a software package for managing third-party data used in underwriting decisions.
-- Developed machine learning and Bayesian models to prioritize submissions.
-- Created tools and dashboards that surfaced model outputs in intuitive, actionable formats for underwriters.
-- Collaborated with product and engineering teams to ensure data integrity and model interpretability.
-- Platform supported ~5 underwriters during production rollout.
-</div>
+- Platform adopted by the underwriting team as its primary submission-triage tool through production rollout.
 </div>
 
 ---
@@ -243,13 +233,14 @@ Joined AIG's insurtech subsidiary to develop new methods for extracting behavior
 </div>
 
 <div class="job-description">
-Founded and led AIG's behavioral science group (5-person team), which included one PhD and two MS-level statisticians, focused on improving human judgment and decision quality across underwriting and claims operations.
+Founded and led AIG's behavioral science group (5-person team), which included one PhD and two MS-level statisticians, focused on improving human judgment and decision quality across underwriting and claims operations. This was among the first behavioral science teams established in the insurance industry.
 
 - Led projects on behavioral analytics, choice architecture, and noise reduction in human judgment.
+- Worked closely with Daniel Kahneman on the design of noise-reduction studies for expert judgment in claims and underwriting.
 - Collaborated with teams across the business, including actuarial, claims, underwriting, and shared services.
 - Regularly presented findings to senior leadership, including the CEO and Chief Underwriting Officer, and was selected to represent the science team at multiple board meetings.
 - Drove process improvements to reduce noise in human judgment and improve underwriting consistency.
-- Ran small experimental studies applying noise-reduction methods (adapted from Kahneman's work) that demonstrated reductions in variance of adjuster case-reserve estimates.
+- Ran experimental studies applying noise-reduction methods that demonstrated reductions in variance of adjuster case-reserve estimates.
 </div>
 
 ---
