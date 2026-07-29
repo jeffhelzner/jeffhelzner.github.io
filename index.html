@@ -18,10 +18,14 @@
     <meta property="og:type" content="profile" />
     <meta property="og:url" content="https://jeffhelzner.github.io/" />
     <meta property="og:image" content="https://jeffhelzner.github.io/assets/social-card.png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content="Jeff Helzner — decision science under uncertainty" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Jeff Helzner — Decision Scientist" />
     <meta name="twitter:description" content="Bayesian decision systems, and methods for evaluating how people and AI systems reason under uncertainty." />
     <meta name="twitter:image" content="https://jeffhelzner.github.io/assets/social-card.png" />
+    <meta name="twitter:image:alt" content="Jeff Helzner — decision science under uncertainty" />
 
     <script type="application/ld+json">
       {
@@ -29,6 +33,7 @@
         "@type": "Person",
         "name": "Jeff Helzner",
         "url": "https://jeffhelzner.github.io/",
+        "description": "Decision scientist working on Bayesian decision systems and methods for evaluating how people and AI systems reason under uncertainty. Director of Data Strategy and Analytics at Berkley Enterprise Risk Solutions; formerly Associate Professor of Philosophy at Columbia University.",
         "image": "https://jeffhelzner.github.io/assets/jeff-helzner-400.jpg",
         "jobTitle": "Director of Data Strategy and Analytics",
         "worksFor": {
@@ -79,10 +84,9 @@
         <h1 class="site-title">Jeff Helzner</h1>
         <nav aria-label="Primary">
           <ul class="nav">
-            <li><a href="#research">Research</a></li>
-            <li><a href="#writing">Writing</a></li>
-            <li><a href="#experience">Experience</a></li>
             <li><a href="#about">About</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#experience">Experience</a></li>
             <li><a href="./posts/">Blog</a></li>
             <li><a href="./resume.pdf" type="application/pdf" target="_blank" rel="noopener" aria-label="Resume (PDF, opens in a new tab)">Resume</a></li>
           </ul>
@@ -116,9 +120,18 @@
 
       <p class="methods">Bayesian modeling (Stan, PyMC) · LLM decision evaluation · Formal methods (Lean&nbsp;4) · Python, R, SQL</p>
 
+      <section id="about" class="section">
+        <h2>About</h2>
+        <p>I'm a decision scientist with over a decade of experience building data systems, probabilistic models, and decision tools in the insurance industry. Before that, after earning my PhD at Carnegie Mellon, I was a philosophy professor at Columbia teaching and researching the foundations of decision theory, formal epistemology, and logic. Both careers have been shaped by a single question: how should decision makers—whether human or algorithmic—form beliefs, choose actions, and revise their thinking in light of evidence?</p>
+
+        <p>The bridge between them was noise. In 2014 I left Columbia to found one of the insurance industry's first behavioral science teams, where I worked closely with Daniel Kahneman on reducing unwanted variability in expert judgment. That work turned out to be the same problem I had been studying formally, now with adjusters and underwriters in place of idealized agents.</p>
+
+        <p>Since then I have focused on designing systems where human expertise and machine intelligence complement each other: Bayesian models that blend actuarial benchmarks with underwriter judgment, monitoring that surfaces unexpected patterns for human review, and AI-powered tools that augment—rather than replace—the judgment of claims adjusters and underwriters.</p>
+      </section>
+
       <section id="research" class="section">
         <h2>Selected research</h2>
-        <p>Methods for evaluating and improving how decision makers reason under uncertainty, and increasingly how AI systems do.</p>
+        <p>This work extends my industry focus on human–machine decision systems to AI systems themselves — most recently to Ellsberg-style ambiguity problems, the same territory as my <a href="https://philpapers.org/rec/DUTTDG" target="_blank" rel="noopener">2014 work on risky and ambiguous gambles</a>, approached now with a Bayesian measurement framework and an LLM in the decision seat. I tend to reach for tools that resonate with my background in logic and formal epistemology, drawing on both probabilistic modeling and formal proof. The aim is to take a claim like "this system reasons well under uncertainty" and turn it into something you can test, and then improve.</p>
 
         <article class="paper">
           <p class="paper-status">Working paper · 2026</p>
@@ -188,40 +201,6 @@
         </div>
       </section>
 
-      <section id="writing" class="section">
-        <h2>Writing</h2>
-        <p>Four series tracing one argument: from why AI decision quality needs measuring, to a method for measuring it, to what happens when that method meets harder cases. The hardest of those cases are Ellsberg-style ambiguity problems — the same territory as my <a href="https://philpapers.org/rec/DUTTDG" target="_blank" rel="noopener">2014 work on risky and ambiguous gambles</a>, approached now with a Bayesian measurement framework and an LLM in the decision seat.</p>
-
-        <ol class="series-index">
-          <li>
-            <a href="./posts/seu-sensitivity-ellsberg-01-from-insurance-to-urns.html">
-              <strong>Applying SEU Sensitivity to Ellsberg-Style Decisions</strong>
-              <span>Three parts · June 2026 — Urn gambles designed to put SEU itself under pressure, and a factorial synthesis of what travels across models and tasks.</span>
-            </a>
-          </li>
-          <li>
-            <a href="./posts/seu-sensitivity-applications-01-temperature-as-methodological-probe.html">
-              <strong>Applying SEU Sensitivity to LLM Decisions</strong>
-              <span>Two parts · June 2026 — A clear temperature effect in GPT-4o that did not replicate in Claude, and why the non-replication is the informative part.</span>
-            </a>
-          </li>
-          <li>
-            <a href="./posts/seu-sensitivity-foundations-01-decision-quality-to-sensitivity.html">
-              <strong>Foundations of SEU Sensitivity</strong>
-              <span>Three parts · May 2026 — From decision quality to an estimable quantity, its Stan implementation, and the checks that make an estimate interpretable.</span>
-            </a>
-          </li>
-          <li>
-            <a href="./posts/evaluating-ai-decisions-01-why-measure.html">
-              <strong>Evaluating AI Decision-Makers</strong>
-              <span>Three parts · May 2026 — Why outcomes are not decision quality, what a measurement of alignment has to do, and how to tell evidence from noise.</span>
-            </a>
-          </li>
-        </ol>
-
-        <p><a href="./posts/">All eleven posts</a> · <a href="./feed.xml">RSS</a></p>
-      </section>
-
       <section id="experience" class="section">
         <h2>Experience</h2>
         <p>Across four organizations I have built decision-science capability from zero: founding teams, platforms, and data infrastructure where none existed. Fully remote since 2020, including team leadership.</p>
@@ -269,17 +248,6 @@
           <li><strong>B.A., Mathematics</strong> · University of Massachusetts</li>
         </ul>
       </section>
-
-      <section id="about" class="section">
-        <h2>About</h2>
-        <p>I'm a decision scientist with over a decade of experience building data systems, probabilistic models, and decision tools in the insurance industry. Before that, after earning my PhD at Carnegie Mellon, I was a philosophy professor at Columbia teaching and researching the foundations of decision theory, formal epistemology, and logic. Both careers have been shaped by a single question: how should decision makers—whether human or algorithmic—form beliefs, choose actions, and revise their thinking in light of evidence?</p>
-
-        <p>The bridge between them was noise. In 2014 I left Columbia to found one of the insurance industry's first behavioral science teams, where I worked closely with Daniel Kahneman on reducing unwanted variability in expert judgment. That work turned out to be the same problem I had been studying formally, now with adjusters and underwriters in place of idealized agents.</p>
-
-        <p>Since then I have focused on designing systems where human expertise and machine intelligence complement each other: Bayesian models that blend actuarial benchmarks with underwriter judgment, monitoring that surfaces unexpected patterns for human review, and AI-powered tools that augment—rather than replace—the judgment of claims adjusters and underwriters.</p>
-
-        <p>The research featured here extends that work to AI systems themselves. I tend to reach for tools that resonate with my background in logic and formal epistemology, drawing on both probabilistic modeling and formal proof. The aim is to take a claim like "this system reasons well under uncertainty" and turn it into something you can test, and then improve.</p>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -288,7 +256,8 @@
           <span class="js-email" data-u="jeffhelzner" data-d="gmail.com">jeffhelzner [at] gmail [dot] com</span> •
           <a href="https://www.linkedin.com/in/jeff-helzner-109a5498/" target="_blank" rel="noopener noreferrer me" aria-label="LinkedIn profile">LinkedIn</a> •
           <a href="https://github.com/jeffhelzner" target="_blank" rel="noopener noreferrer me" aria-label="GitHub profile">GitHub</a> •
-          <a href="https://philpeople.org/profiles/jeffrey-helzner" target="_blank" rel="noopener noreferrer me" aria-label="PhilPeople profile">PhilPeople</a>
+          <a href="https://philpeople.org/profiles/jeffrey-helzner" target="_blank" rel="noopener noreferrer me" aria-label="PhilPeople profile">PhilPeople</a> •
+          <a href="./feed.xml">RSS</a>
         </p>
       </div>
     </footer>
