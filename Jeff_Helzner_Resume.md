@@ -162,15 +162,15 @@ hr {
 
 # Jeff Helzner
 <div class="contact-info">
-<strong>Brooklyn, NY</strong> · <a href="mailto:jeffhelzner@gmail.com">jeffhelzner@gmail.com</a> · <a href="https://www.linkedin.com/in/jeff-helzner-109a5498">LinkedIn</a>
+<strong>Brooklyn, NY</strong> · <a href="mailto:jeffhelzner@gmail.com">jeffhelzner@gmail.com</a> · <a href="https://jeffhelzner.github.io">jeffhelzner.github.io</a> · <a href="https://www.linkedin.com/in/jeff-helzner-109a5498">LinkedIn</a> · <a href="https://github.com/jeffhelzner">GitHub</a>
 </div>
 
 ---
 
 ## Summary
-I design data systems and decision frameworks that help insurance organizations make better underwriting, claims, and portfolio decisions by combining human judgment with algorithmic intelligence. Across four organizations I have built decision-science capability from zero — founding teams, platforms, and data infrastructure where none existed. My background combines formal training in mathematics, logic, and decision theory (Ph.D., Carnegie Mellon) with a decade as a philosophy professor at Columbia University and more than ten years building production data infrastructure, probabilistic models, and human-in-the-loop decision tools in the insurance industry.
+Hands-on decision scientist who builds AI, Bayesian, and machine learning systems that make expert judgment better in high-stakes decisions with incomplete data. Over twelve years in insurance I have designed and shipped production models, data pipelines, monitoring, and LLM tools for underwriting and claims, building the capability from scratch at four organizations. I worked closely with Daniel Kahneman on reducing noise in expert judgment, and before industry I was a professor at Columbia University teaching and researching decision theory, probability, and logic (Ph.D., Carnegie Mellon). A long-standing focus of my work, from graduate school to the present, is how to measure whether decision makers, human or AI, are actually deciding well.
 
-My work spans the full data lifecycle — from data pipelines and models to dashboards and executive reporting — with a particular focus on systems that allow underwriters, adjusters, and portfolio managers to blend domain expertise with principled uncertainty quantification. I lead teams and partner with senior leadership to translate model outputs into auditable, decision-ready workflows. I have worked fully remotely since 2020, including in team leadership roles.
+I work end to end, from data ingestion and modeling to the tools and dashboards experts actually use, with a focus on principled uncertainty quantification and on systems that combine model output with human expertise. Fully remote since 2020.
 
 ---
 
@@ -182,15 +182,15 @@ My work spans the full data lifecycle — from data pipelines and models to dash
 </div>
 
 <div class="job-description">
-Lead the design and development of data systems, probabilistic models, and AI-powered tools that support underwriting and claims decisions at a California-based startup writing large workers' compensation policies. My role bridges data engineering and decision science, focusing on building systems that combine algorithmic outputs with human expertise to improve decision quality.
+Hands-on lead for the data systems, probabilistic models, and AI tools behind underwriting and claims decisions at a California-based startup writing large workers' compensation policies.
 
-- Created pipelines for ingestion and transformation of underwriting and exposure data supporting submission intake and ongoing claims monitoring.
-- Designed and integrated Bayesian models combining class-rate priors with submission-level loss and payroll data to produce principled loss picks; deployed five Bayesian/ML models to production.
-- Built automated alerting (roughly ten weekly checks across the book of business) that surfaces anomalous shifts in claim-type frequency or severity for proactive portfolio management.
+- Designed and deployed Bayesian models that combine class-rate priors with submission-level loss and payroll data to produce principled loss picks; five Bayesian/ML models deployed to production in total.
+- Built an LLM-powered application that drafts claim status updates for adjusters; adopted broadly across the claims team, with a marked reduction in preparation time.
+- Built automated monitoring (roughly ten weekly checks across the book of business) that flags anomalous shifts in claim-type frequency or severity for proactive portfolio management.
+- Built pipelines for ingestion and transformation of underwriting and exposure data supporting submission intake and ongoing claims monitoring.
 - Built ML pipelines to standardize and impute missing fields in OCR-extracted loss records.
-- Developed automation workflows to generate client-facing service booklets delivered monthly, substantially reducing preparation time.
-- Developed LLM-powered applications to draft claim status updates for adjusters; adopted broadly across the claims team, with a marked reduction in preparation time.
-- Partnered with leadership to define decision-aligned metrics and dashboards used in underwriting and portfolio reviews.
+- Automated generation of monthly client-facing service booklets, substantially reducing preparation time.
+- Defined decision-aligned metrics and dashboards with leadership for underwriting and portfolio reviews.
 </div>
 
 ---
@@ -201,12 +201,12 @@ Lead the design and development of data systems, probabilistic models, and AI-po
 </div>
 
 <div class="job-description">
-At this early-stage insurtech, I helped build a data-driven underwriting platform from the ground up, embedding decision science principles—particularly the integration of model outputs with underwriter judgment—into the company's technical infrastructure and culture.
+At an early-stage insurtech, helped build a data-driven underwriting platform from the ground up, integrating model output with underwriter judgment.
 
+- Built ML and Bayesian models to prioritize incoming submissions.
 - Designed and maintained a software package for managing third-party data used in underwriting decisions.
-- Developed machine learning and Bayesian models to prioritize submissions.
-- Created tools and dashboards that surfaced model outputs in intuitive, actionable formats for underwriters.
-- Collaborated with product and engineering teams to ensure data integrity and model interpretability.
+- Built tools and dashboards that surfaced model outputs to underwriters in intuitive, actionable formats.
+- Partnered with product and engineering to ensure data integrity and model interpretability.
 - Platform adopted by the underwriting team as its primary submission-triage tool through production rollout.
 </div>
 
@@ -217,12 +217,12 @@ At this early-stage insurtech, I helped build a data-driven underwriting platfor
 <span class="company">AIG</span> <span class="date">December 2018 – August 2020</span>
 </div>
 <div class="job-description">
-Joined AIG's insurtech subsidiary to develop new methods for extracting behavioral insights from operational data, connecting behavioral analytics to human-in-the-loop decision systems and business strategy.
+Built methods for extracting behavioral insight from operational data at AIG's insurtech subsidiary.
 
-- Designed behavioral analytics models to understand underwriter and broker behavior.
-- Worked with data engineering teams to build data pipelines to support analytics requirements.
-- Managed an MS-level data scientist to support analytics and productionization efforts.
-- Collaborated with other members of the R&D team on NLP and OCR projects to extract structured data from unstructured documents.
+- Built behavioral analytics models of underwriter and broker behavior.
+- Contributed to R&D projects using NLP and OCR to extract structured data from unstructured documents.
+- Partnered with data engineering on pipelines supporting analytics requirements.
+- Managed an MS-level data scientist supporting analytics and productionization.
 </div>
 
 ---
@@ -233,14 +233,13 @@ Joined AIG's insurtech subsidiary to develop new methods for extracting behavior
 </div>
 
 <div class="job-description">
-Founded and led AIG's behavioral science group (5-person team), which included one PhD and two MS-level statisticians, focused on improving human judgment and decision quality across underwriting and claims operations. This was among the first behavioral science teams established in the insurance industry.
+Founded and led one of the insurance industry's first behavioral science teams (5 people, including one PhD and two MS-level statisticians), focused on improving the quality of expert judgment in underwriting and claims.
 
-- Led projects on behavioral analytics, choice architecture, and noise reduction in human judgment.
 - Worked closely with Daniel Kahneman on the design of noise-reduction studies for expert judgment in claims and underwriting.
-- Collaborated with teams across the business, including actuarial, claims, underwriting, and shared services.
-- Regularly presented findings to senior leadership, including the CEO and Chief Underwriting Officer, and was selected to represent the science team at multiple board meetings.
+- Ran experimental studies that demonstrated reduced variance in adjuster case-reserve estimates.
 - Drove process improvements to reduce noise in human judgment and improve underwriting consistency.
-- Ran experimental studies applying noise-reduction methods that demonstrated reductions in variance of adjuster case-reserve estimates.
+- Led projects on behavioral analytics and choice architecture with actuarial, claims, underwriting, and shared services.
+- Presented findings to the CEO and Chief Underwriting Officer; represented the science team at multiple board meetings.
 </div>
 
 ---
@@ -256,8 +255,22 @@ Founded and led AIG's behavioral science group (5-person team), which included o
 </div>
 
 <div class="job-description">
-Taught undergraduate and graduate courses on logic, probability, decision theory, and the philosophy of science. Research focused on the foundations of decision theory under uncertainty. Mentored students who have since gone on to careers in data science, economics, software engineering, and academia.
+Taught undergraduate and graduate courses on logic, probability, decision theory, and the philosophy of science. Published on decision-making under uncertainty and mathematical logic in <em>Theory and Decision</em>, <em>Synthese</em>, the <em>Journal of Behavioral Decision Making</em>, and the <em>Archive for Mathematical Logic</em>. Mentored students who have gone on to careers in data science, economics, software engineering, and academia.
 </div>
+
+---
+
+## Advisory
+
+- <strong>Decision Science Advisor, Rational AI.</strong> An AI-native firm helping private equity investors with deal sourcing, valuation, and portfolio value creation.
+- <strong>Member, BeSci.io Collective.</strong> A collective of senior applied behavioral scientists that helps organizations adopt and scale behavioral science methods.
+
+---
+
+## Research and Open Source
+
+- <strong>Sensitivity to Subjective Expected Utility Maximization: A Methodological Study, with an Illustrative Application to LLM Decision-Making</strong> (arXiv:2607.11920, 2026). A Bayesian framework for measuring how closely a decision maker's choices, human or AI, track expected utility, with adequacy checks for when the measure can be trusted. Open-source Stan/Python workflow: <a href="https://github.com/jeffhelzner/seu-sensitivity">github.com/jeffhelzner/seu-sensitivity</a>.
+- Interviewed on the <em>An N of 1</em> applied behavioral science podcast (Episode 48, 2026).
 
 ---
 
@@ -272,17 +285,11 @@ Taught undergraduate and graduate courses on logic, probability, decision theory
 
 <div class="skills-section">
 
-## Selected Skills and Interests
+## Skills
 
-- **Core Expertise:** Decision science, human-machine decision systems, data strategy, analytics
-- **Tools:** SQL, Python, R, Stan, PyMC, scikit-learn, LLMs and prompt engineering, Git, GitHub Copilot, Power BI
-- **Focus Areas:** Designing systems that combine human judgment with algorithmic intelligence, uncertainty quantification, reducing noise and bias in expert decisions, capturing domain expertise in interpretable models
-- **Personal Interests:** Mathematical logic, rational choice theory, music (jazz), sports (ice hockey, football)
-</div>
-
----
-
-<div class="quote">
-<em>"Knowledge is a resource for inquiry and deliberation." </em>
-— Isaac Levi
+- **Modeling:** Bayesian inference (Stan, PyMC), machine learning (scikit-learn), uncertainty quantification, experimental design
+- **Applied AI:** LLM application development, prompt engineering, AI-assisted development (GitHub Copilot)
+- **Data & tooling:** Python, SQL, R, data pipelines, Git, Power BI
+- **Domain:** Insurance underwriting and claims (workers' compensation, commercial lines), judgment and decision-making, noise reduction in expert judgment
+- **Interests:** Jazz, ice hockey, football
 </div>
